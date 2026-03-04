@@ -370,7 +370,8 @@
             logline: 'Cut off at a coastal outpost, a soldier records strange disturbances in the dark. What hunts him is older than the war; he left it once, but it never left him.',
             result: 'Advanced',
             link: 'read/viewer.html#dont-answer',
-            date: 'November 2025'
+            date: 'November 2025',
+            limit: '400 words \u00b7 48 hours'
           },
           {
             label: 'Round 2',
@@ -383,7 +384,8 @@
             logline: 'Alone in an empty station on New Year\u2019s Eve, an FBI investigator reviews two unsolved murders that were never meant to be connected.',
             result: 'Advanced',
             link: 'read/viewer.html#oops',
-            date: 'January 2026'
+            date: 'January 2026',
+            limit: '400 words \u00b7 48 hours'
           },
           {
             label: 'Final Round',
@@ -395,7 +397,8 @@
             ],
             logline: 'A priest, worn down by reviewing video confessions, finds one voice that does not seek absolution, only a listener.',
             link: 'read/viewer.html#confession-114',
-            date: 'March 2026'
+            date: 'March 2026',
+            limit: '400 words \u00b7 48 hours'
           }
         ]
       },
@@ -411,7 +414,8 @@
             ],
             logline: 'A talented but frustrated clockmaker restores timepieces in Victorian London. As she works, an unseen force moves through the city, leaving behind a trail of bodies and an unsettling connection to her craft.',
             link: 'read/viewer.html#feed',
-            date: 'February 2025'
+            date: 'February 2025',
+            limit: '10 pages \u00b7 8 days'
           }
         ]
       },
@@ -427,7 +431,8 @@
             ],
             logline: 'A children\u2019s speech therapist drowning in debt accepts a too-good-to-be-true offer to coach an adult client, but the more she teaches him to speak, the less she\u2019s sure he should be heard.',
             link: 'read/viewer.html#first-words',
-            date: 'February 2026'
+            date: 'February 2026',
+            limit: '10 pages \u00b7 8 days'
           }
         ]
       },
@@ -443,7 +448,8 @@
             ],
             logline: 'A hopeless romantic with the wrong title learns that love, like everything else worth having, doesn\u2019t care about the packaging.',
             link: 'read/viewer.html#eau-de-prince',
-            date: 'February 2026'
+            date: 'February 2026',
+            limit: '2,000 words \u00b7 8 days'
           }
         ]
       }
@@ -456,7 +462,7 @@
       return '<div class="rounds-content">' + data.rounds.map(r => `
         <div class="round">
           <div class="round-header">
-            <div class="round-label">${r.label} \u2014 ${r.date}</div>
+            <div class="round-label">${r.label} \u2014 ${r.date}${r.limit ? ` \u00b7 ${r.limit}` : ''}</div>
             ${r.result ? `<div class="round-result">${r.result}</div>` : ''}
           </div>
           <div class="round-title">${r.title}</div>
