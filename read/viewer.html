@@ -182,11 +182,12 @@
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 768px) {
-      .top-bar { padding: 0.8rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
+      .top-bar { padding: 0.5rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
       .top-bar-right { display: none; }
-      .page-area { padding: 0 0.25rem 0.25rem; gap: 0.25rem; }
+      .page-area { padding: 0 0.25rem 0; gap: 0.25rem; align-items: flex-start; padding-top: 0.5rem; }
       .page-container { max-height: calc(100vh - 80px); }
       .page-nav { font-size: 1.5rem; padding: 0.5rem 0.25rem; }
+      .bottom-bar { padding: 0.3rem 1rem; }
     }
   </style>
 </head>
@@ -396,6 +397,20 @@
       const safe = e.target.closest('.page-container, .page-nav, .top-bar, .bottom-bar');
       if (!safe) location.href = '../nyc-midnight.html';
     });
+
+    // Swipe navigation
+    let touchStartX = 0;
+    let touchEndX = 0;
+    canvas.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    canvas.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        changePage(diff > 0 ? 1 : -1);
+      }
+    }, { passive: true });
 
     // Re-render on resize
     let resizeTimer;
