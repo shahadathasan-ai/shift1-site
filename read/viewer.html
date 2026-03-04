@@ -341,11 +341,12 @@
       const page = await pdfDoc.getPage(num);
       const viewport = page.getViewport({ scale: 1 });
 
-      // Fit page within container maintaining aspect ratio
-      const containerW = container.clientWidth;
-      const containerH = container.clientHeight;
-      const scaleX = containerW / viewport.width;
-      const scaleY = containerH / viewport.height;
+      // Fit page within available viewport space
+      const pageArea = document.querySelector('.page-area');
+      const availW = Math.min(680, pageArea.clientWidth - 160);
+      const availH = pageArea.clientHeight - 20;
+      const scaleX = availW / viewport.width;
+      const scaleY = availH / viewport.height;
       const scale = Math.min(scaleX, scaleY);
 
       // Retina support
