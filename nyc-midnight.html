@@ -472,7 +472,11 @@
     function showComp(el, compId) {
       document.querySelectorAll('.comp-item').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
-      document.getElementById('roundsPanel').innerHTML = renderRounds(compId);
+      const panel = document.getElementById('roundsPanel');
+      panel.innerHTML = renderRounds(compId);
+      if (window.innerWidth <= 768) {
+        panel.scrollIntoView({ behavior: 'smooth' });
+      }
     }
 
     // Show first competition by default
