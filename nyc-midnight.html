@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NYC Midnight — Shift1 Productions</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0b0b0b;
+      --bg-card: #161616;
+      --text: #e8e4de;
+      --text-muted: #8a8580;
+      --accent: #c9b99a;
+      --accent-dim: rgba(201, 185, 154, 0.12);
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── PARTICLES ─── */
+    .particles {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .particle {
+      position: absolute; background: var(--accent);
+      border-radius: 50%; opacity: 0;
+      animation: firefly ease-in-out infinite;
+    }
+    @keyframes firefly {
+      0% { opacity: 0; transform: translate(0, 0); }
+      25% { opacity: 0.25; }
+      50% { opacity: 0.08; transform: translate(30px, -60px); }
+      75% { opacity: 0.2; }
+      100% { opacity: 0; transform: translate(-20px, -120px); }
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; width: 100%;
+      padding: 1.5rem 3rem;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 100;
+      background: linear-gradient(to bottom, var(--bg) 60%, transparent);
+    }
+    .nav-logo {
+      font-family: var(--font-heading); font-size: 1rem; font-weight: 600;
+      letter-spacing: 0.15em; color: var(--text); text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--font-body); font-size: 0.8rem; font-weight: 400;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.3s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── PAGE HERO ─── */
+    .page-hero {
+      padding: 10rem 3rem 3rem;
+      max-width: 1200px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .back-link {
+      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-muted); text-decoration: none; transition: color 0.3s;
+      display: inline-block; margin-bottom: 2rem;
+    }
+    .back-link:hover { color: var(--accent); }
+    .back-link::before { content: '\2190  '; }
+    .page-hero h1 {
+      font-family: var(--font-heading);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700; color: var(--text);
+      margin-bottom: 1.5rem; line-height: 1.1;
+    }
+    .page-hero .subtitle {
+      font-size: 1.05rem; color: var(--text-muted);
+      max-width: 600px; line-height: 1.8;
+    }
+
+    /* ─── SPLIT LAYOUT ─── */
+    .split {
+      max-width: 1200px; margin: 0 auto;
+      padding: 3rem 3rem 5rem;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 3rem;
+      position: relative; z-index: 1;
+      min-height: 60vh;
+    }
+
+    /* ─── LEFT: COMPETITION STACK ─── */
+    .comp-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .comp-item {
+      padding: 1.25rem 1.5rem;
+      border-left: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .comp-item:hover {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .comp-item.active {
+      border-left-color: var(--accent);
+      background: rgba(201, 185, 154, 0.04);
+    }
+
+    .comp-item-format {
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+      font-weight: 500;
+    }
+
+    .comp-item-title {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+      transition: color 0.3s;
+    }
+
+    .comp-item.active .comp-item-title {
+      color: var(--text);
+    }
+
+    .comp-item-date {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      opacity: 0.6;
+    }
+
+    /* ─── RIGHT: ROUNDS ─── */
+    .rounds-panel {
+      padding: 0.5rem 0 0 2rem;
+      border-left: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .rounds-empty {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      opacity: 0.4;
+      letter-spacing: 0.1em;
+    }
+
+    .rounds-content {
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .round {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .round:last-child { border-bottom: none; }
+
+    .round-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .round-label {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .round-result {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(123, 201, 123, 0.6);
+    }
+
+    .round-title {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .round-constraints {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .round-constraint {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .round-constraint strong {
+      color: var(--text);
+      font-weight: 400;
+    }
+
+    .round-logline {
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 0.75rem;
+    }
+
+    .round-link {
+      display: inline-block;
+      margin-top: 0.5rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      transition: opacity 0.3s;
+      border-bottom: 1px solid rgba(201, 185, 154, 0.3);
+      padding-bottom: 2px;
+    }
+    .round-link:hover { opacity: 0.7; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center; padding: 4rem 3rem;
+      font-size: 0.7rem; letter-spacing: 0.15em;
+      text-transform: uppercase; color: var(--text-muted);
+      opacity: 0.4; position: relative; z-index: 1;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      .page-hero { padding: 8rem 1.5rem 2rem; }
+      .split {
+        grid-template-columns: 1fr;
+        padding: 2rem 1.5rem 3rem;
+        min-height: auto;
+      }
+      .rounds-panel {
+        border-left: none;
+        border-top: 1px solid rgba(255,255,255,0.04);
+        padding: 2rem 0 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="particles" id="particles"></div>
+
+  <nav>
+    <a href="index.html" class="nav-logo">SH1FT</a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <a href="index.html" class="back-link">Back to home</a>
+    <h1>NYC Midnight</h1>
+    <p class="subtitle">
+      Timed writing competition with assigned constraints. You are assigned a genre, subject and character and have between 48 hours to 7 days to write your story.
+    </p>
+  </div>
+
+  <!-- SPLIT: COMPETITIONS LEFT, ROUNDS RIGHT -->
+  <div class="split">
+    <div class="comp-stack" id="compStack">
+      <div class="comp-item active" data-comp="scary2025" onclick="showComp(this, 'scary2025')">
+        <div class="comp-item-format">Scary Story</div>
+        <div class="comp-item-title">Scary Story Challenge</div>
+        <div class="comp-item-date">November 2025 — 3 Rounds</div>
+      </div>
+      <div class="comp-item" data-comp="sp2025" onclick="showComp(this, 'sp2025')">
+        <div class="comp-item-format">Screenplay</div>
+        <div class="comp-item-title">Screenwriting Challenge</div>
+        <div class="comp-item-date">February 2025 — 1 Round</div>
+      </div>
+      <div class="comp-item" data-comp="sp2026" onclick="showComp(this, 'sp2026')">
+        <div class="comp-item-format">Screenplay</div>
+        <div class="comp-item-title">Screenwriting Challenge</div>
+        <div class="comp-item-date">February 2026 — 1 Round</div>
+      </div>
+      <div class="comp-item" data-comp="ss2026" onclick="showComp(this, 'ss2026')">
+        <div class="comp-item-format">Short Story</div>
+        <div class="comp-item-title">Short Story Challenge</div>
+        <div class="comp-item-date">February 2026 — 1 Round</div>
+      </div>
+    </div>
+
+    <div class="rounds-panel" id="roundsPanel"></div>
+  </div>
+
+  <footer>
+    &copy; 2026 Shift1&trade; Productions. All rights reserved.
+  </footer>
+
+  <script>
+    // Particles
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement('div');
+      p.classList.add('particle');
+      p.style.left = Math.random() * 100 + '%';
+      p.style.top = Math.random() * 100 + '%';
+      const size = 2 + Math.random() * 2;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.animationDuration = (8 + Math.random() * 8) + 's';
+      p.style.animationDelay = (Math.random() * 12) + 's';
+      container.appendChild(p);
+    }
+
+    // Competition data
+    const comps = {
+      scary2025: {
+        rounds: [
+          {
+            label: 'Round 1',
+            title: 'Don\u2019t Answer.',
+            constraints: [
+              { key: 'Scare', val: 'A Silhouette' },
+              { key: 'Action', val: 'Concealing' },
+              { key: 'Character', val: 'A Stepsister' }
+            ],
+            logline: 'A soldier\u2019s wartime journal entries reveal a haunting that followed him from a riverbank to Mont-Saint-Michel \u2014 and the stepsister he tried to forget.',
+            result: 'Advanced',
+            link: 'read/viewer.html#dont-answer',
+            date: 'November 2025'
+          },
+          {
+            label: 'Round 2',
+            title: 'Oops',
+            constraints: [
+              { key: 'Scare', val: 'New Year\u2019s Eve' },
+              { key: 'Action', val: 'Roughhousing' },
+              { key: 'Character', val: 'A Klutz' }
+            ],
+            logline: 'An FBI investigator working alone on New Year\u2019s Eve connects two impossible deaths \u2014 then realises the pattern includes him.',
+            result: 'Advanced',
+            link: 'read/viewer.html#oops',
+            date: 'January 2026'
+          },
+          {
+            label: 'Final Round',
+            title: 'Confession 114',
+            constraints: [
+              { key: 'Scare', val: 'A Wrong Turn' },
+              { key: 'Action', val: 'Sifting' },
+              { key: 'Character', val: 'An Exhausted Person' }
+            ],
+            logline: 'A priest sifting through video confessions late at night encounters one that knows his name \u2014 and won\u2019t stay on the screen.',
+            link: 'read/viewer.html#confession-114',
+            date: 'March 2026'
+          }
+        ]
+      },
+      sp2025: {
+        rounds: [
+          {
+            label: 'Round 1',
+            title: 'Feed',
+            constraints: [
+              { key: 'Genre', val: 'Horror' },
+              { key: 'Subject', val: 'Turn of the Century' },
+              { key: 'Character', val: 'A Doppelg\u00e4nger' }
+            ],
+            logline: 'A frustrated clockmaker restores timepieces in Victorian London. As she works, an unseen force moves through the city, leaving behind a trail of bodies and an unsettling connection to her craft.',
+            link: 'read/viewer.html#feed',
+            date: 'February 2025'
+          }
+        ]
+      },
+      sp2026: {
+        rounds: [
+          {
+            label: 'Round 1',
+            title: 'First Words',
+            constraints: [
+              { key: 'Genre', val: 'Sci-Fi' },
+              { key: 'Action', val: 'Publicity Stunt' },
+              { key: 'Character', val: 'A Coach' }
+            ],
+            logline: 'A children\u2019s speech therapist is recruited to prepare humanity\u2019s first alien visitor for his televised address \u2014 but discovers his body betrays a truth his words won\u2019t.',
+            link: 'read/viewer.html#first-words',
+            date: 'February 2026'
+          }
+        ]
+      },
+      ss2026: {
+        rounds: [
+          {
+            label: 'Round 1',
+            title: 'Eau de Prince',
+            constraints: [
+              { key: 'Genre', val: 'Romantic Comedy' },
+              { key: 'Subject', val: 'Contamination' },
+              { key: 'Character', val: 'A Prince' }
+            ],
+            logline: 'On Mars, the Prince of Waste Reclamation can\u2019t find love \u2014 until a contamination lockdown traps him with the one person who literally can\u2019t smell him.',
+            link: 'read/viewer.html#eau-de-prince',
+            date: 'February 2026'
+          }
+        ]
+      }
+    };
+
+    function renderRounds(compId) {
+      const data = comps[compId];
+      if (!data) return '';
+
+      return '<div class="rounds-content">' + data.rounds.map(r => `
+        <div class="round">
+          <div class="round-header">
+            <div class="round-label">${r.label} \u2014 ${r.date}</div>
+            ${r.result ? `<div class="round-result">${r.result}</div>` : ''}
+          </div>
+          <div class="round-title">${r.title}</div>
+          <div class="round-constraints">
+            ${r.constraints.map(c => `<div class="round-constraint"><strong>${c.key}:</strong> ${c.val}</div>`).join('')}
+          </div>
+          <div class="round-logline">${r.logline}</div>
+          <a href="${r.link}" class="round-link">Read the story</a>
+        </div>
+      `).join('') + '</div>';
+    }
+
+    function showComp(el, compId) {
+      document.querySelectorAll('.comp-item').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('roundsPanel').innerHTML = renderRounds(compId);
+    }
+
+    // Show first competition by default
+    document.getElementById('roundsPanel').innerHTML = renderRounds('scary2025');
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift1 — Productions</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0b0b0b;
+      --bg-card: #161616;
+      --bg-card-back: #1a1a1a;
+      --text: #e8e4de;
+      --text-muted: #8a8580;
+      --accent: #c9b99a;
+      --accent-dim: rgba(201, 185, 154, 0.12);
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── BACKGROUND PARTICLES ─── */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0;
+      animation: firefly ease-in-out infinite;
+    }
+
+    @keyframes firefly {
+      0% { opacity: 0; transform: translate(0, 0); }
+      25% { opacity: 0.25; }
+      50% { opacity: 0.08; transform: translate(30px, -60px); }
+      75% { opacity: 0.2; }
+      100% { opacity: 0; transform: translate(-20px, -120px); }
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: linear-gradient(to bottom, var(--bg) 60%, transparent);
+    }
+
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── HERO ─── */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-logo { margin-bottom: 2rem; }
+
+    .logo-text {
+      font-family: var(--font-heading);
+      font-size: clamp(4rem, 10vw, 8rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      line-height: 1;
+    }
+
+    .logo-text .one {
+      color: var(--accent);
+      position: relative;
+    }
+
+    .logo-text .tm {
+      font-size: 0.2em;
+      vertical-align: baseline;
+      color: var(--text-muted);
+      opacity: 0.5;
+      margin-left: 0.05em;
+      position: relative;
+      top: -2.7em;
+    }
+
+    .hero-sub {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+    }
+
+    .hero-line {
+      width: 40px;
+      height: 1px;
+      background: var(--accent);
+      margin-top: 3rem;
+      opacity: 0.5;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      opacity: 0.4;
+      animation: bounce 2s ease-in-out infinite;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    .scroll-hint:hover { opacity: 0.7; }
+    .scroll-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    @keyframes bounce {
+      0%, 100% { opacity: 0.3; transform: translateY(0); }
+      50% { opacity: 0.6; transform: translateY(8px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.2; transform: translateY(0); }
+      50% { opacity: 0.5; transform: translateY(4px); }
+    }
+
+    /* ─── SECTIONS ─── */
+    section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+
+    .section-text {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 600px;
+      line-height: 1.8;
+    }
+
+
+    /* ─── DIVIDER ─── */
+    .divider {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 3rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .divider-line {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--accent-dim), transparent);
+    }
+
+    /* ─── PROJECTS ─── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .card-container {
+      perspective: 1000px;
+      height: 400px;
+    }
+
+    .card-container a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+
+    .card-container:hover .card {
+      transform: rotateY(180deg);
+    }
+
+    /* No flip on link cards */
+    .card-container.no-flip:hover .card {
+      transform: none;
+    }
+
+    .card-container.no-flip .card-front {
+      transition: border-color 0.3s, background 0.3s;
+    }
+
+    .card-container.no-flip:hover .card-front {
+      border-color: rgba(201, 185, 154, 0.15);
+      background: #1a1a1a;
+    }
+
+    .card-front,
+    .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .card-front {
+      background: var(--bg-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      transition: border-color 0.3s ease;
+    }
+
+    .card-container:hover .card-front {
+      border-color: rgba(201, 185, 154, 0.15);
+    }
+
+    .card-status {
+      position: absolute;
+      top: 1.5rem;
+      left: 2rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .status-complete { color: rgba(123, 201, 123, 0.6); }
+    .status-progress { color: rgba(201, 185, 154, 0.6); }
+
+    .card-category {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      font-weight: 500;
+    }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .card-number {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-family: var(--font-heading);
+      font-size: 4rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.03);
+      line-height: 1;
+    }
+
+    .card-back {
+      background: var(--bg-card-back);
+      transform: rotateY(180deg);
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border: 1px solid rgba(201, 185, 154, 0.1);
+      border-radius: 8px;
+    }
+
+    .card-back .card-category { margin-bottom: 1rem; }
+
+    .card-back-title {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .card-back-text {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-back-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+      opacity: 0.6;
+    }
+
+    .card-back-meta span {
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .card-back-link {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      transition: opacity 0.3s;
+      border-bottom: 1px solid rgba(201, 185, 154, 0.3);
+      padding-bottom: 2px;
+    }
+    .card-back-link:hover { opacity: 0.7; }
+
+    /* ─── CONTACT ─── */
+    .contact {
+      text-align: center;
+      padding: 10rem 3rem;
+    }
+
+    .contact .section-title { margin-bottom: 1rem; }
+
+    .contact-email {
+      font-family: var(--font-heading);
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      color: var(--accent);
+      text-decoration: none;
+      transition: opacity 0.3s ease;
+      letter-spacing: 0.02em;
+    }
+
+    .contact-email:hover { opacity: 0.7; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 2rem 3rem 3rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.4;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ─── SCROLL ANIMATIONS ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-container.reveal {
+      transition-delay: calc(var(--i, 0) * 0.1s);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { gap: 1.5rem; }
+      section { padding: 5rem 1.5rem; }
+      .about { grid-template-columns: 1fr; gap: 2rem; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .contact { padding: 6rem 1.5rem; }
+      .divider { padding: 0 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BACKGROUND PARTICLES -->
+  <div class="particles" id="particles"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">SH1FT</a>
+    <ul class="nav-links">
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-logo">
+      <div class="logo-text">SH<span class="one">1</span>FT</div>
+      <div class="hero-sub">Productions</div>
+    </div>
+    <div class="hero-line"></div>
+    <a href="#projects" class="scroll-hint"><span class="scroll-label">Stories</span>&#8595;</a>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">Projects</div>
+    <h2 class="section-title">Selected Stories</h2>
+    <p class="section-text">Features, pilots, novels, short stories — the best fit for the idea.</p>
+
+    <div class="projects-grid">
+
+      <!-- NYC Midnight -->
+      <div class="card-container reveal" style="--i:0">
+        <div class="card">
+          <div class="card-front">
+            <div class="card-status status-complete">Complete</div>
+            <div class="card-category">Competition</div>
+            <div class="card-title">NYC Midnight</div>
+            <div class="card-subtitle">Timed story competition</div>
+          </div>
+          <a href="nyc-midnight.html" class="card-back">
+            <div class="card-category">NYC Midnight</div>
+            <div class="card-back-title">4 Competitions</div>
+            <div class="card-back-text">
+              Scary Story Challenge — 2025<br>
+              Screenwriting Challenge — 2025<br>
+              Screenwriting Challenge — 2026<br>
+              Short Story Challenge — 2026
+            </div>
+            <span class="card-back-link">View entries &rarr;</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Icarus -->
+      <div class="card-container reveal" style="--i:1">
+        <div class="card">
+          <div class="card-front">
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-category">Animated Pilot</div>
+            <div class="card-title">Icarus</div>
+            <div class="card-subtitle">Comedy / Sci-Fi</div>
+          </div>
+          <div class="card-back">
+            <div class="card-category">Animated Pilot</div>
+            <div class="card-back-title">Icarus</div>
+            <div class="card-back-text">
+              An outcast teenager becomes the unlikely leader of an alien universe on the brink of collapse. She didn't ask for the job — and they didn't ask for her.
+            </div>
+            <div class="card-back-meta">
+              <span>Format: Animated Pilot / 22 min</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shuffle -->
+      <div class="card-container reveal" style="--i:2">
+        <div class="card">
+          <div class="card-front">
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-category">Feature Screenplay</div>
+            <div class="card-title">Shuffle</div>
+            <div class="card-subtitle">Horror</div>
+          </div>
+          <div class="card-back">
+            <div class="card-category">Feature Screenplay</div>
+            <div class="card-back-title">Shuffle</div>
+            <div class="card-back-text">
+              A college student pulling an all-nighter in an empty science lab is pricked by a needle — and something materialises. An entity with a dark connection to the school begins following him. The worst part: you can't hear it until it's already moving towards you.
+            </div>
+            <div class="card-back-meta">
+              <span>Format: Feature</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lion Street -->
+      <div class="card-container reveal" style="--i:3">
+        <div class="card">
+          <div class="card-front">
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-category">Novel / Feature / Series</div>
+            <div class="card-title">Lion Street</div>
+            <div class="card-subtitle">Biopic</div>
+          </div>
+          <div class="card-back">
+            <div class="card-category">Novel / Feature / Series</div>
+            <div class="card-back-title">Lion Street</div>
+            <div class="card-back-text">
+              A teenage girl arrives in a foreign country barely speaking the language. She finds a close community of others like her, and together they make their way in a new world.
+            </div>
+            <div class="card-back-meta">
+              <span>Format: Novel / Feature / Series</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bombshell -->
+      <div class="card-container no-flip reveal" style="--i:4">
+        <div class="card">
+          <div class="card-front">
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-category">Feature Screenplay</div>
+            <div class="card-title">Bombshell</div>
+            <div class="card-subtitle">Comedy</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Maalik -->
+      <div class="card-container no-flip reveal" style="--i:5">
+        <div class="card">
+          <div class="card-front">
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-category">Feature / Series</div>
+            <div class="card-title">Maalik</div>
+            <div class="card-subtitle">Thriller</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Griot -->
+      <div class="card-container no-flip reveal" style="--i:6">
+        <div class="card">
+          <div class="card-front">
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-category">Feature Screenplay</div>
+            <div class="card-title">Griot</div>
+            <div class="card-subtitle">Psychological</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- God has No Family -->
+      <div class="card-container no-flip reveal" style="--i:7">
+        <div class="card">
+          <div class="card-front">
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-category">Feature Screenplay</div>
+            <div class="card-title">God has No Family</div>
+            <div class="card-subtitle">Thriller / Sci-Fi</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Nostradamus -->
+      <div class="card-container no-flip reveal" style="--i:8">
+        <div class="card">
+          <div class="card-front">
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-category">Feature Screenplay</div>
+            <div class="card-title">Nostradamus</div>
+            <div class="card-subtitle">Romantic Comedy</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact">
+    <div class="section-label">Get in touch</div>
+    <a href="mailto:stories@shift1.co" class="contact-email">stories@shift1.co</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    &copy; 2026 Shift1&trade; Productions. All rights reserved.
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Background particles (fireflies)
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 40; i++) {
+      const p = document.createElement('div');
+      p.classList.add('particle');
+      p.style.left = Math.random() * 100 + '%';
+      p.style.top = Math.random() * 100 + '%';
+      const size = 2 + Math.random() * 2;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.animationDuration = (8 + Math.random() * 8) + 's';
+      p.style.animationDelay = (Math.random() * 12) + 's';
+      container.appendChild(p);
+    }
+  </script>
+
+</body>
+</html>
