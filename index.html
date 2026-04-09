@@ -59,9 +59,9 @@
 
     @keyframes firefly {
       0% { opacity: 0; transform: translate(0, 0); }
-      25% { opacity: 0.25; }
-      50% { opacity: 0.08; transform: translate(30px, -60px); }
-      75% { opacity: 0.2; }
+      25% { opacity: 0.4; }
+      50% { opacity: 0.15; transform: translate(30px, -60px); }
+      75% { opacity: 0.32; }
       100% { opacity: 0; transform: translate(-20px, -120px); }
     }
 
@@ -667,7 +667,7 @@
       p.style.width = size + 'px';
       p.style.height = size + 'px';
       p.style.animationDuration = (8 + Math.random() * 8) + 's';
-      p.style.animationDelay = (Math.random() * 12) + 's';
+      p.style.animationDelay = (Math.random() * 1) + 's';
       container.appendChild(p);
     }
   </script>
