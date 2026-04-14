@@ -60,7 +60,7 @@
     /* ─── TOP BAR ─── */
     .top-bar {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
       align-items: center;
       padding: 1rem 3rem;
       flex-shrink: 0;
@@ -91,10 +91,14 @@
     .back-link::before { content: '\2190  '; }
 
     .top-bar-right {
+      position: absolute;
+      top: 1rem;
+      right: 3rem;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
       gap: 0.4rem;
+      z-index: 5;
     }
 
     .constraint-pill {
@@ -141,7 +145,7 @@
 
     .page-container {
       max-width: 680px;
-      max-height: calc(100vh - 120px);
+      max-height: calc(100vh - 90px);
       display: flex;
       align-items: center;
       justify-content: center;
