@@ -106,27 +106,43 @@
       min-height: 60vh;
     }
 
+    /* Column heading — "Competitions" / "Stories" */
+    .col-heading {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding-bottom: 0.9rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(201,185,154,0.25);
+    }
+
     /* ─── LEFT: COMPETITION STACK ─── */
     .comp-stack {
       display: flex;
       flex-direction: column;
-      gap: 0;
+      gap: 0.6rem;
     }
 
     .comp-item {
-      padding: 1.25rem 1.5rem;
-      border-left: 2px solid transparent;
+      padding: 1.1rem 1.25rem;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-left: 2px solid rgba(255,255,255,0.09);
+      border-radius: 3px;
       cursor: pointer;
       transition: all 0.3s;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
     }
 
     .comp-item:hover {
       background: rgba(255,255,255,0.02);
+      border-color: rgba(201,185,154,0.3);
+      border-left-color: rgba(201,185,154,0.4);
     }
 
     .comp-item.active {
       border-left-color: var(--accent);
+      border-left-width: 3px;
       background: rgba(201, 185, 154, 0.04);
     }
 
@@ -159,20 +175,70 @@
     }
 
     /* ─── RIGHT: ROUNDS ─── */
+    .rounds-col {
+      border-left: 1px solid rgba(255,255,255,0.06);
+      padding-left: 2rem;
+    }
     .rounds-panel {
-      padding: 0.5rem 0 0 2rem;
-      border-left: 1px solid rgba(255,255,255,0.04);
+      padding: 0;
     }
 
     .rounds-empty {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100%;
-      font-size: 0.8rem;
+      min-height: 340px;
+      text-align: center;
+      padding: 2rem;
+    }
+    .rounds-empty-eyebrow {
+      font-family: var(--font-heading);
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      opacity: 0.7;
+    }
+    .rounds-empty-title {
+      font-family: var(--font-heading);
+      font-size: 1.15rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.01em;
+    }
+    .rounds-empty-msg {
+      font-size: 0.82rem;
       color: var(--text-muted);
-      opacity: 0.4;
-      letter-spacing: 0.1em;
+      max-width: 380px;
+      line-height: 1.7;
+    }
+    .rounds-empty-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .rounds-empty-stat {
+      text-align: center;
+    }
+    .rounds-empty-num {
+      font-family: var(--font-heading);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+    .rounds-empty-label {
+      font-family: var(--font-heading);
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
     }
 
     .rounds-content {
@@ -188,6 +254,7 @@
       padding: 1.5rem 0;
       border-bottom: 1px solid rgba(255,255,255,0.03);
     }
+    .round:first-child { padding-top: 0; }
 
     .round:last-child { border-bottom: none; }
 
@@ -308,31 +375,52 @@
   </div>
 
   <!-- SPLIT: COMPETITIONS LEFT, ROUNDS RIGHT -->
-  <div class="split">
-    <div class="comp-stack" id="compStack">
-      <div class="comp-item active" data-comp="scary2025" onclick="showComp(this, 'scary2025')">
-        <div class="comp-item-format">Scary Story</div>
-        <div class="comp-item-title">Scary Story Challenge</div>
-        <div class="comp-item-date">November 2025 — 3 Rounds</div>
-      </div>
-      <div class="comp-item" data-comp="ss2026" onclick="showComp(this, 'ss2026')">
-        <div class="comp-item-format">Short Story</div>
-        <div class="comp-item-title">Short Story Challenge</div>
-        <div class="comp-item-date">February 2026 — 1 Round</div>
-      </div>
-      <div class="comp-item" data-comp="sp2026" onclick="showComp(this, 'sp2026')">
-        <div class="comp-item-format">Screenplay</div>
-        <div class="comp-item-title">Screenwriting Challenge</div>
-        <div class="comp-item-date">February 2026 — 1 Round</div>
-      </div>
-      <div class="comp-item" data-comp="sp2025" onclick="showComp(this, 'sp2025')">
-        <div class="comp-item-format">Screenplay</div>
-        <div class="comp-item-title">Screenwriting Challenge</div>
-        <div class="comp-item-date">February 2025 — 1 Round</div>
+  <div class="split" id="split">
+    <div class="comp-col">
+      <div class="col-heading">Competitions</div>
+      <div class="comp-stack" id="compStack">
+        <div class="comp-item" data-comp="scary2025" onclick="showComp(this, 'scary2025')">
+          <div class="comp-item-format">Scary Story</div>
+          <div class="comp-item-title">Scary Story Challenge</div>
+          <div class="comp-item-date">November 2025 — 3 Rounds</div>
+        </div>
+        <div class="comp-item" data-comp="ss2026" onclick="showComp(this, 'ss2026')">
+          <div class="comp-item-format">Short Story</div>
+          <div class="comp-item-title">Short Story Challenge</div>
+          <div class="comp-item-date">February 2026 — 2 Rounds</div>
+        </div>
+        <div class="comp-item" data-comp="sp2026" onclick="showComp(this, 'sp2026')">
+          <div class="comp-item-format">Screenplay</div>
+          <div class="comp-item-title">Screenwriting Challenge</div>
+          <div class="comp-item-date">February 2026 — 2 Rounds</div>
+        </div>
+        <div class="comp-item" data-comp="sp2025" onclick="showComp(this, 'sp2025')">
+          <div class="comp-item-format">Screenplay</div>
+          <div class="comp-item-title">Screenwriting Challenge</div>
+          <div class="comp-item-date">February 2025 — 1 Round</div>
+        </div>
       </div>
     </div>
 
-    <div class="rounds-panel" id="roundsPanel"></div>
+    <div class="rounds-col">
+      <div class="col-heading">Stories</div>
+      <div class="rounds-panel" id="roundsPanel">
+        <div class="rounds-empty">
+          <div class="rounds-empty-eyebrow">Competition Overview</div>
+          <div class="rounds-empty-msg">Select a competition on the left to see the rounds and read the stories.</div>
+          <div class="rounds-empty-stats">
+            <div class="rounds-empty-stat">
+              <div class="rounds-empty-num">6</div>
+              <div class="rounds-empty-label">Stories</div>
+            </div>
+            <div class="rounds-empty-stat">
+              <div class="rounds-empty-num">3</div>
+              <div class="rounds-empty-label">Live Competitions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <footer>
@@ -493,15 +581,13 @@
     function showComp(el, compId) {
       document.querySelectorAll('.comp-item').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
+      document.getElementById('split').classList.remove('no-selection');
       const panel = document.getElementById('roundsPanel');
       panel.innerHTML = renderRounds(compId);
       if (window.innerWidth <= 768) {
         panel.scrollIntoView({ behavior: 'smooth' });
       }
     }
-
-    // Show first competition by default
-    document.getElementById('roundsPanel').innerHTML = renderRounds('scary2025');
   </script>
 
 <script data-goatcounter="https://shift1.goatcounter.com/count"
