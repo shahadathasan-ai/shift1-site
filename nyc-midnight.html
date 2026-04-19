@@ -106,7 +106,7 @@
       min-height: 60vh;
     }
 
-    /* Column heading — "Competitions" / "Stories" */
+    /* Column heading — "Competitions Overview" / "Stories" */
     .col-heading {
       font-family: var(--font-heading);
       font-size: 0.6rem;
@@ -117,6 +117,131 @@
       margin-bottom: 1rem;
       border-bottom: 1px solid rgba(201,185,154,0.25);
     }
+    .col-heading.clickable {
+      cursor: pointer;
+      transition: color 0.2s, opacity 0.2s;
+      user-select: none;
+    }
+    .col-heading.clickable:hover {
+      color: var(--text);
+      opacity: 0.9;
+    }
+    .col-heading.clickable::before {
+      content: '← ';
+      opacity: 0.5;
+      margin-right: 0.3em;
+    }
+
+    /* ─── OVERVIEW TRACKER (inside empty state) ─── */
+    .overview-tracker {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      width: 100%;
+      max-width: 520px;
+    }
+    .overview-tracker-label {
+      font-family: var(--font-heading);
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 1.2rem;
+      text-align: center;
+      opacity: 0.7;
+    }
+    .tracker-row {
+      padding: 0.7rem 0.8rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      text-align: left;
+      border-radius: 4px;
+    }
+    .tracker-row:hover {
+      background: rgba(255,255,255,0.025);
+    }
+    .tracker-row:last-child {
+      border-bottom: none;
+    }
+    .tracker-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.55rem;
+    }
+    .tracker-comp-title {
+      font-family: var(--font-heading);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .tracker-comp-sub {
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .tracker-stages {
+      display: flex;
+      align-items: center;
+      padding: 0 0.2rem;
+    }
+    .tracker-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .tracker-label-top {
+      font-size: 0.48rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 5px;
+      white-space: nowrap;
+      line-height: 1;
+    }
+    .tracker-stage.done .tracker-label-top { color: rgba(123,201,123,0.75); }
+    .tracker-stage.pending .tracker-label-top { color: var(--accent); font-weight: 600; }
+    .tracker-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: 1.5px solid rgba(255,255,255,0.18);
+    }
+    .tracker-stage.done .tracker-dot {
+      background: rgba(123,201,123,0.7);
+      border-color: rgba(123,201,123,0.7);
+    }
+    .tracker-stage.pending .tracker-dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(201,185,154,0.18);
+    }
+    .tracker-label-bot {
+      font-size: 0.5rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      text-align: center;
+      max-width: 90px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+      min-height: 0.55rem;
+    }
+    .tracker-stage.pending .tracker-label-bot { color: var(--accent); font-weight: 500; }
+    .tracker-connector {
+      flex: 1 1 auto;
+      height: 1.5px;
+      background: rgba(255,255,255,0.08);
+      margin: 0 3px;
+      min-width: 8px;
+    }
+    .tracker-connector.done { background: rgba(123,201,123,0.5); }
 
     /* ─── LEFT: COMPETITION STACK ─── */
     .comp-stack {
@@ -377,7 +502,7 @@
   <!-- SPLIT: COMPETITIONS LEFT, ROUNDS RIGHT -->
   <div class="split" id="split">
     <div class="comp-col">
-      <div class="col-heading">Competitions</div>
+      <div class="col-heading clickable" id="overviewHeading" onclick="resetOverview()">Competitions Overview</div>
       <div class="comp-stack" id="compStack">
         <div class="comp-item" data-comp="scary2025" onclick="showComp(this, 'scary2025')">
           <div class="comp-item-format">Scary Story</div>
@@ -404,22 +529,7 @@
 
     <div class="rounds-col">
       <div class="col-heading">Stories</div>
-      <div class="rounds-panel" id="roundsPanel">
-        <div class="rounds-empty">
-          <div class="rounds-empty-eyebrow">Competition Overview</div>
-          <div class="rounds-empty-msg">Select a competition on the left to see the rounds and read the stories.</div>
-          <div class="rounds-empty-stats">
-            <div class="rounds-empty-stat">
-              <div class="rounds-empty-num">6</div>
-              <div class="rounds-empty-label">Stories</div>
-            </div>
-            <div class="rounds-empty-stat">
-              <div class="rounds-empty-num">3</div>
-              <div class="rounds-empty-label">Live Competitions</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="rounds-panel" id="roundsPanel"></div>
     </div>
   </div>
 
@@ -578,6 +688,99 @@
       `).join('') + '</div>';
     }
 
+    // ─── OVERVIEW TRACKER DATA ───
+    // Shown on the empty state. Click any row to jump to that competition.
+    const trackerData = [
+      {
+        id: 'scary2025',
+        title: 'Scary Story',
+        sub: '2025',
+        stages: [
+          { label: 'Round 1',     state: 'done',    below: "Don\u2019t Answer" },
+          { label: 'Round 2',     state: 'done',    below: 'Oops' },
+          { label: 'Final Round', state: 'done',    below: 'Confession 114' },
+          { label: 'Result',      state: 'pending', below: '22 Apr' }
+        ]
+      },
+      {
+        id: 'ss2026',
+        title: 'Short Story',
+        sub: '2026',
+        stages: [
+          { label: 'Round 1', state: 'done',    below: 'Eau de Prince' },
+          { label: 'Round 2', state: 'done',    below: 'Bad Human' },
+          { label: 'Result',  state: 'pending', below: '3 Jun' }
+        ]
+      },
+      {
+        id: 'sp2026',
+        title: 'Screenwriting',
+        sub: '2026',
+        stages: [
+          { label: 'Round 1', state: 'done',    below: 'First Words' },
+          { label: 'Round 2', state: 'done',    below: 'TBD' },
+          { label: 'Result',  state: 'pending', below: '10 Jun' }
+        ]
+      }
+    ];
+
+    function renderOverviewHTML() {
+      const trackerRows = trackerData.map(t => {
+        const stagesHtml = t.stages.map((s, i) => {
+          const connHtml = (i < t.stages.length - 1)
+            ? `<div class="tracker-connector${s.state === 'done' && t.stages[i+1].state !== 'future' ? ' done' : ''}"></div>`
+            : '';
+          return `<div class="tracker-stage ${s.state}">
+            <div class="tracker-label-top">${s.label}</div>
+            <div class="tracker-dot"></div>
+            <div class="tracker-label-bot" title="${s.below}">${s.below}</div>
+          </div>${connHtml}`;
+        }).join('');
+        return `<div class="tracker-row" onclick="showCompById('${t.id}')">
+          <div class="tracker-head">
+            <span class="tracker-comp-title">${t.title}</span>
+            <span class="tracker-comp-sub">${t.sub}</span>
+          </div>
+          <div class="tracker-stages">${stagesHtml}</div>
+        </div>`;
+      }).join('');
+
+      return `
+        <div class="rounds-empty">
+          <div class="rounds-empty-eyebrow">Competition Overview</div>
+          <div class="rounds-empty-msg">Select a competition on the left \u2014 or tap a tracker below \u2014 to see the rounds and read the stories.</div>
+          <div class="rounds-empty-stats">
+            <div class="rounds-empty-stat">
+              <div class="rounds-empty-num">6</div>
+              <div class="rounds-empty-label">Stories</div>
+            </div>
+            <div class="rounds-empty-stat">
+              <div class="rounds-empty-num">3</div>
+              <div class="rounds-empty-label">Live Competitions</div>
+            </div>
+          </div>
+          <div class="overview-tracker">
+            <div class="overview-tracker-label">Live Progress</div>
+            ${trackerRows}
+          </div>
+        </div>`;
+    }
+
+    function resetOverview() {
+      document.querySelectorAll('.comp-item').forEach(c => c.classList.remove('active'));
+      const panel = document.getElementById('roundsPanel');
+      panel.innerHTML = renderOverviewHTML();
+      document.getElementById('split').classList.add('no-selection');
+      if (window.innerWidth <= 768) {
+        document.querySelector('.page-hero').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function showCompById(id) {
+      const el = document.querySelector(`.comp-item[data-comp="${id}"]`);
+      if (el) showComp(el, id);
+    }
+
     function showComp(el, compId) {
       document.querySelectorAll('.comp-item').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
@@ -588,6 +791,9 @@
         panel.scrollIntoView({ behavior: 'smooth' });
       }
     }
+
+    // Initial render of the overview state (with tracker)
+    resetOverview();
   </script>
 
 <script data-goatcounter="https://shift1.goatcounter.com/count"
