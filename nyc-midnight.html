@@ -73,48 +73,41 @@
 
     /* ─── PAGE HERO ─── */
     .page-hero {
-      padding: 10rem 3rem 3rem;
+      padding: 3.5rem 3rem 0.3rem;
       max-width: 1200px; margin: 0 auto;
       position: relative; z-index: 1;
     }
-    .back-link {
-      font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
-      color: var(--text-muted); text-decoration: none; transition: color 0.3s;
-      display: inline-block; margin-bottom: 2rem;
-    }
-    .back-link:hover { color: var(--accent); }
-    .back-link::before { content: '\2190  '; }
     .page-hero h1 {
       font-family: var(--font-heading);
-      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-size: clamp(1.5rem, 2.5vw, 1.9rem);
       font-weight: 700; color: var(--text);
-      margin-bottom: 1.5rem; line-height: 1.1;
+      margin-bottom: 0.35rem; line-height: 1.1;
     }
     .page-hero .subtitle {
-      font-size: 1.05rem; color: var(--text-muted);
-      max-width: 600px; line-height: 1.8;
+      font-size: 0.78rem; color: var(--text-muted);
+      max-width: 680px; line-height: 1.5;
     }
 
     /* ─── SPLIT LAYOUT ─── */
     .split {
       max-width: 1200px; margin: 0 auto;
-      padding: 3rem 3rem 5rem;
+      padding: 0.6rem 3rem 2rem;
       display: grid;
       grid-template-columns: 300px 1fr;
-      gap: 3rem;
+      gap: 2.5rem;
       position: relative; z-index: 1;
-      min-height: 60vh;
+      min-height: auto;
     }
 
-    /* Column heading — "Competitions Overview" / "Stories" */
+    /* Column heading — "Competitions" / "Competition" / "Stories" */
     .col-heading {
       font-family: var(--font-heading);
       font-size: 0.6rem;
       letter-spacing: 0.3em;
       text-transform: uppercase;
       color: var(--accent);
-      padding-bottom: 0.9rem;
-      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.6rem;
       border-bottom: 1px solid rgba(201,185,154,0.25);
     }
     .col-heading.clickable {
@@ -134,11 +127,10 @@
 
     /* ─── OVERVIEW TRACKER (inside empty state) ─── */
     .overview-tracker {
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(255,255,255,0.06);
+      margin-top: 0.8rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
       width: 100%;
-      max-width: 520px;
     }
     .overview-tracker-label {
       font-family: var(--font-heading);
@@ -146,8 +138,8 @@
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: var(--text-muted);
-      margin-bottom: 1.2rem;
-      text-align: center;
+      margin-bottom: 0.7rem;
+      text-align: left;
       opacity: 0.7;
     }
     .tracker-row {
@@ -192,6 +184,7 @@
       flex-direction: column;
       align-items: center;
       flex-shrink: 0;
+      width: 82px;
     }
     .tracker-label-top {
       font-size: 0.48rem;
@@ -225,7 +218,7 @@
       color: var(--text-muted);
       margin-top: 6px;
       text-align: center;
-      max-width: 90px;
+      max-width: 100%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -271,26 +264,19 @@
       background: rgba(201, 185, 154, 0.04);
     }
 
-    .comp-item-format {
-      font-size: 0.55rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.4rem;
-      font-weight: 500;
-    }
-
     .comp-item-title {
       font-family: var(--font-heading);
       font-size: 1rem;
       font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 0.2rem;
-      transition: color 0.3s;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+      transition: opacity 0.3s;
+      opacity: 0.85;
     }
 
+    .comp-item:hover .comp-item-title,
     .comp-item.active .comp-item-title {
-      color: var(--text);
+      opacity: 1;
     }
 
     .comp-item-date {
@@ -311,11 +297,10 @@
     .rounds-empty {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 340px;
-      text-align: center;
-      padding: 2rem;
+      align-items: flex-start;
+      justify-content: flex-start;
+      text-align: left;
+      padding: 0 0.2rem;
     }
     .rounds-empty-eyebrow {
       font-family: var(--font-heading);
@@ -342,27 +327,24 @@
     }
     .rounds-empty-stats {
       display: flex;
-      gap: 2rem;
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(255,255,255,0.06);
+      gap: 1.5rem;
+      align-items: baseline;
+      margin-bottom: 0.5rem;
     }
     .rounds-empty-stat {
-      text-align: center;
+      display: flex;
+      align-items: baseline;
+      gap: 0.4rem;
     }
     .rounds-empty-num {
       font-family: var(--font-heading);
-      font-size: 1.6rem;
-      font-weight: 300;
+      font-size: 0.95rem;
+      font-weight: 500;
       color: var(--accent);
       line-height: 1;
-      margin-bottom: 0.3rem;
     }
     .rounds-empty-label {
-      font-family: var(--font-heading);
-      font-size: 0.55rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+      font-size: 0.7rem;
       color: var(--text-muted);
     }
 
@@ -465,7 +447,7 @@
     @media (max-width: 768px) {
       nav { padding: 1.2rem 1.5rem; }
       .nav-links { gap: 1.5rem; }
-      .page-hero { padding: 8rem 1.5rem 2rem; }
+      .page-hero { padding: 4rem 1.5rem 1rem; }
       .split {
         grid-template-columns: 1fr;
         padding: 2rem 1.5rem 3rem;
@@ -492,7 +474,6 @@
   </nav>
 
   <div class="page-hero">
-    <a href="index.html" class="back-link">Back to home</a>
     <h1>NYC Midnight</h1>
     <p class="subtitle">
       Timed writing competition with assigned constraints. You are assigned a genre, subject and character and have between 48 hours to 7 days to write your story.
@@ -502,33 +483,29 @@
   <!-- SPLIT: COMPETITIONS LEFT, ROUNDS RIGHT -->
   <div class="split" id="split">
     <div class="comp-col">
-      <div class="col-heading clickable" id="overviewHeading" onclick="resetOverview()">Competitions Overview</div>
+      <div class="col-heading" id="overviewHeading">Competitions</div>
       <div class="comp-stack" id="compStack">
         <div class="comp-item" data-comp="scary2025" onclick="showComp(this, 'scary2025')">
-          <div class="comp-item-format">Scary Story</div>
           <div class="comp-item-title">Scary Story Challenge</div>
-          <div class="comp-item-date">November 2025 — 3 Rounds</div>
+          <div class="comp-item-date">Nov 2025 · 3 Rounds</div>
         </div>
         <div class="comp-item" data-comp="ss2026" onclick="showComp(this, 'ss2026')">
-          <div class="comp-item-format">Short Story</div>
           <div class="comp-item-title">Short Story Challenge</div>
-          <div class="comp-item-date">February 2026 — 2 Rounds</div>
+          <div class="comp-item-date">Feb 2026 · 2 Rounds</div>
         </div>
         <div class="comp-item" data-comp="sp2026" onclick="showComp(this, 'sp2026')">
-          <div class="comp-item-format">Screenplay</div>
           <div class="comp-item-title">Screenwriting Challenge</div>
-          <div class="comp-item-date">February 2026 — 2 Rounds</div>
+          <div class="comp-item-date">Feb 2026 · 2 Rounds</div>
         </div>
         <div class="comp-item" data-comp="sp2025" onclick="showComp(this, 'sp2025')">
-          <div class="comp-item-format">Screenplay</div>
           <div class="comp-item-title">Screenwriting Challenge</div>
-          <div class="comp-item-date">February 2025 — 1 Round</div>
+          <div class="comp-item-date">Feb 2025 · 1 Round</div>
         </div>
       </div>
     </div>
 
     <div class="rounds-col">
-      <div class="col-heading">Stories</div>
+      <div class="col-heading" id="storiesHeading">Competition</div>
       <div class="rounds-panel" id="roundsPanel"></div>
     </div>
   </div>
@@ -754,7 +731,6 @@
         return `<div class="tracker-row" onclick="showCompById('${t.id}')">
           <div class="tracker-head">
             <span class="tracker-comp-title">${t.title}</span>
-            <span class="tracker-comp-sub">${t.sub}</span>
           </div>
           <div class="tracker-stages">${stagesHtml}</div>
         </div>`;
@@ -762,8 +738,6 @@
 
       return `
         <div class="rounds-empty">
-          <div class="rounds-empty-eyebrow">Competition Overview</div>
-          <div class="rounds-empty-msg">Select a competition on the left \u2014 or tap a tracker below \u2014 to see the rounds and read the stories.</div>
           <div class="rounds-empty-stats">
             <div class="rounds-empty-stat">
               <div class="rounds-empty-num">6</div>
@@ -786,6 +760,14 @@
       const panel = document.getElementById('roundsPanel');
       panel.innerHTML = renderOverviewHTML();
       document.getElementById('split').classList.add('no-selection');
+
+      // Headings revert to default state
+      const left = document.getElementById('overviewHeading');
+      left.textContent = 'Competitions';
+      left.classList.remove('clickable');
+      left.onclick = null;
+      document.getElementById('storiesHeading').textContent = 'Competition';
+
       if (window.innerWidth <= 768) {
         document.querySelector('.page-hero').scrollIntoView({ behavior: 'smooth' });
       }
@@ -802,6 +784,14 @@
       document.getElementById('split').classList.remove('no-selection');
       const panel = document.getElementById('roundsPanel');
       panel.innerHTML = renderRounds(compId);
+
+      // Swap headings: left becomes the back-to-overview link, right becomes "Stories"
+      const left = document.getElementById('overviewHeading');
+      left.textContent = 'Competitions Overview';
+      left.classList.add('clickable');
+      left.onclick = resetOverview;
+      document.getElementById('storiesHeading').textContent = 'Stories';
+
       if (window.innerWidth <= 768) {
         panel.scrollIntoView({ behavior: 'smooth' });
       }
