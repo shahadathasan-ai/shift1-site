@@ -447,17 +447,24 @@
     @media (max-width: 768px) {
       nav { padding: 1.2rem 1.5rem; }
       .nav-links { gap: 1.5rem; }
-      .page-hero { padding: 4rem 1.5rem 1rem; }
+      .page-hero { padding: 4rem 1rem 1rem; }
       .split {
         grid-template-columns: 1fr;
-        padding: 2rem 1.5rem 3rem;
+        padding: 1rem 1rem 3rem;
+        gap: 1.5rem;
         min-height: auto;
       }
       .rounds-panel {
         border-left: none;
         border-top: 1px solid rgba(255,255,255,0.04);
-        padding: 2rem 0 0 0;
+        padding: 1.5rem 0 0 0;
       }
+      /* Tracker stages shrink to fit mobile width */
+      .tracker-row { padding: 0.6rem 0.4rem; }
+      .tracker-stage { width: 60px; }
+      .tracker-label-top { font-size: 0.45rem; }
+      .tracker-label-bot { font-size: 0.48rem; }
+      .tracker-connector { min-width: 4px; margin: 0 2px; }
     }
   </style>
 </head>
