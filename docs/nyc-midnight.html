@@ -492,17 +492,17 @@
     <div class="comp-col">
       <div class="col-heading" id="overviewHeading">Competitions</div>
       <div class="comp-stack" id="compStack">
-        <div class="comp-item" data-comp="scary2025" onclick="showComp(this, 'scary2025')">
-          <div class="comp-item-title">Scary Story Challenge</div>
-          <div class="comp-item-date">Nov 2025 · 3 Rounds</div>
+        <div class="comp-item" data-comp="sp2026" onclick="showComp(this, 'sp2026')">
+          <div class="comp-item-title">Screenwriting Challenge</div>
+          <div class="comp-item-date">Feb 2026 · 2 Rounds</div>
         </div>
         <div class="comp-item" data-comp="ss2026" onclick="showComp(this, 'ss2026')">
           <div class="comp-item-title">Short Story Challenge</div>
           <div class="comp-item-date">Feb 2026 · 2 Rounds</div>
         </div>
-        <div class="comp-item" data-comp="sp2026" onclick="showComp(this, 'sp2026')">
-          <div class="comp-item-title">Screenwriting Challenge</div>
-          <div class="comp-item-date">Feb 2026 · 2 Rounds</div>
+        <div class="comp-item" data-comp="scary2025" onclick="showComp(this, 'scary2025')">
+          <div class="comp-item-title">Scary Story Challenge</div>
+          <div class="comp-item-date">Nov 2025 · 3 Rounds</div>
         </div>
         <div class="comp-item" data-comp="sp2025" onclick="showComp(this, 'sp2025')">
           <div class="comp-item-title">Screenwriting Challenge</div>
@@ -689,14 +689,14 @@
     // Shown on the empty state. Click any row to jump to that competition.
     const trackerData = [
       {
-        id: 'scary2025',
-        title: 'Scary Story',
-        sub: '2025',
+        id: 'sp2026',
+        title: 'Screenwriting',
+        sub: '2026',
         stages: [
-          { label: 'Round 1',     state: 'done',    below: "Don\u2019t Answer" },
-          { label: 'Round 2',     state: 'done',    below: 'Oops' },
-          { label: 'Final Round', state: 'done',    below: 'Confession 114' },
-          { label: 'Result',      state: 'pending', below: '22 Apr' }
+          { label: 'Round 1',     state: 'done',    below: 'First Words' },
+          { label: 'Round 2',     state: 'done',    below: 'Tomorrow' },
+          { label: 'Result',      state: 'pending', below: '10 Jun' },
+          { label: 'Final Round', state: 'future',  below: '' }
         ]
       },
       {
@@ -707,17 +707,6 @@
           { label: 'Round 1',     state: 'done',    below: 'Eau de Prince' },
           { label: 'Round 2',     state: 'done',    below: 'Bad Human' },
           { label: 'Result',      state: 'pending', below: '3 Jun' },
-          { label: 'Final Round', state: 'future',  below: '' }
-        ]
-      },
-      {
-        id: 'sp2026',
-        title: 'Screenwriting',
-        sub: '2026',
-        stages: [
-          { label: 'Round 1',     state: 'done',    below: 'First Words' },
-          { label: 'Round 2',     state: 'done',    below: 'Tomorrow' },
-          { label: 'Result',      state: 'pending', below: '10 Jun' },
           { label: 'Final Round', state: 'future',  below: '' }
         ]
       }
