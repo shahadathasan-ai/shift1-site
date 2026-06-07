@@ -213,6 +213,14 @@
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(201,185,154,0.18);
     }
+    /* 'next' = we've advanced to this stage but it hasn't happened yet */
+    .tracker-stage.next .tracker-label-top { color: rgba(123,201,123,0.85); font-weight: 600; }
+    .tracker-stage.next .tracker-label-bot { color: rgba(123,201,123,0.7); font-weight: 500; }
+    .tracker-stage.next .tracker-dot {
+      background: transparent;
+      border-color: rgba(123,201,123,0.85);
+      box-shadow: 0 0 0 3px rgba(123,201,123,0.15);
+    }
     .tracker-label-bot {
       font-size: 0.5rem;
       color: var(--text-muted);
@@ -707,7 +715,7 @@
         stages: [
           { label: 'Round 1',     state: 'done',    below: 'Eau de Prince' },
           { label: 'Round 2',     state: 'done',    below: 'Bad Human' },
-          { label: 'Round 3',     state: 'pending', below: 'TBD' },
+          { label: 'Round 3',     state: 'next',    below: 'TBD' },
           { label: 'Final Round', state: 'future',  below: '' }
         ]
       }
@@ -717,7 +725,7 @@
       const trackerRows = trackerData.map(t => {
         const stagesHtml = t.stages.map((s, i) => {
           const connHtml = (i < t.stages.length - 1)
-            ? `<div class="tracker-connector${s.state === 'done' && t.stages[i+1].state !== 'future' ? ' done' : ''}"></div>`
+            ? `<div class="tracker-connector${s.state === 'done' && (t.stages[i+1].state === 'done' || t.stages[i+1].state === 'next') ? ' done' : ''}"></div>`
             : '';
           return `<div class="tracker-stage ${s.state}">
             <div class="tracker-label-top">${s.label}</div>
