@@ -669,6 +669,19 @@
             link: 'read/viewer.html#bad-human',
             date: 'April 2026',
             limit: '1,750 words \u00b7 2 days'
+          },
+          {
+            label: 'Round 3',
+            title: 'Exhibit A',
+            constraints: [
+              { key: 'Genre', val: 'Mystery' },
+              { key: 'Subject', val: 'Locked Room' },
+              { key: 'Character', val: 'A Naysayer' }
+            ],
+            logline: 'A jury sealed in until the verdict is unanimous, a mother\u2019s story that will not add up, and one woman who refuses to condemn her until she knows what really happened to her child.',
+            link: 'read/viewer.html#exhibit-a',
+            date: 'June 2026',
+            limit: '1,500 words \u00b7 1 day'
           }
         ]
       }
@@ -715,7 +728,7 @@
         stages: [
           { label: 'Round 1',     state: 'done',    below: 'Eau de Prince' },
           { label: 'Round 2',     state: 'done',    below: 'Bad Human' },
-          { label: 'Round 3',     state: 'next',    below: 'TBD' },
+          { label: 'Round 3',     state: 'done',    below: 'Exhibit A' },
           { label: 'Final Round', state: 'future',  below: '' }
         ]
       }
