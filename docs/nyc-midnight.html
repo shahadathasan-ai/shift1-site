@@ -500,12 +500,12 @@
     <div class="comp-col">
       <div class="col-heading" id="overviewHeading">Competitions</div>
       <div class="comp-stack" id="compStack">
-        <div class="comp-item" data-comp="sp2026" onclick="showComp(this, 'sp2026')">
-          <div class="comp-item-title">Screenwriting Challenge</div>
-          <div class="comp-item-date">Feb 2026 · 2 Rounds</div>
-        </div>
         <div class="comp-item" data-comp="ss2026" onclick="showComp(this, 'ss2026')">
           <div class="comp-item-title">Short Story Challenge</div>
+          <div class="comp-item-date">Feb 2026 · 3 Rounds</div>
+        </div>
+        <div class="comp-item" data-comp="sp2026" onclick="showComp(this, 'sp2026')">
+          <div class="comp-item-title">Screenwriting Challenge</div>
           <div class="comp-item-date">Feb 2026 · 2 Rounds</div>
         </div>
         <div class="comp-item" data-comp="scary2025" onclick="showComp(this, 'scary2025')">
@@ -711,25 +711,13 @@
     // Shown on the empty state. Click any row to jump to that competition.
     const trackerData = [
       {
-        id: 'sp2026',
-        title: 'Screenwriting',
-        sub: '2026',
-        stages: [
-          { label: 'Round 1',     state: 'done',    below: 'First Words' },
-          { label: 'Round 2',     state: 'done',    below: 'Tomorrow' },
-          { label: 'Result',      state: 'pending', below: '10 Jun' },
-          { label: 'Final Round', state: 'future',  below: '' }
-        ]
-      },
-      {
         id: 'ss2026',
         title: 'Short Story',
         sub: '2026',
         stages: [
-          { label: 'Round 1',     state: 'done',    below: 'Eau de Prince' },
-          { label: 'Round 2',     state: 'done',    below: 'Bad Human' },
-          { label: 'Round 3',     state: 'done',    below: 'Exhibit A' },
-          { label: 'Final Round', state: 'future',  below: '' }
+          { label: 'Round 1', state: 'done',    below: 'Eau de Prince' },
+          { label: 'Round 2', state: 'done',    below: 'Bad Human' },
+          { label: 'Round 3', state: 'pending', below: 'Exhibit A' }
         ]
       }
     ];
