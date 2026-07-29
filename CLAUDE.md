@@ -27,7 +27,7 @@ A creative production company. Portfolio site for original writing across format
 ### index.html (main page)
 - Hero: Full-screen logo + "Productions" subtitle + "Stories" scroll hint with bouncing arrow
 - Projects section: "Selected Stories" heading, "Features, pilots, novels, short stories — the best fit for the idea."
-- 7 project cards: NYC Midnight (flip, links to nyc-midnight.html), Icarus (flip), Shuffle (flip), Lion Street (flip), Bombshell (no-flip), God has No Family (no-flip), Nostradamus (no-flip)
+- 7 project cards: NYC Midnight (flip, links to nyc-midnight.html), Icarus (flip), Shuffle (flip — card back links to read/shuffle.html, the gated script), Lion Street (flip), Bombshell (no-flip), God has No Family (no-flip), Nostradamus (no-flip)
 - Contact: stories@shift1.co
 - Footer: copyright with TM
 
@@ -46,6 +46,17 @@ A creative production company. Portfolio site for original writing across format
 - Click outside PDF goes back to nyc-midnight.html
 - Constraint pills stacked vertically, left-aligned on desktop, hidden on mobile
 
+### read/shuffle.html — gated script + storyboard viewer
+Self-contained page for the *Shuffle* screenplay (horror short). Reached from the homepage Shuffle card's flip-back.
+
+- **Password gate (client-side).** GitHub Pages is static, so there's no server auth. The gate hashes the entered password with SHA-256 (`crypto.subtle`) and compares to a hardcoded hex digest — no plaintext password in source. Success sets a `sessionStorage` flag so it won't re-prompt during the session. **Password is `2026`** (hash `158a3…a208ab`). This is obscurity, not real security — it just keeps the draft out of casual view and off search engines. To change the password: `echo -n "NEWPASS" | shasum -a 256` and replace the `HASH` constant.
+- **Not indexed:** `<meta name="robots" content="noindex,nofollow,noarchive,nosnippet">` + googlebot variant. There is no sitemap.xml/robots.txt in the site, so nothing else references it. Do **not** add it to any future sitemap.
+- **Screenplay source is embedded** in `<script type="text/plain" id="fountain">` (a copy of `Writing /Shuffle/Shuffle v2.fountain`) so the page renders offline without a fetch. `read/shuffle.fountain` is a standalone copy of the same source.
+- **Renderer** (`doRender`): minimal Fountain→HTML parser (title page, scene headings, action, character/parenthetical/dialogue, transitions; supports `**bold**`/`*italic*`). It **paginates** by measuring rendered height into US-Letter-proportioned **paper sheets** (cream `#f6f2e9`, black Courier Prime, screenplay indents — action flush-left, dialogue as a centred column; **no page numbers** — the web pagination doesn't match Final Draft page counts, so numbers were dropped rather than fake them). Waits on `document.fonts.ready` before measuring; a `RENDERED` one-shot guard prevents a double build. Each sheet sits in a `.spread` grid beside its **storyboard frame** column, and each frame is offset down (inline `margin-top`, computed from its anchor block's measured position during pagination) so it **aligns vertically with the exact line it depicts**, not just the page top. The frame column is `height:0; overflow:visible`, so a tall or far-offset frame (e.g. the square Scream) overflows the right margin rather than stretching the sheet's grid row — which otherwise left a visible gap in the script before the next page. (Offsets are zeroed on mobile, where frames stack under the sheet.)
+- **Storyboard frames** (`FRAMES` array): 10 frames, each anchored either to a scene-heading substring (`key`) or an in-scene action phrase (`at`), first unused match wins, placed beside — and vertically aligned to — the block it matches. Beat-anchored frames (via `at`): **06 The Stopped Foot** (`at:'HOLDS IT MID-AIR'`), **07 The Corner** (`at:'SUDDENLY A NOISE'`), **08 The Scale** (`at:'FOLDED WRONG'`, the dead-Pike reveal), and **10 The Scream** (`at:'IT SCREAMS'`). An optional `skip:N` jumps past the first N matching blocks — used by **09 The Reveal** (the climax figure is the *second* `SUPPLY ROOM - CONTINUOUS`). Frames with a real render show the image; the rest show a labelled dark placeholder ("render coming"). **All 10 frames now have real Midjourney stills** in `read/frames/` (sourced from `Writing /Shuffle/Pictures/`): **01 The Plaza** (`plaza.jpg`), **02 The Descent** (`elevator-interior.jpg`), **03 The Locker Room** (`changing-room.jpg`), **04 The Corridor** (`corridor.jpg`), **05 The Fume Hood** (`fume-hood.jpg`), **06 The Stopped Foot** (`stopped-foot.jpg`), **07 The Corner** (`monster-darkness.jpg` — the figure in the dark lab on his return), **08 The Scale** (`pike-in-bin.jpg` — the body-in-bin reveal on the scale), **09 The Reveal** (`supply-room.jpg`), and **10 The Scream** (`monster.jpg` — a charcoal-drawn screaming figure; earlier options `Scream.png`/`Monster 2.png` kept in `Pictures/` as alternates). No placeholders remain. Frames 01–09 are 2.33:1 cinematic photos (1680×720); **Frame 10 is square (1024×1024)** and carries a per-frame `ratio:'1/1'` override so it renders uncropped rather than being cut to the letterbox. *(Note: frame numbers 03/04 read in reverse scene order — the Corridor scene precedes the Locker Room in the script — left as-is pending a call.)*
+- **To drop in a new render:** add a web-weight JPG to `read/frames/`, then set `img:'frames/<name>.jpg'` on the matching `FRAMES` entry.
+- Mobile (`≤900px`): single column, sheets scale to width, frames stack inline under their page.
+
 ### read/pdfs/
 - 6 PDFs with clean filenames: dont-answer.pdf, oops.pdf, confession-114.pdf, feed.pdf, first-words.pdf, eau-de-prince.pdf
 
@@ -59,6 +70,9 @@ shift1/
 ├── favicon.svg             ← S1 browser tab icon
 ├── read/
 │   ├── viewer.html         ← PDF.js reader (hash-routed)
+│   ├── shuffle.html        ← gated Shuffle script + storyboard viewer (password 2026)
+│   ├── shuffle.fountain    ← screenplay source copy (from Writing /Shuffle/Shuffle v2.fountain)
+│   ├── frames/             ← storyboard stills (all 10: plaza, elevator-interior, changing-room, corridor, fume-hood, stopped-foot, monster-darkness, pike-in-bin, supply-room, monster)
 │   └── pdfs/               ← 6 story PDFs
 ├── Writing /
 │   ├── Writing Ideas.xlsx  ← master list of all story ideas
@@ -146,8 +160,8 @@ Competition data stored as JS object in nyc-midnight.html. Loglines match the ac
 | Competition | Format | Rounds | Stories |
 |-------------|--------|--------|---------|
 | Scary Story Challenge 2025 | 400 words, 48 hours | 3 | Don't Answer (R1, Advanced), Oops (R2, Advanced), Confession 114 (Final) |
-| Short Story Challenge 2026 | 2,000 words, 8 days (R1) | 1 | Eau de Prince |
-| Screenwriting Challenge 2026 | 10 pages, 8 days (R1) | 1 | First Words |
+| Short Story Challenge 2026 | 2,000 words 8 days (R1), 1,750 words 2 days (R2), 1,500 words 1 day (R3) | 3 | Eau de Prince (R1, Advanced), Bad Human (R2, Advanced), Exhibit A (R3, awaiting result) |
+| Screenwriting Challenge 2026 | 10 pages, 8 days (R1) | 2 | First Words (R1, Advanced), Tomorrow (R2, awaiting result) |
 | Screenwriting Challenge 2025 | 12 pages, 8 days (R1) | 1 | Feed |
 
 ### Judge Feedback Summaries
