@@ -347,6 +347,24 @@
       color: var(--text-muted);
     }
 
+    /* Shuffle tile — 2/3 exterior-elevator picture, title on a solid panel below */
+    .card-front.tile-shuffle { padding: 0; --imgh: 62%; }
+    .tile-shuffle .tile-bg {
+      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
+      background: url('read/frames/plaza.jpg') no-repeat;
+      background-size: auto 115%; background-position: center var(--py, 15%);
+    }
+    .tile-shuffle .edge {
+      position: absolute; left: 0; right: 0; height: 60px; top: calc(var(--imgh) - 60px); z-index: 2;
+      background: linear-gradient(to bottom, transparent, rgba(11,11,11,0.4));
+    }
+    .tile-shuffle .tile-panel {
+      position: absolute; left: 0; right: 0; top: var(--imgh); bottom: 0; z-index: 4;
+      background: var(--bg-card); border-top: 1px solid rgba(232,213,163,0.14);
+      padding: 1.5rem 2rem;
+    }
+    .tile-shuffle .card-status { color: #efe7d3; text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
+
     .card-number {
       position: absolute;
       top: 1.5rem;
@@ -551,11 +569,15 @@
       <!-- Shuffle -->
       <div class="card-container reveal" style="--i:2">
         <div class="card">
-          <div class="card-front">
+          <div class="card-front tile-shuffle" style="--py:15%">
+            <div class="tile-bg"></div>
+            <div class="edge"></div>
             <div class="card-status status-progress">In Progress</div>
-            <div class="card-category">Feature Screenplay</div>
-            <div class="card-title">Shuffle</div>
-            <div class="card-subtitle">Horror</div>
+            <div class="tile-panel">
+              <div class="card-category">Feature Screenplay</div>
+              <div class="card-title">Shuffle</div>
+              <div class="card-subtitle">Horror</div>
+            </div>
           </div>
           <a href="read/shuffle.html" class="card-back">
             <div class="card-category">Feature Screenplay</div>
