@@ -350,11 +350,11 @@
 
     /* ── image tiles (Shuffle / NYC / Icarus) — shared format ── */
     /* picture up top (--imgh); title on a solid panel below. divider lowered to give the picture more room */
-    .card-front.tile-shuffle, .card-front.tile-nyc, .card-front.tile-ic { padding: 0; --imgh: 65%; }
+    .card-front.tile-shuffle, .card-front.tile-nyc, .card-front.tile-ic { padding: 0; --imgh: 62%; }
     .tile-shuffle .tile-panel, .tile-nyc .tile-panel, .tile-ic .tile-panel {
       position: absolute; left: 0; right: 0; top: var(--imgh); bottom: 0; z-index: 4;
       background: var(--bg-card); border-top: 1px solid rgba(232,213,163,0.14);
-      padding: 0 2rem 1.35rem; display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 1.5rem 2rem 1.4rem; display: flex; flex-direction: column; justify-content: flex-end;
     }
     .tile-shuffle .edge, .tile-ic .edge {
       position: absolute; left: 0; right: 0; height: 60px; top: calc(var(--imgh) - 60px); z-index: 2;
