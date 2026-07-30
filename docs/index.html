@@ -349,15 +349,12 @@
 
     /* Shuffle tile — framing B (top-anchored so the light pole is never clipped), horror-red duotone */
     .card-front.tile-shuffle { padding: 0; --imgh: 62%; }
-    .tile-shuffle::before {
-      content: ""; position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      background: linear-gradient(155deg, #1d0606, #e2685a);
-    }
     .tile-shuffle .tile-bg {
-      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 1;
+      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
       background: url('read/frames/plaza.jpg') no-repeat;
       background-size: auto 118%; background-position: center 0%;
-      mix-blend-mode: luminosity; filter: contrast(1.08) brightness(1.05);
+      /* horror-red via filter (no mix-blend-mode, which broke the 3D flip / clicks) */
+      filter: grayscale(1) sepia(1) hue-rotate(-42deg) saturate(6.5) brightness(0.86) contrast(1.14);
     }
     .tile-shuffle .edge {
       position: absolute; left: 0; right: 0; height: 60px; top: calc(var(--imgh) - 60px); z-index: 2;
@@ -540,7 +537,7 @@
       <!-- NYC Midnight -->
       <div class="card-container reveal" style="--i:0">
         <div class="card">
-          <div class="card-front tile-nyc">
+          <a href="nyc-midnight.html" class="card-front tile-nyc">
             <div class="logo-area"><img src="read/frames/nyc-logo.webp" alt="NYC Midnight" /></div>
             <div class="card-status status-complete">Complete</div>
             <div class="tile-panel">
@@ -548,7 +545,7 @@
               <div class="card-title">NYC Midnight</div>
               <div class="card-subtitle">Timed story competition</div>
             </div>
-          </div>
+          </a>
           <a href="nyc-midnight.html" class="card-back">
             <div class="card-category">NYC Midnight</div>
             <div class="card-back-title">4 Competitions</div>
@@ -588,7 +585,7 @@
       <!-- Shuffle -->
       <div class="card-container reveal" style="--i:2">
         <div class="card">
-          <div class="card-front tile-shuffle">
+          <a href="read/shuffle.html" class="card-front tile-shuffle">
             <div class="tile-bg"></div>
             <div class="edge"></div>
             <div class="card-status status-complete">Complete</div>
@@ -597,7 +594,7 @@
               <div class="card-title">Shuffle</div>
               <div class="card-subtitle">Horror</div>
             </div>
-          </div>
+          </a>
           <a href="read/shuffle.html" class="card-back">
             <div class="card-category">Feature Screenplay</div>
             <div class="card-back-title">Shuffle</div>
