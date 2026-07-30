@@ -347,28 +347,33 @@
       color: var(--text-muted);
     }
 
-    /* Shuffle tile — framing B (top-anchored so the light pole is never clipped), horror-red duotone */
-    .card-front.tile-shuffle { padding: 0; --imgh: 62%; }
-    .tile-shuffle .tile-bg {
-      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      background: url('read/frames/plaza.jpg') no-repeat;
-      background-size: auto 118%; background-position: center 0%;
-      /* horror-red via filter (no mix-blend-mode, which broke the 3D flip / clicks) */
-      filter: grayscale(1) sepia(1) hue-rotate(-42deg) saturate(6.5) brightness(0.86) contrast(1.14);
-    }
-    .tile-shuffle .edge {
-      position: absolute; left: 0; right: 0; height: 60px; top: calc(var(--imgh) - 60px); z-index: 2;
-      background: linear-gradient(to bottom, transparent, rgba(11,11,11,0.4));
-    }
-    .tile-shuffle .tile-panel, .tile-nyc .tile-panel {
+    /* ── image tiles (Shuffle / NYC / Icarus) — shared format ── */
+    /* picture up top (--imgh); title on a solid panel below. divider lowered to give the picture more room */
+    .card-front.tile-shuffle, .card-front.tile-nyc, .card-front.tile-ic { padding: 0; --imgh: 70%; }
+    .tile-shuffle .tile-panel, .tile-nyc .tile-panel, .tile-ic .tile-panel {
       position: absolute; left: 0; right: 0; top: var(--imgh); bottom: 0; z-index: 4;
       background: var(--bg-card); border-top: 1px solid rgba(232,213,163,0.14);
       padding: 0 2rem 1.35rem; display: flex; flex-direction: column; justify-content: flex-end;
     }
-    .tile-shuffle .card-status { color: rgba(123,201,123,0.9); text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
+    .tile-shuffle .edge, .tile-ic .edge {
+      position: absolute; left: 0; right: 0; height: 60px; top: calc(var(--imgh) - 60px); z-index: 2;
+      background: linear-gradient(to bottom, transparent, rgba(11,11,11,0.4));
+    }
+    .tile-shuffle .card-status, .tile-ic .card-status { color: rgba(123,201,123,0.9); text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
 
-    /* NYC Midnight tile — the transparent logo webp, recoloured to the site gold, on dark */
-    .card-front.tile-nyc { padding: 0; --imgh: 62%; }
+    /* Shuffle — plaza, framing B (light pole never clipped), horror-red via filter (no mix-blend-mode) */
+    .tile-shuffle .tile-bg {
+      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
+      background: url('read/frames/plaza.jpg') no-repeat;
+      background-size: auto 118%; background-position: center 0%;
+      filter: grayscale(1) sepia(1) hue-rotate(-42deg) saturate(6.5) brightness(0.86) contrast(1.14);
+    }
+    /* Icarus — sci-fi frame, centred */
+    .tile-ic .tile-bg {
+      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
+      background: url('read/frames/icarus.jpg') center/cover no-repeat;
+    }
+    /* NYC — transparent logo webp, recoloured to the site gold, on dark */
     .tile-nyc .logo-area {
       position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
       display: flex; align-items: center; justify-content: center; background: #161616;
@@ -563,22 +568,24 @@
       <!-- Icarus -->
       <div class="card-container reveal" style="--i:1">
         <div class="card">
-          <div class="card-front">
+          <a href="read/icarus.html" class="card-front tile-ic">
+            <div class="tile-bg"></div>
+            <div class="edge"></div>
             <div class="card-status status-complete">Complete</div>
-            <div class="card-category">Animated Pilot</div>
-            <div class="card-title">Icarus</div>
-            <div class="card-subtitle">Comedy / Sci-Fi</div>
-          </div>
-          <div class="card-back">
+            <div class="tile-panel">
+              <div class="card-category">Animated Pilot</div>
+              <div class="card-title">Icarus</div>
+              <div class="card-subtitle">Comedy / Sci-Fi</div>
+            </div>
+          </a>
+          <a href="read/icarus.html" class="card-back">
             <div class="card-category">Animated Pilot</div>
             <div class="card-back-title">Icarus</div>
             <div class="card-back-text">
               An outcast teenager becomes the unlikely leader of an alien universe on the brink of collapse. She didn't ask for the job — and they didn't ask for her.
             </div>
-            <div class="card-back-meta">
-              <span>Format: Animated Pilot / 22 min</span>
-            </div>
-          </div>
+            <span class="card-back-link">Read the script &rarr;</span>
+          </a>
         </div>
       </div>
 
