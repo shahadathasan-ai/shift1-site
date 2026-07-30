@@ -316,6 +316,7 @@
       position: absolute;
       top: 1.5rem;
       left: 2rem;
+      z-index: 5;
       font-size: 0.6rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
@@ -349,7 +350,7 @@
 
     /* ── image tiles (Shuffle / NYC / Icarus) — shared format ── */
     /* picture up top (--imgh); title on a solid panel below. divider lowered to give the picture more room */
-    .card-front.tile-shuffle, .card-front.tile-nyc, .card-front.tile-ic { padding: 0; --imgh: 70%; }
+    .card-front.tile-shuffle, .card-front.tile-nyc, .card-front.tile-ic { padding: 0; --imgh: 65%; }
     .tile-shuffle .tile-panel, .tile-nyc .tile-panel, .tile-ic .tile-panel {
       position: absolute; left: 0; right: 0; top: var(--imgh); bottom: 0; z-index: 4;
       background: var(--bg-card); border-top: 1px solid rgba(232,213,163,0.14);
@@ -361,17 +362,11 @@
     }
     .tile-shuffle .card-status, .tile-ic .card-status { color: rgba(123,201,123,0.9); text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
 
-    /* Shuffle — plaza, framing B (light pole never clipped); original crimson duotone.
-       (The click bug was the hover-to-flip pattern — now fixed by the front being a link — NOT the blend mode.) */
-    .tile-shuffle::before {
-      content: ""; position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      background: linear-gradient(155deg, #1d0606, #e2685a);
-    }
+    /* Shuffle — plaza, framing B (light pole never clipped); natural for now (colour treatment TBD) */
     .tile-shuffle .tile-bg {
-      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 1;
+      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
       background: url('read/frames/plaza.jpg') no-repeat;
       background-size: auto 118%; background-position: center 0%;
-      mix-blend-mode: luminosity; filter: contrast(1.08) brightness(1.05);
     }
     /* Icarus — sci-fi frame, centred */
     .tile-ic .tile-bg {
