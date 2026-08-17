@@ -1,0 +1,408 @@
+/* =========================================================================
+   HIGH SCHOOL OF DUNDEE — AN INTRODUCTION TO ARTIFICIAL INTELLIGENCE
+   Theme: "Chalk & Slate"
+   Slate-green board ground · Fraunces (serif display/body) · Archivo (labels)
+   Chalk-white ink · chalk-yellow accent · soft "click-into-place" motion.
+   Designed on a 1280×720 stage (see index.html Reveal config). Uses px/em only
+   (no vw/vh) so print-pdf export stays stable.
+   ========================================================================= */
+
+/* ---------------------------------------------------------------- FONTS -- */
+@font-face{font-family:'Fraunces';src:url('../assets/fonts/fraunces-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Fraunces';src:url('../assets/fonts/fraunces-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Fraunces';src:url('../assets/fonts/fraunces-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Fraunces';src:url('../assets/fonts/fraunces-400i.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:'Archivo';src:url('../assets/fonts/archivo-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+
+/* --------------------------------------------------------------- TOKENS -- */
+:root{
+  --bg:#16211c;
+  --panel:#1d2a24;
+  --panel-2:#22322b;
+  --ink:#eef3ec;
+  --mut:#9db3a7;
+  --faint:#6f857a;
+  --acc:#f4c95d;
+  --acc-ink:#16211c;
+  --acc-soft:rgba(244,201,93,.12);
+  --acc-line:rgba(244,201,93,.45);
+  --line:rgba(238,243,236,.16);
+  --line-2:rgba(238,243,236,.30);
+  --serif:'Fraunces','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  --sans:'Archivo','Avenir Next','Segoe UI',system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --r-background-color:#16211c;
+}
+
+/* ------------------------------------------------------------ BACKDROP --- */
+.reveal-viewport{
+  /* flat slate — no edge glow/vignette; faint horizontal ruling only */
+  background:
+    repeating-linear-gradient(0deg, transparent 0 47px, rgba(255,255,255,.012) 47px 48px),
+    var(--bg);
+}
+
+/* --------------------------------------------------------------- BASE ---- */
+.reveal{
+  font-family:var(--serif);
+  font-size:30px;
+  font-weight:400;
+  color:var(--ink);
+  letter-spacing:.002em;
+}
+.reveal .slides{ text-align:left; }
+.reveal .slides section{ height:720px; }        /* full-stage sections */
+
+/* a flex canvas every slide sits inside */
+.canvas{
+  position:absolute; inset:0;
+  box-sizing:border-box;
+  display:flex; flex-direction:column; justify-content:flex-start;
+  padding:64px 96px; gap:0;
+  height:100%;
+}
+/* vertically centred but still left-aligned (title slide) */
+.canvas.mid{ justify-content:center; }
+/* fully centred, both axes (splash / single-statement slides) */
+.canvas.center{ align-items:center; text-align:center; justify-content:center; }
+.canvas.center .lead,.canvas.center h1,.canvas.center h2{ text-wrap:balance; }
+
+/* headings — kill reveal defaults (uppercase, text-shadow, centered) */
+.reveal h1,.reveal h2,.reveal h3{
+  font-family:var(--serif); color:var(--ink);
+  text-transform:none; text-shadow:none; font-weight:600;
+  line-height:1.04; letter-spacing:-.018em; margin:0; text-wrap:balance;
+}
+.reveal h1{ font-size:80px; }
+.reveal h2{ font-size:52px; }
+.reveal h3{ font-size:34px; }
+.reveal p{ margin:0; line-height:1.35; }
+.reveal em{ font-style:italic; color:var(--acc); }
+.reveal strong{ font-weight:600; color:var(--ink); }
+.reveal a{ color:var(--acc); }
+
+/* --------------------------------------------------------- TYPE HELPERS -- */
+.kicker{
+  font-family:var(--sans); font-weight:600; text-transform:uppercase;
+  font-size:16px; letter-spacing:.26em; color:var(--acc); margin:0 0 22px;
+}
+.school{ font-family:var(--serif); font-size:24px; color:var(--mut); margin:0 0 14px; }
+.lead{ font-family:var(--serif); font-size:60px; font-weight:600; line-height:1.05; letter-spacing:-.02em; margin:0; text-wrap:balance; }
+.lead.xl{ font-size:88px; }
+.sub{ font-family:var(--serif); font-size:32px; color:var(--mut); margin:0; line-height:1.3; }
+.note{ font-family:var(--sans); font-size:19px; color:var(--faint); letter-spacing:.01em; }
+.speaker{ font-family:var(--sans); font-size:20px; color:var(--mut); letter-spacing:.02em; }
+.big-stat{ font-family:var(--serif); font-weight:600; font-size:108px; line-height:.98; letter-spacing:-.03em; color:var(--ink); }
+.big-stat .acc{ color:var(--acc); }
+.muted{ color:var(--mut); }
+.acc{ color:var(--acc); }
+
+/* gold underscore — animated draw */
+.underscore{
+  height:4px; width:300px; background:var(--acc); border-radius:3px; margin-top:26px;
+  transform-origin:left center; box-shadow:0 0 12px rgba(244,201,93,.4);
+}
+
+/* punchline band across the bottom */
+.band{
+  position:absolute; left:0; right:0; bottom:0;
+  background:var(--acc); color:var(--acc-ink);
+  font-family:var(--serif); font-weight:600; font-size:30px; letter-spacing:-.01em;
+  padding:26px 96px; text-align:center;
+}
+
+/* ---------------------------------------------------------- FRAGMENTS ---- */
+/* Default fragment motion = chalk "click into place": rise + fade + de-blur */
+.reveal .fragment:not(.custom){
+  opacity:0; visibility:hidden;
+  transform:translateY(14px); filter:blur(5px);
+  transition:opacity .6s var(--ease), transform .6s var(--ease), filter .6s var(--ease);
+  will-change:opacity,transform,filter;
+}
+.reveal .fragment:not(.custom).visible{ opacity:1; visibility:inherit; transform:none; filter:none; }
+
+/* custom draws (width/scale grows) — element stays present, grows on reveal */
+.reveal .fragment.custom.draw-x{ opacity:1; visibility:visible; transform:scaleX(0); transform-origin:left center; transition:transform .8s var(--ease); }
+.reveal .fragment.custom.draw-x.visible{ transform:scaleX(1); }
+.reveal .fragment.custom.draw-w{ opacity:1; visibility:visible; width:0 !important; transition:width .8s var(--ease); overflow:hidden; }
+.reveal .fragment.custom.grow-in{ opacity:0; visibility:visible; transform:scale(.9); transition:opacity .5s var(--ease), transform .5s var(--ease); }
+.reveal .fragment.custom.grow-in.visible{ opacity:1; transform:scale(1); }
+/* fade-only (no move) for cross-fades / swaps */
+.reveal .fragment.custom.just-fade{ opacity:0; visibility:visible; transition:opacity .6s var(--ease); }
+.reveal .fragment.custom.just-fade.visible{ opacity:1; }
+
+@media (prefers-reduced-motion: reduce){
+  .reveal .fragment,.reveal .fragment.custom{ transition:none !important; filter:none !important; transform:none !important; }
+}
+
+/* ---------------------------------------------------------- PLACEHOLDER -- */
+.ph{
+  position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:12px; padding:26px; border-radius:16px;
+  border:2px dashed var(--acc-line); background:var(--acc-soft); color:var(--mut);
+  font-family:var(--sans); text-align:center;
+}
+.ph .ico{ font-size:42px; line-height:1; opacity:.8; }
+.ph .cap{ font-size:18px; color:var(--mut); max-width:20ch; line-height:1.3; }
+.ph .tag{
+  font-family:var(--sans); font-size:14px; font-weight:600; letter-spacing:.02em;
+  color:var(--acc); background:rgba(244,201,93,.14); border:1px solid var(--acc-line);
+  padding:4px 10px; border-radius:7px;
+}
+.ph.video{ justify-content:flex-end; padding-bottom:22px; }
+.ph.video::after{ content:'▶'; position:absolute; top:42%; left:50%; transform:translate(-50%,-50%); font-size:42px; color:var(--acc); opacity:.85; }
+.ph.video .ico{ visibility:hidden; }
+
+/* real videos share the placeholder frame */
+.vid{ width:100%; height:100%; object-fit:cover; border-radius:16px; display:block; background:#0d1512; }
+
+/* logo / initial chips */
+.chip{
+  display:inline-flex; align-items:center; justify-content:center;
+  font-family:var(--sans); font-weight:600; font-size:20px; letter-spacing:.01em;
+  color:var(--ink); background:rgba(255,255,255,.035);
+  border:1px solid var(--line-2); border-radius:12px; padding:12px 18px; min-width:64px;
+}
+.chip.sm{ font-size:15px; padding:7px 12px; min-width:0; border-radius:9px; }
+.chip.ghost{ color:var(--mut); border-style:dashed; border-color:var(--acc-line); background:var(--acc-soft); }
+
+/* ------------------------------------------------------------ LAYOUT ----- */
+.stack{ display:flex; flex-direction:column; }
+.row{ display:flex; align-items:center; }
+.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:54px; align-items:center; }
+.grid2.tight{ gap:34px; }
+.wrap-flags{ display:inline-flex; gap:8px; align-items:center; }
+
+/* ------------------------------------------------- AGENDA / NUMBER LISTS - */
+ol.agenda{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; }
+ol.agenda li{ display:flex; align-items:baseline; gap:26px; padding:18px 0; border-bottom:1px solid var(--line); }
+ol.agenda li:last-child{ border-bottom:0; }
+ol.agenda .num{ font-family:var(--sans); font-weight:600; color:var(--acc); font-size:24px; min-width:1.5em; font-variant-numeric:tabular-nums; }
+ol.agenda .t{ font-size:34px; line-height:1.2; }
+
+/* generic pillar row */
+.pillars{ display:flex; gap:30px; }
+.pillar{ flex:1; background:var(--panel); border:1px solid var(--line); border-top:3px solid var(--acc);
+  border-radius:14px; padding:34px 30px; }
+.pillar h3{ font-size:32px; margin-bottom:10px; }
+.pillar p{ font-size:22px; color:var(--mut); }
+
+/* ------------------------------------------------------- FLOW DIAGRAMS --- */
+.flow{ display:flex; align-items:center; gap:22px; }
+.flow.col{ flex-direction:column; align-items:stretch; gap:26px; }
+.box{
+  background:var(--panel); border:1px solid var(--line-2); border-radius:14px;
+  padding:22px 26px; font-family:var(--serif); font-size:24px; color:var(--ink);
+  display:flex; align-items:center; justify-content:center; text-align:center; min-height:84px;
+}
+.box .lab{ font-family:var(--sans); font-weight:600; letter-spacing:.14em; text-transform:uppercase; font-size:18px; color:var(--acc); }
+.box.io{ flex:1; color:var(--mut); font-size:22px; }
+.box.rules{ min-width:180px; background:var(--panel-2); border-color:var(--acc-line); }
+.box.q{ min-width:120px; font-size:40px; color:var(--acc); }
+.box.black{
+  min-width:200px; background:#0c1310; border:1px solid rgba(244,201,93,.25);
+  box-shadow:0 0 30px rgba(244,201,93,.10), inset 0 0 40px rgba(0,0,0,.5); color:#cfe0d6;
+}
+.box.black .lab{ color:#f4c95d; }
+.arrow{ color:var(--faint); font-size:30px; flex:none; }
+.arrow::before{ content:'→'; }
+
+/* smiley / frowny badges (inline svg placed in HTML) */
+.face{ width:46px; height:46px; flex:none; }
+.face.happy{ color:#8fd6a3; }
+.face.sad{ color:#d68f8f; }
+
+/* ------------------------------------------------- CAREER CLUSTERS ------- */
+.clusters{ display:flex; gap:26px; }
+.cluster{ flex:1; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:26px 24px; }
+.cluster .clabel{ font-family:var(--sans); font-size:15px; letter-spacing:.1em; text-transform:uppercase; color:var(--mut); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+.cluster .logos{ display:flex; gap:12px; flex-wrap:wrap; }
+.flag{ width:26px; height:17px; border-radius:3px; box-shadow:0 0 0 1px rgba(0,0,0,.25); flex:none; display:inline-block; overflow:hidden; }
+
+/* -------------------------------------------------------------- LADDER --- */
+.ladder{ display:flex; align-items:flex-end; justify-content:center; gap:0; height:452px; margin-top:8px; }
+.step{ position:relative; width:252px; background:var(--panel); border:1px solid var(--line-2); border-bottom:none;
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding-top:16px; gap:9px; }
+.step.low{ height:152px; }
+.step.mid{ height:252px; background:var(--panel-2); border-color:var(--acc-line); }
+.step.high{ height:352px; }
+.step.peak{ height:452px; }
+.step .steplabel{ font-family:var(--sans); font-weight:600; font-size:19px; color:var(--ink); text-align:center; padding:0 12px; }
+.step .steplabel small{ display:block; font-weight:500; color:var(--mut); font-size:15px; letter-spacing:.02em; margin-top:4px; }
+.step .occupant{ display:flex; gap:8px; align-items:flex-end; }
+.human{ width:34px; height:96px; color:var(--acc); }
+
+/* ---------------------------------------------------------- SEESAW ------- */
+.seesaw{ position:relative; height:300px; display:flex; align-items:center; justify-content:center; }
+.beam{ width:820px; height:14px; background:var(--panel-2); border:1px solid var(--line-2); border-radius:8px; transform:rotate(-4deg); position:relative; }
+.fulcrum{ position:absolute; left:50%; bottom:calc(50% - 150px); transform:translateX(-50%);
+  width:0; height:0; border-left:44px solid transparent; border-right:44px solid transparent; border-bottom:120px solid var(--panel); }
+.seesaw-end{ position:absolute; top:-30px; font-family:var(--sans); font-weight:600; font-size:20px; }
+.seesaw .marker{ position:absolute; background:var(--acc); color:var(--acc-ink); font-family:var(--sans);
+  font-weight:700; font-size:18px; letter-spacing:.06em; padding:8px 16px; border-radius:9px; text-transform:uppercase; }
+
+/* -------------------------------------------------------- APP WALL ------- */
+.wall{ display:grid; grid-template-columns:repeat(9,1fr); gap:8px; }
+.cell{ background:var(--panel); border:1px solid var(--line); border-radius:7px; height:44px;
+  display:flex; align-items:center; justify-content:center; font-family:var(--sans); font-size:11px; color:var(--mut);
+  letter-spacing:.02em; text-align:center; padding:2px; overflow:hidden; }
+
+/* -------------------------------------------------------- STACK LAYERS --- */
+.layers{ display:flex; flex-direction:column; gap:14px; width:760px; margin:0 auto; }
+.layer{ border:1px solid var(--line-2); border-radius:14px; padding:22px 28px; display:flex; align-items:center; gap:22px; background:var(--panel); }
+.layer .lname{ font-family:var(--sans); font-weight:600; font-size:22px; min-width:210px; }
+.layer .lname small{ display:block; color:var(--mut); font-weight:500; font-size:15px; letter-spacing:.02em; }
+.layer .lgrid{ display:flex; gap:10px; flex-wrap:wrap; }
+.layer.top{ border-color:var(--acc-line); background:var(--panel-2); }
+
+/* -------------------------------------------------------- TIMELINE ------- */
+.timeline{ display:flex; align-items:stretch; gap:0; }
+.tstep{ flex:1; position:relative; padding:0 16px; }
+.tstep .tnum{ font-family:var(--sans); font-weight:700; color:var(--acc); font-size:20px; }
+.tstep .tbody{ font-size:22px; margin-top:8px; line-height:1.25; }
+.tstep::before{ content:''; position:absolute; top:9px; left:0; right:0; height:2px; background:var(--line-2); }
+.tstep .dot{ position:absolute; top:2px; left:16px; width:16px; height:16px; border-radius:50%; background:var(--acc); }
+
+/* --------------------------------------------------------- FORK / PATHS -- */
+.fork{ display:grid; grid-template-columns:1fr 1fr; gap:40px; }
+.path{ border-radius:16px; overflow:hidden; border:1px solid var(--line-2); }
+.path .plabel{ font-family:var(--sans); font-weight:700; letter-spacing:.06em; text-transform:uppercase; font-size:18px; padding:14px; text-align:center; }
+.path.up .plabel{ background:rgba(143,214,163,.14); color:#9fe0b3; }
+.path.down .plabel{ background:rgba(214,143,143,.14); color:#e0a19f; }
+
+/* ---------------------------------------------------------- WALL SCHOOL -- */
+.walled{ position:relative; border:3px solid var(--acc-line); border-radius:16px; padding:30px; background:var(--acc-soft); }
+.walled .wlabel{ position:absolute; top:-14px; left:24px; background:var(--bg); padding:0 12px; font-family:var(--sans);
+  font-weight:600; letter-spacing:.04em; color:var(--acc); font-size:18px; }
+.outside{ font-family:var(--sans); color:var(--faint); font-size:18px; display:flex; gap:20px; align-items:center; margin-top:22px; opacity:.55; }
+
+/* -------------------------------------------------------------- MISC ----- */
+.qr{ width:300px; height:300px; }
+.progress-tiny{ font-family:var(--sans); font-size:15px; color:var(--faint); }
+
+/* corner slug (section marker) top-right */
+.slug{ position:absolute; top:40px; right:56px; font-family:var(--sans); font-size:14px;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--faint); }
+
+/* reveal chrome tinting */
+.reveal .controls{ color:var(--acc); }
+.reveal .progress{ color:var(--acc); height:3px; }
+.reveal .slide-number{ background:transparent; color:var(--faint); font-family:var(--sans); }
+
+/* keep speaker-notes readable (handled by plugin window, but set base) */
+.reveal aside.notes{ font-family:var(--sans); }
+
+/* ---------------------------------------------------- EXTRA MOTION ------- */
+@keyframes idlefloat{ 0%,100%{ transform:translateY(0) rotate(-1deg); } 50%{ transform:translateY(-14px) rotate(1deg); } }
+.idle{ animation:idlefloat 3.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce){ .idle{ animation:none; } }
+
+/* big rise (Clippy rising from the bottom of the slide) */
+.reveal .fragment.custom.rise{ opacity:0; visibility:visible; transform:translateY(160px) scale(.96);
+  transition:opacity .7s var(--ease), transform .9s var(--ease); }
+.reveal .fragment.custom.rise.visible{ opacity:1; transform:none; }
+
+/* clippy placeholder sizing */
+.clippy-ph{ width:230px; height:260px; }
+.clippy-ph.lg{ width:300px; height:340px; }
+
+/* ---------------------------------------------------- CAPTCHA MOCK ------- */
+.captcha{ width:330px; background:#f6f7f5; border-radius:10px; overflow:hidden; box-shadow:0 12px 30px rgba(0,0,0,.35); color:#222; }
+.captcha .cap-head{ background:#4a86e8; color:#fff; font-family:var(--sans); font-size:16px; padding:14px 18px; font-weight:600; }
+.captcha .cap-word{ font-family:var(--serif); font-style:italic; font-size:46px; letter-spacing:.08em; text-align:center;
+  padding:26px 0; color:#333; background:repeating-linear-gradient(-8deg, #eceae4 0 6px, #f6f7f5 6px 12px); }
+.captcha .cap-word span{ display:inline-block; }
+.cap-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:4px; padding:6px; background:#ddd; }
+.cap-cell{ aspect-ratio:1/1; background:#c7cdd4; border-radius:3px; position:relative; font-family:var(--sans); font-size:11px;
+  color:#5b6470; display:flex; align-items:center; justify-content:center; }
+.cap-cell.on{ outline:3px solid #4a86e8; outline-offset:-3px; }
+.cap-cell.on::after{ content:'✓'; position:absolute; top:2px; left:4px; color:#4a86e8; font-weight:700; }
+
+/* ------------------------------------------------------- CHAT MOCK ------- */
+.chat{ width:420px; background:var(--panel); border:1px solid var(--line-2); border-radius:16px; padding:20px; }
+.bubble{ background:var(--panel-2); border-radius:12px; padding:16px 18px; font-size:20px; color:var(--ink); line-height:1.35; }
+.chat .rate{ display:flex; align-items:center; gap:14px; margin-top:16px; font-family:var(--sans); font-size:16px; color:var(--mut); }
+.thumb{ width:44px; height:44px; border-radius:10px; border:1px solid var(--line-2); background:rgba(255,255,255,.03);
+  display:flex; align-items:center; justify-content:center; font-size:22px; }
+.thumb.up{ color:#8fd6a3; } .thumb.down{ color:#d68f8f; }
+
+/* small AI monogram icon (used in boxes) */
+.ai-badge{ width:56px; height:56px; border-radius:12px; background:var(--panel-2); border:1px solid var(--acc-line);
+  display:flex; align-items:center; justify-content:center; color:var(--acc); font-family:var(--sans); font-weight:700; font-size:20px; }
+
+/* paperclip icon */
+.clip{ font-size:34px; line-height:1; }
+
+/* traveling connector (slide 33) */
+.connector{ height:3px; background:linear-gradient(90deg,var(--acc),rgba(244,201,93,.2)); transform-origin:left center; border-radius:2px; }
+
+/* utility spacing */
+.mt-s{ margin-top:14px; } .mt-m{ margin-top:26px; } .mt-l{ margin-top:40px; }
+.gap-s{ gap:14px; } .gap-m{ gap:24px; } .gap-l{ gap:40px; }
+
+/* ---------------------------------------------------- LOGO TILES --------- */
+/* Real brand logos sit on a light tile so colour marks pop and dark/black
+   marks (OpenAI, Anthropic, Morgan Stanley) stay legible on the slate. */
+.logo-row{ display:flex; flex-wrap:wrap; gap:14px; align-items:center; }
+.logo-tile{
+  display:inline-flex; align-items:center; justify-content:center;
+  background:#fbfbf9; border-radius:13px; padding:11px 16px; height:58px;
+  box-shadow:0 6px 18px rgba(0,0,0,.28); border:1px solid rgba(0,0,0,.05);
+}
+.logo-tile img{ height:100%; width:auto; max-width:150px; object-fit:contain; display:block; }
+.logo-tile.sm{ height:44px; border-radius:10px; padding:8px 12px; }
+.logo-tile.sm img{ max-width:120px; }
+.logo-tile.lg{ height:74px; border-radius:15px; padding:13px 20px; }
+/* wordmark fallback (e.g. Ancestry) — same tile, set type */
+.logo-tile.word{ font-family:var(--sans); font-weight:700; color:#1a2620; font-size:22px; letter-spacing:-.01em; }
+.logo-tile.sm.word{ font-size:17px; }
+
+/* compact logo tiles inside the narrow ladder steps */
+.step .logo-tile{ height:34px; padding:5px 8px; border-radius:8px; box-shadow:0 3px 9px rgba(0,0,0,.3); }
+.step .logo-tile img{ max-width:66px; }
+.step .logo-row{ gap:7px; justify-content:center; }
+
+/* Clippy graphic */
+.clippy-img{ height:300px; width:auto; display:block; filter:drop-shadow(0 14px 26px rgba(0,0,0,.45)); }
+.clippy-img.sm{ height:70px; filter:none; }
+
+/* person icons (John / Mary) */
+.person{ width:48px; height:58px; flex:none; }
+
+/* mini placeholder (Clippy on the ladder steps) */
+.ph.mini{ padding:8px 8px 10px; gap:5px; border-radius:11px; }
+.ph.mini .ico{ font-size:24px; }
+.ph.mini .tag{ font-size:10px; padding:2px 6px; }
+
+/* slide-in-from-left (Clippy climbing to the middle step) */
+.reveal .fragment.custom.from-left{ opacity:0; visibility:visible; transform:translateX(-170px); transition:opacity .6s var(--ease), transform .85s var(--ease); }
+.reveal .fragment.custom.from-left.visible{ opacity:1; transform:none; }
+
+/* agenda auto-populates on arrival — staggered, no clicks needed */
+.reveal section.present ol.agenda li{ opacity:0; animation:ag-in .6s var(--ease) forwards; }
+.reveal section.present ol.agenda li:nth-child(1){ animation-delay:.25s }
+.reveal section.present ol.agenda li:nth-child(2){ animation-delay:.48s }
+.reveal section.present ol.agenda li:nth-child(3){ animation-delay:.71s }
+.reveal section.present ol.agenda li:nth-child(4){ animation-delay:.94s }
+.reveal section.present ol.agenda li:nth-child(5){ animation-delay:1.17s }
+@keyframes ag-in{ from{opacity:0; transform:translateY(14px); filter:blur(5px)} to{opacity:1; transform:none; filter:none} }
+@media (prefers-reduced-motion: reduce){ .reveal section.present ol.agenda li{ animation:none; opacity:1; } }
+
+/* rules flow — uniform box grid + optional column headers */
+.flow-grid .box{ width:232px; flex:none; min-height:104px; }
+.colhead{ width:232px; text-align:center; font-family:var(--sans); font-weight:600; text-transform:uppercase; letter-spacing:.14em; font-size:15px; color:var(--acc); }
+
+/* Clippy drops into the empty ladder step */
+.reveal .fragment.custom.drop{ opacity:0; visibility:visible; transform:translateY(-54px); transition:opacity .5s var(--ease), transform .6s var(--ease); }
+.reveal .fragment.custom.drop.visible{ opacity:1; transform:none; }
+
+/* auto-advancing list (explosion) — items stagger in on a single click */
+.reveal .fragment.custom.autolist .li{ display:block; opacity:0; }
+.reveal .fragment.custom.autolist.visible .li{ animation:ag-in .5s var(--ease) forwards; }
+.reveal .fragment.custom.autolist.visible .li:nth-child(1){ animation-delay:.05s }
+.reveal .fragment.custom.autolist.visible .li:nth-child(2){ animation-delay:.48s }
+.reveal .fragment.custom.autolist.visible .li:nth-child(3){ animation-delay:.91s }
+.reveal .fragment.custom.autolist.visible .li:nth-child(4){ animation-delay:1.34s }
+@media (prefers-reduced-motion: reduce){ .reveal .fragment.custom.autolist.visible .li{ animation:none; opacity:1 } }
