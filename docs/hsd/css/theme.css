@@ -235,13 +235,18 @@ ol.agenda .t{ font-size:34px; line-height:1.2; }
 .human{ width:34px; height:96px; color:var(--acc); }
 
 /* ---------------------------------------------------------- SEESAW ------- */
-.seesaw{ position:relative; height:300px; display:flex; align-items:center; justify-content:center; }
-.beam{ width:820px; height:14px; background:var(--panel-2); border:1px solid var(--line-2); border-radius:8px; transform:rotate(-4deg); position:relative; }
-.fulcrum{ position:absolute; left:50%; bottom:calc(50% - 150px); transform:translateX(-50%);
-  width:0; height:0; border-left:44px solid transparent; border-right:44px solid transparent; border-bottom:120px solid var(--panel); }
-.seesaw-end{ position:absolute; top:-30px; font-family:var(--sans); font-weight:600; font-size:20px; }
-.seesaw .marker{ position:absolute; background:var(--acc); color:var(--acc-ink); font-family:var(--sans);
-  font-weight:700; font-size:18px; letter-spacing:.06em; padding:8px 16px; border-radius:9px; text-transform:uppercase; }
+/* Horizontal balance beam; a labelled group ("end") sits above each end. */
+.seesaw{ position:relative; width:920px; height:252px; margin:6px auto 0; }
+.seesaw .beam{ position:absolute; left:0; right:0; top:150px; height:14px; background:var(--panel-2);
+  border:1px solid var(--line-2); border-radius:8px; }
+.seesaw .fulcrum{ position:absolute; left:50%; top:150px; transform:translateX(-50%);
+  width:0; height:0; border-left:42px solid transparent; border-right:42px solid transparent; border-bottom:100px solid var(--panel); }
+.see-end{ position:absolute; top:0; width:340px; display:flex; flex-direction:column; align-items:center; gap:14px; }
+.see-end.left{ left:-10px; }
+.see-end.right{ right:-10px; }
+.see-end .marker{ background:var(--acc); color:var(--acc-ink); font-family:var(--sans); font-weight:700;
+  font-size:24px; letter-spacing:.06em; padding:12px 26px; border-radius:12px; text-transform:uppercase; }
+.see-end .see-desc{ font-family:var(--sans); color:var(--mut); font-size:21px; letter-spacing:.01em; }
 
 /* -------------------------------------------------------- APP WALL ------- */
 .wall{ display:grid; grid-template-columns:repeat(9,1fr); gap:8px; }
@@ -361,8 +366,10 @@ ol.agenda .t{ font-size:34px; line-height:1.2; }
 
 /* compact logo tiles inside the narrow ladder steps */
 .step .logo-tile{ height:34px; padding:5px 8px; border-radius:8px; box-shadow:0 3px 9px rgba(0,0,0,.3); }
-.step .logo-tile img{ max-width:66px; }
-.step .logo-row{ gap:7px; justify-content:center; }
+/* 58px keeps all three marks on ONE row inside a 252px rung — at 66px they
+   wrapped, and the sweeping arrow then landed in the middle of them */
+.step .logo-tile img{ max-width:58px; }
+.step .logo-row{ gap:6px; justify-content:center; flex-wrap:nowrap; }
 
 /* Clippy graphic */
 .clippy-img{ height:300px; width:auto; display:block; filter:drop-shadow(0 14px 26px rgba(0,0,0,.45)); }
@@ -398,6 +405,223 @@ ol.agenda .t{ font-size:34px; line-height:1.2; }
 .reveal .fragment.custom.drop{ opacity:0; visibility:visible; transform:translateY(-54px); transition:opacity .5s var(--ease), transform .6s var(--ease); }
 .reveal .fragment.custom.drop.visible{ opacity:1; transform:none; }
 
+/* =========================================================================
+   REVIEW BATCH — August 2026
+   ========================================================================= */
+
+/* ---- band ink ------------------------------------------------------------
+   <strong> inside the gold band was picking up the global white ink, so
+   "Common thread" printed white on gold while the rest of the line was slate.
+   Inherit instead. */
+.band strong{ color:inherit; }
+/* `.reveal strong` (0,1,1) outranks `.acc` (0,1,0), so a highlighted bold word
+   silently rendered white. Make the accent win when both are on one element. */
+.reveal strong.acc, .reveal .acc strong{ color:var(--acc); }
+
+/* ---- SYSTEMATIC HEADING → CONTENT RHYTHM --------------------------------
+   Every content slide is: kicker → h2 → gap → body. These rules are the
+   single source of truth for that gap. Slides no longer hand-tune their own
+   inline margin-bottom, which is why 10/11/12/23/34 had all drifted apart
+   and sat too close to the title. Change the number here, the whole deck
+   moves together.
+   Only DIRECT children of .canvas are governed, so headings nested inside a
+   grid (e.g. the coding slide) keep their local spacing. */
+.canvas > .kicker{ margin:0 0 20px; }
+.canvas > h1,
+.canvas > h2{ margin:0 0 54px; }
+.canvas > h2.snug{ margin-bottom:30px; }   /* opt-out for unusually tall bodies */
+.canvas.center > h2{ margin-bottom:32px; }
+/* a .sub that belongs to the title rides up under it, then holds the gap */
+.canvas > h2 + .sub.deck{ margin:-38px 0 48px; }
+
+/* ---- CLIPPY STAGE + SPEECH BUBBLE (slide 7) ----------------------------- */
+/* Clippy sits dead centre of the slide; the bubble hangs off to his right
+   without shifting him off-axis. */
+.clippy-stage{ position:relative; display:flex; align-items:center; justify-content:center; width:100%; }
+.clippy-img.md{ height:210px; }
+.bubble-say{
+  position:absolute; left:calc(50% + 122px); top:50%; transform:translateY(-50%);
+  max-width:330px; text-align:left;
+  background:#fbfbf9; color:#1a2620; border-radius:18px; padding:20px 24px;
+  font-family:var(--sans); font-size:21px; font-weight:500; line-height:1.35;
+  box-shadow:0 14px 32px rgba(0,0,0,.42);
+}
+.bubble-say::before{
+  content:''; position:absolute; left:-15px; top:50%; transform:translateY(-50%);
+  border-top:13px solid transparent; border-bottom:13px solid transparent;
+  border-right:16px solid #fbfbf9;
+}
+
+/* ---- MATCHED PERSONA / ENGINE BOXES (slides 11 and 12) -------------------
+   Both slides use the same three widths so the diagram doesn't jump between
+   them. Slide 12 swaps the engine box for the tower below. */
+.persona-box{ width:274px; flex:none; align-self:center; flex-direction:column;
+  align-items:flex-start; gap:9px; min-height:150px; padding:22px 24px;
+  text-align:left; }
+/* the exceptions hang off "John likes red…" rather than restating it */
+.persona-box .exlist{ padding-left:22px; display:block; text-align:left; }
+.engine-box{ width:252px; flex:none; align-self:center; flex-direction:column;
+  gap:10px; min-height:150px; }
+.outcome-box{ width:274px; flex:none; }
+
+/* ---- THE NEVER-ENDING RULES ENGINE (slide 12) ---------------------------
+   The tower runs off the bottom of the stage (negative margin cancels the
+   canvas padding) and never closes, with rules scrolling upward behind a
+   fade. The point is that the list has no end. */
+.explode-row{ flex:1; align-items:stretch; justify-content:center; margin-bottom:-72px; }
+.rules-tower{
+  /* 304px = the engine box on slide 11 (252 content + 2x26 padding), so the
+     two slides put their middle box in exactly the same place */
+  position:relative; width:304px; box-sizing:border-box;
+  flex:none; align-self:stretch; overflow:hidden;
+  background:var(--panel-2); border:1px solid var(--acc-line); border-bottom:none;
+  border-radius:14px 14px 0 0; display:flex; flex-direction:column;
+  align-items:center; padding-top:18px; min-height:260px;
+}
+.rules-tower .lab{ position:relative; z-index:3; font-family:var(--sans); font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase; font-size:16px; color:var(--acc);
+  text-align:center; line-height:1.3; }
+.rules-tower .veil{ position:absolute; inset:0; z-index:2; pointer-events:none;
+  background:linear-gradient(180deg,
+    var(--panel-2) 0 58px,
+    rgba(34,50,43,.72) 120px,
+    rgba(34,50,43,0) 240px); }
+.codefall{
+  position:absolute; left:0; right:0; top:0; z-index:1; padding:0 10px;
+  font-family:'SFMono-Regular',ui-monospace,Menlo,Consolas,monospace;
+  font-size:11px; line-height:1.6; color:#8fd6a3; opacity:.55; white-space:pre;
+  /* fast enough that it reads as "this is out of control", not as a list */
+  animation:codeup 5s linear infinite;
+}
+@keyframes codeup{ from{ transform:translateY(0) } to{ transform:translateY(-50%) } }
+@media (prefers-reduced-motion: reduce){ .codefall{ animation:none } }
+
+/* ---- LADDER: centred rungs, sweeping arrow, five steps ------------------ */
+.ladder{ position:relative; }
+/* occupants sit in the middle of whatever height is left under the label,
+   instead of bunching up directly beneath it */
+.step .stepbody{ flex:1; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:9px; padding-bottom:12px; width:100%; }
+
+.ladder.five{ height:452px; }
+.ladder.five .step{ width:205px; }
+.ladder.five .step.low{ height:132px; }
+.ladder.five .step.mid{ height:212px; }
+/* AGI sits at the SAME height as human-level intelligence — that is the point:
+   it is a machine AT our level, not a rung above it. Only ASI is higher. */
+.ladder.five .step.high{ height:292px; }
+.ladder.five .step.agi{ height:292px; }
+.ladder.five .step.peak{ height:412px; }
+.step.agi{ background:var(--panel-2); border-color:var(--acc-line); }
+.icon-ai{ color:var(--acc); display:block; }
+.ladder.five .step .steplabel{ font-size:17px; padding:0 8px; }
+.ladder.five .step .steplabel small{ font-size:13px; }
+/* narrower rungs need smaller marks to stay on one row */
+.ladder.five .step .logo-tile{ height:30px; padding:4px 6px; }
+.ladder.five .step .logo-tile img{ max-width:46px; }
+.ladder.five .step .logo-row{ gap:5px; }
+
+/* sweeping arrow from Clippy's rung up to the next one.
+   Centred on the ladder rather than stretched across the canvas, so the
+   viewBox maps 1:1 onto the rungs and the curve lands where it should. */
+.sweep{ position:absolute; left:50%; top:0; transform:translateX(-50%);
+  height:100%; overflow:visible; pointer-events:none; z-index:4; }
+.sweep path.line{ fill:none; stroke:var(--acc); stroke-width:3.5; stroke-linecap:round;
+  stroke-dasharray:420; stroke-dashoffset:420; }
+.sweep .head{ fill:var(--acc); opacity:0; }
+.reveal .fragment.custom.sweep-in{ opacity:1; visibility:visible; }
+/* line and arrowhead read as ONE motion — the head lands as the line arrives */
+.reveal .fragment.custom.sweep-in path.line{ transition:stroke-dashoffset .8s var(--ease); }
+.reveal .fragment.custom.sweep-in.visible path.line{ stroke-dashoffset:0; }
+.reveal .fragment.custom.sweep-in .head{ transition:opacity .2s ease; }
+.reveal .fragment.custom.sweep-in.visible .head{ opacity:1; transition-delay:.62s; }
+
+/* ---- TWO-BOX TEACHING LAYOUT (learning from examples / feedback) -------- */
+.twobox{ display:grid; grid-template-columns:1fr 1fr; gap:34px; align-items:stretch; }
+.lbox{ background:var(--panel); border:1px solid var(--line-2); border-top:3px solid var(--acc);
+  border-radius:16px; padding:28px 30px; display:flex; flex-direction:column; gap:14px; }
+.lbox .n{ font-family:var(--sans); font-weight:700; font-size:15px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--acc); }
+.lbox h3{ font-size:30px; }
+.lbox p{ font-size:22px; color:var(--mut); line-height:1.35; }
+.lbox.dim{ opacity:.45; border-top-color:var(--line-2); }
+
+/* dashed list used inside the teaching boxes */
+.blist{ margin:0; padding:0; display:flex; flex-direction:column; gap:13px; }
+.blist li{ list-style:none; display:flex; gap:13px; align-items:baseline;
+  font-family:var(--serif); font-size:25px; color:var(--ink); line-height:1.3; }
+.blist li::before{ content:'—'; color:var(--acc); flex:none; }
+.blist li.q{ color:var(--acc); font-style:italic; }
+.blist li.q::before{ content:'→'; font-style:normal; }
+/* a line that trails its parent fragment by a beat, on the same click */
+.delayed{ opacity:0; }
+.reveal .fragment.visible .delayed{ animation:ag-in .6s var(--ease) 1s forwards; }
+@media (prefers-reduced-motion: reduce){
+  .reveal .fragment.visible .delayed{ animation:none; opacity:1 } }
+
+/* ---- IMAGE CARDS (captchas, screenshots, charts) ------------------------ */
+.shot{ border-radius:14px; box-shadow:0 14px 34px rgba(0,0,0,.42); display:block;
+  max-width:100%; background:#fbfbf9; }
+.shot.pad{ padding:10px; }
+.figcap{ font-family:var(--sans); font-size:15px; color:var(--faint); text-align:center;
+  margin-top:10px; }
+
+/* ---- CLOUD vs LOCAL, two versions (slide 35) --------------------------- */
+.netcase{ display:flex; flex-direction:column; gap:10px; }
+.netcase .caselab{ font-family:var(--sans); font-weight:600; font-size:17px;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--acc); }
+.netcase.bad .caselab{ color:#e0a19f; }
+/* the safe case is green throughout, so the two halves never get confused */
+.netcase.safe .caselab{ color:#9fe0b3; }
+.netcase.safe .school-box{ border-color:rgba(143,214,163,.5); background:rgba(143,214,163,.08); }
+.netcase.safe .school-box .wlabel{ color:#9fe0b3; }
+.caserule{ height:1px; background:var(--line-2); margin:2px 0; }
+/* a pipe carrying traffic both ways */
+.pipe.two-way::before,
+.pipe.two-way::after{ position:absolute; top:-11px; font-family:var(--sans); font-size:19px;
+  color:#d68f8f; line-height:1; }
+.pipe.two-way::before{ content:'◀'; left:-2px; }
+.pipe.two-way::after{ content:'▶'; right:-2px; }
+.pipe.safe.two-way::before,
+.pipe.safe.two-way::after{ color:#8fd6a3; }
+.pipe .plab.back{ top:auto; bottom:-30px; color:#9db3a7; }
+.netrow{ display:flex; align-items:center; }
+.school-box{ position:relative; border:3px solid var(--acc-line); border-radius:14px;
+  padding:24px 26px 20px; background:var(--acc-soft); display:flex; align-items:center;
+  gap:16px; flex:none; }
+.school-box .wlabel{ position:absolute; top:-13px; left:20px; background:var(--bg);
+  padding:0 10px; font-family:var(--sans); font-weight:600; letter-spacing:.04em;
+  color:var(--acc); font-size:16px; }
+.pipe{ position:relative; flex:1; min-width:130px; height:3px;
+  background:repeating-linear-gradient(90deg,#d68f8f 0 12px,transparent 12px 22px); }
+.pipe .plab{ position:absolute; top:-30px; left:50%; transform:translateX(-50%);
+  white-space:nowrap; font-family:var(--sans); font-size:15px; color:#e0a19f;
+  letter-spacing:.02em; }
+.pipe.safe{ background:repeating-linear-gradient(90deg,#8fd6a3 0 12px,transparent 12px 22px); }
+.pipe.safe .plab{ color:#8fd6a3; }
+.mini-box{ background:var(--panel); border:1px solid var(--line-2); border-radius:12px;
+  padding:14px 18px; font-family:var(--serif); font-size:20px; color:var(--ink);
+  text-align:center; min-width:150px; flex:none; }
+.mini-box.model{ background:#0c1310; border-color:rgba(244,201,93,.3); color:#cfe0d6; }
+.mini-box small{ display:block; font-family:var(--sans); font-size:13px; color:var(--mut);
+  margin-top:3px; letter-spacing:.02em; }
+
+/* ---- FORK WITH ROADS (slide 40) ---------------------------------------- */
+.forkshot{ border-radius:14px; overflow:hidden; border:1px solid var(--line-2);
+  height:296px; display:block; width:100%; object-fit:cover; }
+.roadsvg{ display:block; width:100%; height:92px; }
+
+/* ---- CHART-WEIGHTED SPLIT -----------------------------------------------
+   Charts get the larger share of the slide; a 50/50 grid2 shrank them until
+   the axis labels stopped being readable from the back of a room. */
+.grid-chart{ display:grid; grid-template-columns:352px 1fr; gap:40px; align-items:center; }
+.grid-chart img{ width:100%; height:auto; display:block; }
+
+/* ---- MISC -------------------------------------------------------------- */
+.centre-note{ text-align:center; }
+.hairline{ height:1px; background:var(--line); margin:26px auto; width:180px; }
+.qr-lg{ width:250px; height:250px; border-radius:14px; box-shadow:0 12px 34px rgba(0,0,0,.45); }
+
 /* auto-advancing list (explosion) — items stagger in on a single click */
 .reveal .fragment.custom.autolist .li{ display:block; opacity:0; }
 .reveal .fragment.custom.autolist.visible .li{ animation:ag-in .5s var(--ease) forwards; }
@@ -406,3 +630,23 @@ ol.agenda .t{ font-size:34px; line-height:1.2; }
 .reveal .fragment.custom.autolist.visible .li:nth-child(3){ animation-delay:.91s }
 .reveal .fragment.custom.autolist.visible .li:nth-child(4){ animation-delay:1.34s }
 @media (prefers-reduced-motion: reduce){ .reveal .fragment.custom.autolist.visible .li{ animation:none; opacity:1 } }
+/* slower variant — one line per second, up to six lines (the Imagine slide) */
+.reveal .fragment.custom.autolist.slow.visible .li:nth-child(1){ animation-delay:.05s }
+.reveal .fragment.custom.autolist.slow.visible .li:nth-child(2){ animation-delay:1.05s }
+.reveal .fragment.custom.autolist.slow.visible .li:nth-child(3){ animation-delay:2.05s }
+.reveal .fragment.custom.autolist.slow.visible .li:nth-child(4){ animation-delay:3.05s }
+.reveal .fragment.custom.autolist.slow.visible .li:nth-child(5){ animation-delay:4.05s }
+.reveal .fragment.custom.autolist.slow.visible .li:nth-child(6){ animation-delay:5.05s }
+
+/* ---- SELF-TIMED SEQUENCE ------------------------------------------------
+   Lines that arrive on their own once the slide lands, a beat apart, with no
+   click. Used where the rhythm of the delivery matters more than the
+   speaker's timing. */
+.autoseq > *{ opacity:0; }
+.reveal section.present .autoseq > *{ animation:ag-in .7s var(--ease) forwards; }
+.reveal section.present .autoseq > *:nth-child(1){ animation-delay:.15s }
+.reveal section.present .autoseq > *:nth-child(2){ animation-delay:1.15s }
+.reveal section.present .autoseq > *:nth-child(3){ animation-delay:2.15s }
+.reveal section.present .autoseq > *:nth-child(4){ animation-delay:3.15s }
+@media (prefers-reduced-motion: reduce){
+  .reveal section.present .autoseq > *{ animation:none; opacity:1 } }

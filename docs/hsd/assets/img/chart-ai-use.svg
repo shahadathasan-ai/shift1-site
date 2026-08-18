@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1216 562" width="1216" height="562" font-family="Archivo, Helvetica, Arial, sans-serif">
+<rect width="1216" height="562" fill="#fbfbf9"/>
+<text x="48" y="40" font-size="27" font-weight="700" fill="#1f4e79">AI use by industry</text>
+<text x="48" y="68" font-size="19" fill="#5d6b62">Share of firms using AI in the last two weeks (percent)</text>
+<text x="92" y="120" font-size="18" font-weight="600" fill="#1a2620">Information</text>
+<line x1="92" y1="260.0" x2="362" y2="260.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="82" y="265.0" text-anchor="end" font-size="14" fill="#5d6b62">0</text>
+<line x1="92" y1="197.0" x2="362" y2="197.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="82" y="202.0" text-anchor="end" font-size="14" fill="#5d6b62">25</text>
+<line x1="92" y1="134.0" x2="362" y2="134.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="82" y="139.0" text-anchor="end" font-size="14" fill="#5d6b62">50</text>
+<polygon points="92.0,260.0 92.0,179.4 116.5,168.0 141.1,165.5 165.6,165.5 190.2,156.7 214.7,157.9 239.3,183.1 263.8,169.3 288.4,155.4 312.9,152.9 337.5,156.7 362.0,160.5 362.0,260.0" fill="rgba(31,78,121,.10)"/>
+<polyline points="92.0,179.4 116.5,168.0 141.1,165.5 165.6,165.5 190.2,156.7 214.7,157.9 239.3,183.1 263.8,169.3 288.4,155.4 312.9,152.9 337.5,156.7 362.0,160.5" fill="none" stroke="#1f4e79" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="362.0" cy="160.5" r="4.6" fill="#1f4e79"/>
+<text x="373.0" y="167.5" font-size="20" font-weight="700" fill="#1f4e79">40%</text>
+<text x="472" y="120" font-size="18" font-weight="600" fill="#1a2620">Finance and Insurance</text>
+<line x1="472" y1="260.0" x2="742" y2="260.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="462" y="265.0" text-anchor="end" font-size="14" fill="#5d6b62">0</text>
+<line x1="472" y1="197.0" x2="742" y2="197.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="462" y="202.0" text-anchor="end" font-size="14" fill="#5d6b62">25</text>
+<line x1="472" y1="134.0" x2="742" y2="134.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="462" y="139.0" text-anchor="end" font-size="14" fill="#5d6b62">50</text>
+<polygon points="472.0,260.0 472.0,185.7 496.5,183.1 521.1,181.9 545.6,181.9 570.2,178.1 594.7,180.6 619.3,184.4 643.8,180.6 668.4,176.8 692.9,173.1 717.5,176.8 742.0,173.1 742.0,260.0" fill="rgba(31,78,121,.10)"/>
+<polyline points="472.0,185.7 496.5,183.1 521.1,181.9 545.6,181.9 570.2,178.1 594.7,180.6 619.3,184.4 643.8,180.6 668.4,176.8 692.9,173.1 717.5,176.8 742.0,173.1" fill="none" stroke="#1f4e79" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="742.0" cy="173.1" r="4.6" fill="#1f4e79"/>
+<text x="753.0" y="180.1" font-size="20" font-weight="700" fill="#1f4e79">34%</text>
+<text x="852" y="120" font-size="18" font-weight="600" fill="#1a2620">Professional and Technical Services</text>
+<line x1="852" y1="260.0" x2="1122" y2="260.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="842" y="265.0" text-anchor="end" font-size="14" fill="#5d6b62">0</text>
+<line x1="852" y1="197.0" x2="1122" y2="197.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="842" y="202.0" text-anchor="end" font-size="14" fill="#5d6b62">25</text>
+<line x1="852" y1="134.0" x2="1122" y2="134.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="842" y="139.0" text-anchor="end" font-size="14" fill="#5d6b62">50</text>
+<polygon points="852.0,260.0 852.0,179.4 876.5,178.1 901.1,174.3 925.6,170.5 950.2,169.3 974.7,171.8 999.3,171.8 1023.8,170.5 1048.4,168.0 1072.9,166.8 1097.5,168.0 1122.0,165.5 1122.0,260.0" fill="rgba(31,78,121,.10)"/>
+<polyline points="852.0,179.4 876.5,178.1 901.1,174.3 925.6,170.5 950.2,169.3 974.7,171.8 999.3,171.8 1023.8,170.5 1048.4,168.0 1072.9,166.8 1097.5,168.0 1122.0,165.5" fill="none" stroke="#1f4e79" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1122.0" cy="165.5" r="4.6" fill="#1f4e79"/>
+<text x="1133.0" y="172.5" font-size="20" font-weight="700" fill="#1f4e79">38%</text>
+<text x="92" y="338" font-size="18" font-weight="600" fill="#1a2620">Educational Services</text>
+<line x1="92" y1="478.0" x2="362" y2="478.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="82" y="483.0" text-anchor="end" font-size="14" fill="#5d6b62">0</text>
+<line x1="92" y1="415.0" x2="362" y2="415.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="82" y="420.0" text-anchor="end" font-size="14" fill="#5d6b62">25</text>
+<line x1="92" y1="352.0" x2="362" y2="352.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="82" y="357.0" text-anchor="end" font-size="14" fill="#5d6b62">50</text>
+<polygon points="92.0,478.0 92.0,417.5 116.5,393.6 141.1,404.9 165.6,402.4 190.2,386.0 214.7,397.4 239.3,403.7 263.8,394.8 288.4,407.4 312.9,399.9 337.5,393.6 362.0,389.8 362.0,478.0" fill="rgba(31,78,121,.10)"/>
+<polyline points="92.0,417.5 116.5,393.6 141.1,404.9 165.6,402.4 190.2,386.0 214.7,397.4 239.3,403.7 263.8,394.8 288.4,407.4 312.9,399.9 337.5,393.6 362.0,389.8" fill="none" stroke="#1f4e79" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="362.0" cy="389.8" r="4.6" fill="#1f4e79"/>
+<text x="373.0" y="396.8" font-size="20" font-weight="700" fill="#1f4e79">35%</text>
+<text x="92.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Dec</text>
+<text x="146.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Jan</text>
+<text x="200.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Feb</text>
+<text x="254.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Mar</text>
+<text x="308.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Apr</text>
+<text x="362.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">May</text>
+<text x="472" y="338" font-size="18" font-weight="600" fill="#1a2620">Manufacturing</text>
+<line x1="472" y1="478.0" x2="742" y2="478.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="462" y="483.0" text-anchor="end" font-size="14" fill="#5d6b62">0</text>
+<line x1="472" y1="415.0" x2="742" y2="415.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="462" y="420.0" text-anchor="end" font-size="14" fill="#5d6b62">25</text>
+<line x1="472" y1="352.0" x2="742" y2="352.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="462" y="357.0" text-anchor="end" font-size="14" fill="#5d6b62">50</text>
+<polygon points="472.0,478.0 472.0,450.3 496.5,442.7 521.1,447.8 545.6,444.0 570.2,444.0 594.7,441.5 619.3,442.7 643.8,433.9 668.4,433.9 692.9,432.6 717.5,433.9 742.0,435.2 742.0,478.0" fill="rgba(31,78,121,.10)"/>
+<polyline points="472.0,450.3 496.5,442.7 521.1,447.8 545.6,444.0 570.2,444.0 594.7,441.5 619.3,442.7 643.8,433.9 668.4,433.9 692.9,432.6 717.5,433.9 742.0,435.2" fill="none" stroke="#1f4e79" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="742.0" cy="435.2" r="4.6" fill="#1f4e79"/>
+<text x="753.0" y="442.2" font-size="20" font-weight="700" fill="#1f4e79">17%</text>
+<text x="472.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Dec</text>
+<text x="526.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Jan</text>
+<text x="580.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Feb</text>
+<text x="634.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Mar</text>
+<text x="688.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Apr</text>
+<text x="742.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">May</text>
+<text x="852" y="338" font-size="18" font-weight="600" fill="#1a2620">Retail Trade</text>
+<line x1="852" y1="478.0" x2="1122" y2="478.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="842" y="483.0" text-anchor="end" font-size="14" fill="#5d6b62">0</text>
+<line x1="852" y1="415.0" x2="1122" y2="415.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="842" y="420.0" text-anchor="end" font-size="14" fill="#5d6b62">25</text>
+<line x1="852" y1="352.0" x2="1122" y2="352.0" stroke="#d9ddd6" stroke-width="1"/>
+<text x="842" y="357.0" text-anchor="end" font-size="14" fill="#5d6b62">50</text>
+<polygon points="852.0,478.0 852.0,444.0 876.5,447.8 901.1,442.7 925.6,441.5 950.2,442.7 974.7,444.0 999.3,447.8 1023.8,442.7 1048.4,441.5 1072.9,438.9 1097.5,440.2 1122.0,441.5 1122.0,478.0" fill="rgba(31,78,121,.10)"/>
+<polyline points="852.0,444.0 876.5,447.8 901.1,442.7 925.6,441.5 950.2,442.7 974.7,444.0 999.3,447.8 1023.8,442.7 1048.4,441.5 1072.9,438.9 1097.5,440.2 1122.0,441.5" fill="none" stroke="#1f4e79" stroke-width="3.4" stroke-linejoin="round" stroke-linecap="round"/>
+<circle cx="1122.0" cy="441.5" r="4.6" fill="#1f4e79"/>
+<text x="1133.0" y="448.5" font-size="20" font-weight="700" fill="#1f4e79">14%</text>
+<text x="852.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Dec</text>
+<text x="906.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Jan</text>
+<text x="960.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Feb</text>
+<text x="1014.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Mar</text>
+<text x="1068.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">Apr</text>
+<text x="1122.0" y="502.0" text-anchor="middle" font-size="14" fill="#5d6b62">May</text>
+<text x="48" y="548" font-size="15" fill="#5d6b62">Source: US Census Bureau, Business Trends and Outlook Survey · Dec 2025 – May 2026</text>
+</svg>
