@@ -30,11 +30,14 @@
     }
     .shuffle .ch:last-child { margin-right: -1.85em; }
 
+    /* Sits in the subtitle slot beneath where SHUFFLE was, not in its place.
+       --drop is measured from frame centre in container-height units. */
     .bats {
       font-family: 'Inter', sans-serif; font-weight: 300; font-size: 3.5cqh;
       letter-spacing: .52em; white-space: nowrap; line-height: 1;
       color: var(--bats-lit); opacity: 0;
-      text-shadow: 0 0 .05em rgba(var(--bats-glow), .16);
+      transform: translateY(var(--drop, 13cqh));
+      text-shadow: 0 0 .022em rgba(var(--bats-glow), .085);  /* essentially none */
     }
     .bats span { margin-right: -.52em; }
   </style>
@@ -58,6 +61,8 @@ location.hash.slice(1).split('&').forEach(function (kv) {
 const W = parseInt(q.w || 2048, 10), H = parseInt(q.h || 858, 10);
 const tubeKey = TUBE[q.tube] ? q.tube : 'A';
 const bloom = q.bloom !== undefined ? parseFloat(q.bloom) : 1.0;
+const drop = q.drop !== undefined ? parseFloat(q.drop) : 13;
+const dim  = q.dim  !== undefined ? parseFloat(q.dim)  : E.BATS_PEAK;
 const t = q.f !== undefined ? (parseInt(q.f, 10) / E.FPS) : parseFloat(q.t || 0);
 
 const hex2rgb = h => [1, 3, 5].map(i => parseInt(h.substr(i, 2), 16));
@@ -73,6 +78,7 @@ frame.style.setProperty('--glow', hex2rgb(lit).join(','));
 frame.style.setProperty('--bt', bloom);
 frame.style.setProperty('--bats-lit', bh);
 frame.style.setProperty('--bats-glow', hex2rgb(bh).join(','));
+frame.style.setProperty('--drop', drop + 'cqh');
 
 const sh = document.getElementById('sh'), bats = document.getElementById('bats');
 const chars = [];
@@ -90,12 +96,14 @@ function paint(time) {
     chars[i].style.setProperty('--o', Math.min(1, b).toFixed(5));
     chars[i].style.setProperty('--bm', Math.max(0, bm).toFixed(5));
   }
-  bats.style.opacity = E.batsAt(time).toFixed(5);
+  // engine value is normalised to BATS_PEAK; rescale if dim is overridden
+  bats.style.opacity = (E.batsAt(time) / E.BATS_PEAK * dim).toFixed(5);
 }
 
 paint(t);
 window.RENDER_INFO = { w: W, h: H, t: t, frame: Math.round(t * E.FPS), tube: tubeKey,
-                       bloom: bloom, lit: lit, batsLit: bh, frames: E.SEQ.frames };
+                       bloom: bloom, drop: drop, dim: dim, lit: lit, batsLit: bh,
+                       frames: E.SEQ.frames };
 /* only declare ready once webfonts are in, or glyph metrics differ per frame */
 if (document.fonts && document.fonts.ready) {
   document.fonts.ready.then(function () { paint(t); window.RENDER_READY = true; });

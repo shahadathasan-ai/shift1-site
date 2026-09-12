@@ -63,10 +63,21 @@
 
     /* ─── BASED ON A TRUE STORY ─── */
     /* Same family, no flicker, no ignition: one uniform gentle fade. */
+    /* Subtitle slot beneath where SHUFFLE sat — not SHUFFLE's own position. */
     .bats { font-family:'Inter',sans-serif; font-weight:300; font-size:3.5cqh;
             letter-spacing:.52em; white-space:nowrap; line-height:1;
             color:var(--bats-lit); opacity:0;
-            text-shadow: 0 0 .05em rgba(var(--bats-glow), .16); }
+            transform:translateY(var(--drop,13cqh));
+            text-shadow: 0 0 .022em rgba(var(--bats-glow), .085); }
+    /* Review aid only — never rendered. Shows where SHUFFLE was, so the
+       subtitle position can be judged against it. */
+    .ghost { position:absolute; inset:0; display:grid; place-items:center;
+             pointer-events:none; opacity:0; }
+    .ghosting .ghost { opacity:.13; }
+    .ghost .gw { font-family:'Inter',sans-serif; font-weight:200; font-size:11cqh;
+                 letter-spacing:1.85em; white-space:nowrap; line-height:1; display:flex;
+                 color:var(--lit); }
+    .ghost .gw span:last-child { margin-right:-1.85em; }
     .bats span { margin-right:-.52em; }
 
     /* ─── transport ─── */
@@ -125,11 +136,13 @@
   <div class="eyebrow">Shift1 · Shuffle</div>
   <h1>Full title sequence — approval build</h1>
   <p class="lede">
-    Option 6 <strong>Tube</strong>, warmed to an ageing institutional fluorescent, followed by the
-    second card. The ignition choreography is <strong>unchanged</strong> from the version you picked;
-    the black beat is measured from the actual electrical cut at <strong>2.74s</strong>, so the whole
-    sequence totals <strong>5.75s = 138 frames at 24fps</strong>. Pick a tube colour, trim the bloom,
-    then send me the settings line at the bottom.
+    Option 6 <strong>Tube</strong>, warmed to an ageing institutional fluorescent. The ignition is
+    <strong>unchanged</strong>. On frame <strong>66</strong> — the CLICK — SHUFFLE drops to zero and
+    the card switches on <strong>in the same frame</strong>: no phosphor tail, no black between, no
+    fade in. The card sits in the subtitle slot <strong>beneath</strong> where SHUFFLE was, so the
+    electrical state reads as transferring rather than as a second card. Total
+    <strong>4.083s = 98 frames at 24fps</strong>. Set colour, bloom, drop and dim, then send me the
+    settings line at the bottom.
   </p>
 
   <!-- ══ 1. MASTER PREVIEW ══ -->
@@ -140,6 +153,7 @@
       their relative scale exactly as it will render.</div>
 
     <div class="frame" id="master">
+      <div class="ghost"><div class="gw" id="gw"></div></div>
       <div class="stack"><div class="shuffle" id="sh"></div></div>
       <div class="stack"><div class="bats" id="bats"></div></div>
     </div>
@@ -154,11 +168,13 @@
         <span class="tval" id="tv">0.000s · frame 0</span>
         <button data-jump="1.30">Failed strike</button>
         <button data-jump="2.00">Full burn</button>
-        <button data-jump="2.74">Electrical cut</button>
-        <button data-jump="3.00">Black beat</button>
-        <button data-jump="4.40">Second card</button>
+        <button data-jump="2.667">Burn</button>
+        <button data-jump="2.708">Frame before</button>
+        <button data-jump="2.750">THE SWAP</button>
+        <button data-jump="3.30">Card holding</button>
         <button id="half">Half speed</button>
         <button id="guides">Safe area</button>
+        <button id="ghost">Ghost SHUFFLE</button>
       </div>
     </div>
   </section>
@@ -188,11 +204,20 @@
   <!-- ══ 4. SECOND CARD ══ -->
   <section>
     <div class="shead"><span class="snum">4</span><h2>Second card, held</h2></div>
-    <div class="sdesc">Frozen at full hold so you can judge typography and scale. Same family as
-      SHUFFLE at weight 300 — <b>200 disappears at this size</b>, which is why it steps up one weight.
-      No ignition, no flicker: a single uniform fade. Peak opacity 0.62 and a desaturated tint, so it
-      keeps a trace of the tube hue while sitting far below SHUFFLE in luminance.</div>
-    <div class="frame" id="batsonly"><div class="stack"><div class="bats" id="bats2"></div></div></div>
+    <div class="sdesc">Frozen at full hold. Same family as SHUFFLE at weight 300 —
+      <b>200 disappears at this size</b>, which is why it steps up one weight. No ignition, no
+      flicker, no fade in: it switches on with the CLICK. Essentially no bloom. Turn on
+      <b>Ghost SHUFFLE</b> above to see it against the position SHUFFLE occupied.</div>
+    <div class="trow" style="margin-bottom:1rem">
+      <span class="tval" id="dropv">drop 13.0cqh</span>
+      <input type="range" id="drop" min="4" max="20" step="0.5" value="13" style="max-width:280px">
+      <span class="tval" id="dimv">dim 0.60</span>
+      <input type="range" id="dim" min="30" max="90" step="1" value="60" style="max-width:240px">
+    </div>
+    <div class="frame ghosting" id="batsonly">
+      <div class="ghost"><div class="gw" id="gw2"></div></div>
+      <div class="stack"><div class="bats" id="bats2"></div></div>
+    </div>
   </section>
 
   <!-- ══ 5. READOUT ══ -->
@@ -235,6 +260,12 @@ const batsHexFor = h => rgb2hex(hex2rgb(h).map((v, i) => v * 0.72 + [201, 200, 1
 /* ══ build ══ */
 const sh = document.getElementById('sh'), bats = document.getElementById('bats'),
       bats2 = document.getElementById('bats2');
+['gw','gw2'].forEach(function (id) {
+  const g = document.getElementById(id); if (!g) return;
+  for (let i = 0; i < N; i++) { const s = document.createElement('span'); s.textContent = WORD[i]; g.appendChild(s); }
+});
+
+let drop = 13, dim = BATS_PEAK;
 const chars = [];
 for (let i = 0; i < N; i++) {
   const s = document.createElement('span'); s.className = 'ch'; s.textContent = WORD[i];
@@ -252,6 +283,7 @@ function applyColour() {
     f.style.setProperty('--bt', bloomTrim);
     f.style.setProperty('--bats-lit', bh);
     f.style.setProperty('--bats-glow', brgb);
+    f.style.setProperty('--drop', drop + 'cqh');
   });
   document.querySelectorAll('.cand').forEach(el => el.classList.toggle('sel', el.dataset.k === sel));
   readout();
@@ -264,7 +296,7 @@ function paint(t) {
     chars[i].style.setProperty('--o', Math.min(1, b).toFixed(4));
     chars[i].style.setProperty('--bm', Math.max(0, bm).toFixed(4));
   }
-  bats.style.opacity = batsAt(t).toFixed(4);
+  bats.style.opacity = (batsAt(t) / BATS_PEAK * dim).toFixed(4);
   const f = Math.round(t * SEQ.fps);
   document.getElementById('tv').textContent = t.toFixed(3) + 's · frame ' + f;
   document.getElementById('scrub').value = Math.round(t * 1000);
@@ -273,15 +305,13 @@ function paint(t) {
 
 /* ══ phases ══ */
 const PH = [
-  ['Black',        0,            0.26],
-  ['Pre-glow',     0.26,         0.45],
-  ['Failed strikes', 0.45,       IGN.catch],
-  ['Ignition + burn', IGN.catch, SEQ.cut],
-  ['Cut',          SEQ.cut,      SEQ.batsT0],
-  ['Card fades in', SEQ.batsT0,  SEQ.batsFull],
-  ['Card holds',   SEQ.batsFull, SEQ.batsOutT],
-  ['Fade out',     SEQ.batsOutT, SEQ.batsEnd],
-  ['Black',        SEQ.batsEnd,  SEQ.total]
+  ['Black',           0,             E.fr(6)],
+  ['Pre-glow',        E.fr(6),       E.fr(11)],
+  ['Failed strikes',  E.fr(11),      IGN.catch],
+  ['Ignition + burn', IGN.catch,     SEQ.swap],
+  ['CLICK · card on', SEQ.swap,      SEQ.outStart],
+  ['Card fades',      SEQ.outStart,  SEQ.end],
+  ['Black',           SEQ.end,       SEQ.total]
 ];
 const phEl = document.getElementById('phases');
 PH.forEach(function (p) {
@@ -329,19 +359,23 @@ function readout() {
   const rows = [
     ['Sequence', SEQ.total.toFixed(2) + 's · ' + SEQ.frames + ' frames @ ' + SEQ.fps + ' fps · 2.39:1'],
     ['SHUFFLE', 'Inter 200 · 11cqh · tracking 1.85em · ' + c.hex + ' (' + c.k + ' ' + c.name + ')'],
-    ['Ignition', 'catch ' + IGN.catch.toFixed(2) + 's · burn ' + (SEQ.cut - IGN.catch).toFixed(2) +
-                 's · cut ' + SEQ.cut.toFixed(2) + 's · 1-frame tail'],
+    ['Ignition', 'unchanged · catch f' + IGN.catchF + ' · burn ' + (SEQ.swapF - IGN.catchF) +
+                 'f (1.000s) · CLICK f' + SEQ.swapF],
     ['Bloom', bloomTrim.toFixed(2) + ' (tinted to tube colour, 4 layers, widest .95em)'],
-    ['Black beat', SEQ.beat.toFixed(2) + 's  (' + SEQ.cut.toFixed(2) + 's → ' + SEQ.batsT0.toFixed(2) + 's)'],
-    ['Second card', 'Inter 300 · 3.5cqh · tracking .52em · ' + batsHexFor(c.hex) + ' · peak ' + BATS_PEAK],
-    ['Card timing', 'in ' + SEQ.batsIn.toFixed(2) + 's · hold ' + SEQ.batsHold.toFixed(2) +
-                    's · out ' + SEQ.batsOut.toFixed(2) + 's (ends ' + SEQ.batsEnd.toFixed(2) + 's)'],
+    ['The swap', 'frame ' + SEQ.swapF + ' — SHUFFLE to zero and card on in the same frame; ' +
+                 'no phosphor tail, no black between'],
+    ['Second card', 'Inter 300 · 3.5cqh · tracking .52em · ' + batsHexFor(c.hex) +
+                    ' · dim ' + dim.toFixed(2) + ' · drop ' + drop.toFixed(1) + 'cqh · bloom ~0'],
+    ['Card timing', 'instant on f' + SEQ.swapF + ' · hold ' + SEQ.holdF + 'f (' +
+                    SEQ.hold.toFixed(3) + 's) · fade ' + SEQ.outF + 'f (' + SEQ.out.toFixed(3) +
+                    's) · black f' + SEQ.endF],
     ['Audio', 'none — buzz / strikes / CLICK added in Resolve']
   ];
   document.getElementById('rtable').innerHTML =
     rows.map(r => '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>').join('');
   document.getElementById('hash').textContent =
-    'APPROVE  #tube=' + sel + '&bloom=' + bloomTrim.toFixed(2) + '&res=<your timeline, e.g. 2048x858>';
+    'APPROVE  #tube=' + sel + '&bloom=' + bloomTrim.toFixed(2) + '&drop=' + drop.toFixed(1) +
+    '&dim=' + dim.toFixed(2) + '&res=<your timeline, e.g. 2048x858>';
 }
 
 /* ══ transport ══ */
@@ -370,6 +404,21 @@ document.getElementById('half').addEventListener('click', function () {
 document.getElementById('guides').addEventListener('click', function () {
   document.body.classList.toggle('guides'); this.classList.toggle('on');
 });
+document.getElementById('ghost').addEventListener('click', function () {
+  document.getElementById('master').classList.toggle('ghosting');
+  this.classList.toggle('on');
+});
+const dropEl = document.getElementById('drop'), dimEl = document.getElementById('dim');
+dropEl.addEventListener('input', function () {
+  drop = +this.value;
+  document.getElementById('dropv').textContent = 'drop ' + drop.toFixed(1) + 'cqh';
+  applyColour();
+});
+dimEl.addEventListener('input', function () {
+  dim = +this.value / 100;
+  document.getElementById('dimv').textContent = 'dim ' + dim.toFixed(2);
+  bats2.style.opacity = dim; applyColour();
+});
 const bl = document.getElementById('bloom');
 bl.addEventListener('input', function () {
   bloomTrim = +this.value / 100;
@@ -384,6 +433,11 @@ function applyHash() {
   if (q.tube && CANDS.some(c => c.k === q.tube)) sel = q.tube;
   if (q.bloom) { bloomTrim = parseFloat(q.bloom); bl.value = Math.round(bloomTrim * 100);
                  document.getElementById('bv').textContent = 'bloom ' + bloomTrim.toFixed(2); }
+  if (q.drop) { drop = parseFloat(q.drop); dropEl.value = drop;
+                document.getElementById('dropv').textContent = 'drop ' + drop.toFixed(1) + 'cqh'; }
+  if (q.dim)  { dim = parseFloat(q.dim); dimEl.value = Math.round(dim * 100);
+                document.getElementById('dimv').textContent = 'dim ' + dim.toFixed(2);
+                bats2.style.opacity = dim; }
   if (q.guides) document.body.classList.add('guides');
   applyColour();
   if (q.t !== undefined) paint(parseFloat(q.t));
@@ -392,7 +446,7 @@ function applyHash() {
 function init() {
   applyColour();
   // second card frozen at full hold for the detail frame
-  bats2.style.opacity = BATS_PEAK;
+  bats2.style.opacity = dim;
   paint(0);
   applyHash();
 }
