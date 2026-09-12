@@ -265,7 +265,7 @@ const sh = document.getElementById('sh'), bats = document.getElementById('bats')
   for (let i = 0; i < N; i++) { const s = document.createElement('span'); s.textContent = WORD[i]; g.appendChild(s); }
 });
 
-let drop = 13, dim = BATS_PEAK;
+let drop = 13, dim = BATS_PEAK, curT = 0;
 const chars = [];
 for (let i = 0; i < N; i++) {
   const s = document.createElement('span'); s.className = 'ch'; s.textContent = WORD[i];
@@ -290,6 +290,7 @@ function applyColour() {
 }
 
 function paint(t) {
+  curT = t;
   for (let i = 0; i < N; i++) {
     const b = shuffleAt(t, i);
     const bm = b > 1 ? 1 + (b - 1) * 2.6 : b;
@@ -349,7 +350,7 @@ CANDS.forEach(function (c) {
   }
   const fr = el.querySelector('.frame');
   fr.style.setProperty('--lit', c.hex); fr.style.setProperty('--glow', rgb); fr.style.setProperty('--bt', 1);
-  el.addEventListener('click', function () { sel = c.k; applyColour(); });
+  el.addEventListener('click', function () { sel = c.k; applyColour(); paint(curT); });
   candHost.appendChild(el);
 });
 
@@ -413,17 +414,21 @@ dropEl.addEventListener('input', function () {
   drop = +this.value;
   document.getElementById('dropv').textContent = 'drop ' + drop.toFixed(1) + 'cqh';
   applyColour();
+  paint(curT);
 });
 dimEl.addEventListener('input', function () {
   dim = +this.value / 100;
   document.getElementById('dimv').textContent = 'dim ' + dim.toFixed(2);
-  bats2.style.opacity = dim; applyColour();
+  bats2.style.opacity = dim;
+  applyColour();
+  paint(curT);          // dim lives in paint(), so repaint or a paused frame goes stale
 });
 const bl = document.getElementById('bloom');
 bl.addEventListener('input', function () {
   bloomTrim = +this.value / 100;
   document.getElementById('bv').textContent = 'bloom ' + bloomTrim.toFixed(2);
   applyColour();
+  paint(curT);
 });
 
 /* hash: #tube=B&bloom=1.10&t=4.4 */
@@ -442,6 +447,8 @@ function applyHash() {
   applyColour();
   if (q.t !== undefined) paint(parseFloat(q.t));
 }
+
+window.addEventListener('hashchange', function () { applyHash(); });
 
 function init() {
   applyColour();
