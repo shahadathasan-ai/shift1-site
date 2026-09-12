@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift1 — Instagram Icon Options</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0b0b0b;
+      --bg-card: #161616;
+      --text: #e8e4de;
+      --text-muted: #8a8580;
+      --accent: #e8d5a3;
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      /* the surface a mark sits on — flipped by the light/dark toggle.
+         --mark-accent goes deeper on light: #e8d5a3 on cream is ~1.05:1. */
+      --mark-bg: #0b0b0b;
+      --mark-fg: #e8e4de;
+      --mark-accent: #e8d5a3;
+      --mark-accent-soft: rgba(232, 213, 163, 0.55);
+      --mark-ghost: rgba(232, 213, 163, 0.22);
+      --mark-echo: rgba(232, 228, 222, 0.26);
+      --guide: rgba(232, 213, 163, 0.45);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .wrap { max-width: 1180px; margin: 0 auto; }
+
+    /* ─── HEADER ─── */
+    .eyebrow {
+      font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1rem;
+    }
+    h1 {
+      font-family: var(--font-heading); font-weight: 700;
+      font-size: clamp(1.8rem, 4vw, 2.6rem); letter-spacing: 0.02em;
+      line-height: 1.1; margin-bottom: 1.2rem;
+    }
+    .lede { max-width: 62ch; color: var(--text-muted); margin-bottom: 2rem; }
+    .lede strong { color: var(--text); font-weight: 400; }
+
+    /* ─── SIZE REFERENCE ─── */
+    .sizes {
+      border: 1px solid rgba(232, 213, 163, 0.14);
+      border-radius: 4px; padding: 1.4rem 1.6rem; margin-bottom: 2.5rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 1.2rem;
+    }
+    .sizes dt {
+      font-family: var(--font-heading); font-size: 0.95rem; font-weight: 600;
+      color: var(--accent); margin-bottom: 0.15rem;
+    }
+    .sizes dd { font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; }
+
+    /* ─── CONTROLS ─── */
+    .controls {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center;
+      margin-bottom: 3.5rem; padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    button {
+      font-family: var(--font-body); font-size: 0.78rem; font-weight: 400;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); background: transparent; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.14); border-radius: 3px;
+      padding: 0.55rem 1.1rem; transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    button:hover { color: var(--text); border-color: rgba(232, 213, 163, 0.5); }
+    button[aria-pressed="true"] {
+      color: #0b0b0b; background: var(--accent); border-color: var(--accent);
+    }
+    .controls-hint { font-size: 0.76rem; color: var(--text-muted); margin-left: auto; }
+
+    /* ─── SECTIONS ─── */
+    section { margin-bottom: 4.5rem; }
+    .section-label {
+      font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 0.7rem;
+    }
+    h2 {
+      font-family: var(--font-heading); font-weight: 600;
+      font-size: 1.45rem; letter-spacing: 0.01em; margin-bottom: 0.6rem;
+    }
+    .section-text { max-width: 68ch; color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2.4rem; }
+    .verdict {
+      display: inline-block; font-size: 0.7rem; letter-spacing: 0.12em;
+      text-transform: uppercase; padding: 0.25rem 0.6rem; border-radius: 2px; margin-bottom: 1.6rem;
+    }
+    .verdict.no { color: #d98b7a; border: 1px solid rgba(217, 139, 122, 0.35); }
+    .verdict.yes { color: var(--accent); border: 1px solid rgba(232, 213, 163, 0.4); }
+
+    /* ─── OPTION GRID ─── */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(268px, 1fr)); gap: 1.4rem; }
+
+    .card {
+      background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 5px; padding: 1.5rem 1.5rem 1.3rem;
+      display: flex; flex-direction: column;
+    }
+    .card-id {
+      font-family: var(--font-heading); font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.16em; color: var(--accent); margin-bottom: 1.1rem;
+    }
+    .hero-slot { display: flex; justify-content: center; margin-bottom: 1.3rem; }
+    .card-name {
+      font-family: var(--font-heading); font-size: 0.98rem; font-weight: 500;
+      margin-bottom: 0.35rem;
+    }
+    .card-note { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1.2rem; }
+    .card-foot { margin-top: auto; }
+
+    /* true-size preview strip */
+    .strip {
+      display: flex; align-items: flex-end; gap: 1.1rem;
+      padding: 1rem 0 0.4rem; border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .strip-item { display: flex; flex-direction: column; align-items: center; gap: 0.45rem; }
+    .strip-label { font-size: 0.62rem; letter-spacing: 0.08em; color: var(--text-muted); }
+    .dl { margin-top: 0.9rem; width: 100%; }
+
+    /* ─── SHORTLIST ─── */
+    .compare { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; }
+    .col {
+      background: var(--bg-card); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 5px; padding: 1.4rem 1.3rem;
+    }
+    .col.win { border-color: rgba(232, 213, 163, 0.45); }
+    .col.lose { opacity: 0.72; }
+    .col-id {
+      font-family: var(--font-heading); font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.16em; color: var(--accent); margin-bottom: 1rem;
+    }
+    .col-marks {
+      display: flex; align-items: center; gap: 1.1rem;
+      padding-bottom: 1.1rem; margin-bottom: 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .metric { display: flex; justify-content: space-between; gap: 0.6rem; font-size: 0.78rem; padding: 0.2rem 0; }
+    .metric span:first-child { color: var(--text-muted); }
+    .metric span:last-child { font-family: var(--font-heading); font-weight: 500; }
+    .metric.bad span:last-child { color: #d98b7a; }
+    .metric.good span:last-child { color: var(--accent); }
+    .col-take { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; margin-top: 0.9rem; }
+
+    /* ─── THE MARK ─── */
+    /* .mark is sized once via font-size; everything inside is in em, so one
+       variable scales a mark to any render size without redrawing it. */
+    .mark {
+      width: 1em; height: 1em; border-radius: 50%; overflow: hidden;
+      background: var(--mark-bg); color: var(--mark-fg);
+      display: grid; place-items: center; flex: none;
+      font-family: var(--font-heading); font-weight: 700; line-height: 1;
+      position: relative;
+    }
+    .mark.square { border-radius: 0; }
+    .mark .one { color: var(--mark-accent); }
+    .mark .stack { display: flex; flex-direction: column; align-items: center; line-height: 0.88; }
+
+    /* safe-area overlay: IG's circle mask plus breathing room */
+    .safe .mark::after {
+      content: ''; position: absolute; inset: 12%;
+      border: 1px dashed var(--guide); border-radius: 50%;
+    }
+
+    /* offscreen stage used for PNG export */
+    #stage { position: fixed; left: -4000px; top: 0; }
+
+    @media (max-width: 640px) {
+      body { padding: 2.5rem 1.2rem 4rem; }
+      .controls-hint { margin-left: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Shift1 Productions</div>
+  <h1>Instagram profile icon — options</h1>
+  <p class="lede">
+    Instagram shows your avatar at <strong>about 32px</strong> in feed and comments. That, not the
+    profile page, is the size that decides whether a mark works. Every option below is rendered at
+    the real display sizes so you can judge it where it actually lives — the big circle is a detail
+    view, not the test.
+  </p>
+
+  <dl class="sizes">
+    <div><dt>320px</dt><dd>What Instagram stores. Upload at 1024px square and let it downscale.</dd></div>
+    <div><dt>110–150px</dt><dd>Profile page header. The only place a mark gets room.</dd></div>
+    <div><dt>56px</dt><dd>Story ring, DM list, suggested accounts.</dd></div>
+    <div><dt>32px</dt><dd>Feed byline and comments. The size that matters most.</dd></div>
+  </dl>
+
+  <div class="controls">
+    <button id="btn-surface" aria-pressed="false">Light surface</button>
+    <button id="btn-safe" aria-pressed="false">Safe area</button>
+    <button id="btn-square" aria-pressed="false">Uncropped square</button>
+    <span class="controls-hint">Light surface swaps the accent to a deeper gold — #e8d5a3 is invisible on cream. Export gives a 1024px square; Instagram applies the circle mask itself.</span>
+  </div>
+
+  <section id="sec-short-list"></section>
+  <section id="sec-full"></section>
+  <section id="sec-short"></section>
+
+</div>
+<div id="stage"></div>
+
+<script>
+// Each mark is em-based markup, instantiated at several pixel sizes.
+const FULL = [
+  { id: 'A1', name: 'Full wordmark', note: 'The homepage lockup, centred with safe margins. Legible on the profile page, illegible in feed.',
+    html: '<span style="font-size:0.185em;letter-spacing:0.04em">SH<span class="one">1</span>FT</span>' },
+  { id: 'A2', name: 'Wordmark + subtitle', note: 'The complete lockup. "Productions" is already gone at 56px — this is the option to rule out.',
+    html: '<div class="stack"><span style="font-size:0.165em;letter-spacing:0.04em">SH<span class="one">1</span>FT</span><span style="font-size:0.052em;letter-spacing:0.3em;font-family:Inter,sans-serif;font-weight:400;opacity:0.55;margin-top:0.5em">PRODUCTIONS</span></div>' },
+  { id: 'A3', name: 'Wordmark, two lines', note: 'Splitting the word buys roughly 1.7x the letter height. Survives 56px; still soft at 32.',
+    html: '<div class="stack" style="font-size:0.3em;letter-spacing:0.02em"><span>SH<span class="one">1</span></span><span>FT</span></div>' },
+  { id: 'A4', name: 'Wordmark, edge to edge', note: 'Pushed to the crop limit for maximum size. Gains legibility, loses the composure of the real logo.',
+    html: '<span style="font-size:0.235em;letter-spacing:-0.02em">SH<span class="one">1</span>FT</span>' },
+];
+
+const SHORT = [
+  { id: 'B1', name: 'Numeral solo', note: 'The brand’s one distinctive glyph, at full height. Unmistakable at 32px. Ownable only once people know the name.',
+    html: '<span class="one" style="font-size:0.66em">1</span>' },
+  { id: 'B2', name: 'Numeral reversed', note: 'Accent field, dark numeral. The strongest option in a crowded feed — it reads as a shape before a character.',
+    html: '<span style="font-size:0.66em">1</span>', bg: '#e8d5a3', fg: '#0b0b0b' },
+  { id: 'B3', name: 'S1', note: 'Says "Shift 1" the way people would abbreviate it themselves. Safe, and a little anonymous.',
+    html: '<span style="font-size:0.5em;letter-spacing:0.01em">S<span class="one">1</span></span>' },
+  { id: 'B4', name: 'SH1', note: 'Three characters keeps the numeral in its real position inside the word. Best balance of legible and specific.',
+    html: '<span style="font-size:0.37em;letter-spacing:0.01em">SH<span class="one">1</span></span>' },
+  { id: 'B5', name: 'SH / 1FT', note: 'The full word, broken where the numeral lands. Reads as the logo at 110px and as a texture at 32.',
+    html: '<div class="stack" style="font-size:0.27em;letter-spacing:0.02em"><span>SH</span><span><span class="one">1</span>FT</span></div>' },
+  { id: 'B6', name: 'Numeral in ring', note: 'The ring holds the numeral off the crop edge and reads as a lens. Costs about a third of the glyph height.',
+    html: '<span style="display:grid;place-items:center;width:0.72em;height:0.72em;border:0.035em solid var(--mark-accent-soft);border-radius:50%"><span class="one" style="font-size:0.44em">1</span></span>' },
+  { id: 'B7', name: 'Shifted numeral', note: 'A ghost copy offset behind the glyph — the word "shift" drawn rather than spelled. My pick for most distinctive.',
+    html: '<span style="position:relative;font-size:0.66em"><span style="position:absolute;left:-0.1em;top:0.06em;color:var(--mark-ghost)">1</span><span class="one" style="position:relative">1</span></span>' },
+  { id: 'B8', name: 'S1 displaced', note: 'The numeral steps out of the baseline. Same idea as B7, carrying the initial for recognition.',
+    html: '<span style="font-size:0.46em;letter-spacing:0.01em">S<span class="one" style="display:inline-block;transform:translateY(0.16em)">1</span></span>' },
+  { id: 'B9', name: 'Numeral, sliced', note: 'An accent bar cuts the glyph on the horizontal — a shift line. Holds its form down to 32px.',
+    html: '<span style="position:relative;display:inline-block"><span class="one" style="font-size:0.66em">1</span><span style="position:absolute;left:-0.22em;right:-0.22em;top:52%;height:0.035em;background:var(--mark-bg)"></span></span>' },
+  { id: 'B10', name: 'Numeral over rule', note: 'Borrows the hero’s accent rule as a plinth. Quiet, editorial, closest in feel to the site.',
+    html: '<div class="stack"><span class="one" style="font-size:0.56em">1</span><span style="width:0.26em;height:0.022em;background:var(--mark-accent);opacity:0.75;margin-top:0.1em"></span></div>' },
+  { id: 'B11', name: 'S / 1 split', note: 'Letter above numeral, stacked tight. Uses the full circle height instead of its width.',
+    html: '<div class="stack" style="font-size:0.42em;line-height:0.82"><span>S</span><span class="one">1</span></div>' },
+  { id: 'B12', name: 'Bracketed numeral', note: 'Four corner marks imply a frame without drawing one \u2014 a camera bracket. Film-adjacent without being a clich\u00e9.',
+    html: '<span style="position:relative;display:grid;place-items:center;width:0.66em;height:0.66em"><span style="position:absolute;left:0;top:0;width:0.16em;height:0.16em;border-top:0.028em solid var(--mark-accent-soft);border-left:0.028em solid var(--mark-accent-soft)"></span><span style="position:absolute;right:0;top:0;width:0.16em;height:0.16em;border-top:0.028em solid var(--mark-accent-soft);border-right:0.028em solid var(--mark-accent-soft)"></span><span style="position:absolute;left:0;bottom:0;width:0.16em;height:0.16em;border-bottom:0.028em solid var(--mark-accent-soft);border-left:0.028em solid var(--mark-accent-soft)"></span><span style="position:absolute;right:0;bottom:0;width:0.16em;height:0.16em;border-bottom:0.028em solid var(--mark-accent-soft);border-right:0.028em solid var(--mark-accent-soft)"></span><span class="one" style="font-size:0.44em">1</span></span>' },
+  { id: 'B13', name: 'Numeral + micro wordmark', note: 'Hero glyph for small sizes, full name for large. One asset that changes job as it scales.',
+    html: '<div class="stack"><span class="one" style="font-size:0.5em">1</span><span style="font-size:0.058em;letter-spacing:0.26em;font-family:Inter,sans-serif;font-weight:400;opacity:0.6;margin-top:0.55em">SH1FT</span></div>' },
+  { id: 'B14', name: 'Numeral, condensed pair', note: 'The glyph and a lighter-weight echo, stepped apart. Two frames of the same motion \u2014 the most abstract option here.',
+    html: '<span style="position:relative;font-size:0.58em;display:inline-block"><span style="position:absolute;left:0.3em;top:-0.07em;color:var(--mark-echo);font-weight:400">1</span><span class="one" style="position:relative">1</span></span>' },
+];
+
+const STRIP = [110, 56, 32];
+const HERO = 180;
+
+function markEl(opt, size, forExport) {
+  const el = document.createElement('div');
+  el.className = 'mark' + (forExport ? ' square' : '');
+  el.style.fontSize = size + 'px';
+  if (opt.bg) el.style.setProperty('--mark-bg', opt.bg);
+  if (opt.fg) el.style.setProperty('--mark-fg', opt.fg);
+  el.innerHTML = opt.html;
+  return el;
+}
+
+function card(opt) {
+  const c = document.createElement('div');
+  c.className = 'card';
+  c.innerHTML =
+    '<div class="card-id">' + opt.id + '</div>' +
+    '<div class="hero-slot"></div>' +
+    '<div class="card-name">' + opt.name + '</div>' +
+    '<div class="card-note">' + opt.note + '</div>' +
+    '<div class="card-foot"><div class="strip"></div>' +
+    '<button class="dl">Download 1024px PNG</button></div>';
+
+  c.querySelector('.hero-slot').appendChild(markEl(opt, HERO));
+
+  const strip = c.querySelector('.strip');
+  STRIP.forEach(function (s) {
+    const item = document.createElement('div');
+    item.className = 'strip-item';
+    item.appendChild(markEl(opt, s));
+    const lab = document.createElement('div');
+    lab.className = 'strip-label';
+    lab.textContent = s + 'px';
+    item.appendChild(lab);
+    strip.appendChild(item);
+  });
+
+  c.querySelector('.dl').addEventListener('click', function () { download(opt, this); });
+  return c;
+}
+
+function section(node, label, title, text, verdict, opts) {
+  node.innerHTML =
+    '<div class="section-label">' + label + '</div><h2>' + title + '</h2>' +
+    '<p class="section-text">' + text + '</p>' + verdict +
+    '<div class="grid"></div>';
+  const g = node.querySelector('.grid');
+  opts.forEach(function (o) { g.appendChild(card(o)); });
+}
+
+section(
+  document.getElementById('sec-full'),
+  'Option A', 'The full wordmark, minimised',
+  'Four ways to fit SH1FT into a circle. Ignore the large circle and look at the 32px preview — ' +
+  'that is the feed. A1 and A2 are here to be ruled out on the evidence rather than on assertion.',
+  '<div class="verdict no">Not recommended as the primary avatar</div>',
+  FULL
+);
+
+section(
+  document.getElementById('sec-short'),
+  'Option B', 'Shortened marks',
+  'These keep the numeral as the hero, because the substituted 1 — not the letterforms — is the ' +
+  'part of the logo that is yours. Several treat "shift" as displacement and draw the idea instead of ' +
+  'spelling it. Check each at 32px first, then decide whether it still feels like Shift1 at 110.',
+  '<div class="verdict yes">Recommended direction</div>',
+  SHORT
+);
+
+/* ─── SHORTLIST: the wordmark variants, measured ─── */
+/* capPx figures are measured from the live 32px render, not estimated. */
+const SHORTLIST = [
+  { id: 'A2', name: 'Wordmark + subtitle', cap: 3.70, sub: 1.20, cls: 'lose',
+    take: 'Smallest wordmark of the four, because the subtitle steals the height. "Productions" is not small at feed size \u2014 it is gone.' },
+  { id: 'A4', name: 'Wordmark, edge to edge', cap: 5.26, sub: null, cls: '',
+    take: 'Strictly better than A2: 42% more letter height and no invisible second line. Pays for it by sitting on the crop edge.' },
+  { id: 'B5', name: 'SH / 1FT', cap: 6.05, sub: null, cls: '',
+    take: 'The whole word, broken where the numeral falls. Keeps the accent 1 leading the lower line.' },
+  { id: 'A3', name: 'Wordmark, two lines', cap: 6.72, sub: null, cls: 'win',
+    take: 'Largest letters while keeping every character. The top line still reads "SH1" on its own when the rest mushes \u2014 that is the tiebreaker.' },
+];
+
+function shortlistSection() {
+  const node = document.getElementById('sec-short-list');
+  const byId = {};
+  FULL.concat(SHORT).forEach(function (o) { byId[o.id] = o; });
+
+  node.innerHTML =
+    '<div class="section-label">Shortlist</div>' +
+    '<h2>If you want the full name in the icon</h2>' +
+    '<p class="section-text">Cap height measured from the live 32px render \u2014 the feed size. ' +
+    'A 32px circle gives you about 26px of usable width after the crop, so every option here is ' +
+    'spending the same budget differently. Ranked by how much letter height each one buys.</p>' +
+    '<div class="compare"></div>';
+
+  const wrap = node.querySelector('.compare');
+  SHORTLIST.forEach(function (row) {
+    const col = document.createElement('div');
+    col.className = 'col ' + row.cls;
+    col.innerHTML =
+      '<div class="col-id">' + row.id + ' \u00b7 ' + row.name + '</div>' +
+      '<div class="col-marks"></div>' +
+      '<div class="metric' + (row.cap >= 6 ? ' good' : '') + '"><span>Letter cap @32px</span><span>' +
+        row.cap.toFixed(1) + 'px</span></div>' +
+      '<div class="metric' + (row.sub ? ' bad' : '') + '"><span>Subtitle cap @32px</span><span>' +
+        (row.sub ? row.sub.toFixed(1) + 'px' : '\u2014') + '</span></div>' +
+      '<div class="col-take">' + row.take + '</div>';
+    const marks = col.querySelector('.col-marks');
+    marks.appendChild(markEl(byId[row.id], 110));
+    marks.appendChild(markEl(byId[row.id], 32));
+    wrap.appendChild(col);
+  });
+}
+shortlistSection();
+
+/* ─── controls ─── */
+function toggle(btn, on) { btn.setAttribute('aria-pressed', on ? 'true' : 'false'); }
+
+const btnSurface = document.getElementById('btn-surface');
+btnSurface.addEventListener('click', function () {
+  const on = this.getAttribute('aria-pressed') !== 'true';
+  toggle(this, on);
+  const pal = on
+    ? { '--mark-bg': '#e8e4de', '--mark-fg': '#0b0b0b', '--mark-accent': '#8a6a24',
+        '--mark-accent-soft': 'rgba(138,106,36,0.65)', '--mark-ghost': 'rgba(138,106,36,0.28)',
+        '--mark-echo': 'rgba(11,11,11,0.22)', '--guide': 'rgba(11,11,11,0.3)' }
+    : { '--mark-bg': '#0b0b0b', '--mark-fg': '#e8e4de', '--mark-accent': '#e8d5a3',
+        '--mark-accent-soft': 'rgba(232,213,163,0.55)', '--mark-ghost': 'rgba(232,213,163,0.22)',
+        '--mark-echo': 'rgba(232,228,222,0.26)', '--guide': 'rgba(232,213,163,0.45)' };
+  Object.keys(pal).forEach(function (k) { document.documentElement.style.setProperty(k, pal[k]); });
+  this.textContent = on ? 'Dark surface' : 'Light surface';
+});
+
+const btnSafe = document.getElementById('btn-safe');
+btnSafe.addEventListener('click', function () {
+  const on = this.getAttribute('aria-pressed') !== 'true';
+  toggle(this, on);
+  document.body.classList.toggle('safe', on);
+});
+
+const btnSquare = document.getElementById('btn-square');
+btnSquare.addEventListener('click', function () {
+  const on = this.getAttribute('aria-pressed') !== 'true';
+  toggle(this, on);
+  document.querySelectorAll('.mark').forEach(function (m) { m.classList.toggle('square', on); });
+});
+
+/* ─── PNG export ─── */
+/* html2canvas rasterises the live DOM, so the loaded web font comes along.
+   Renders at 512 and scales 2x for a 1024px square. */
+function download(opt, btn) {
+  if (typeof html2canvas !== 'function') {
+    btn.textContent = 'Offline — screenshot instead';
+    return;
+  }
+  const label = btn.textContent;
+  btn.textContent = 'Rendering…';
+  const stage = document.getElementById('stage');
+  const el = markEl(opt, 512, true);
+  stage.appendChild(el);
+
+  html2canvas(el, { backgroundColor: opt.bg || null, scale: 2, logging: false })
+    .then(function (canvas) {
+      const a = document.createElement('a');
+      a.download = 'shift1-ig-' + opt.id.toLowerCase() + '-1024.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+      btn.textContent = label;
+    })
+    .catch(function () { btn.textContent = 'Render failed'; })
+    .then(function () { stage.removeChild(el); });
+}
+
+document.fonts && document.fonts.ready.then(function () { document.body.dataset.fonts = 'ready'; });
+</script>
+</body>
+</html>
