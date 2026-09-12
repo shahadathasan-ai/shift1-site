@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHUFFLE — Full Title Sequence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --ui-bg: #0a0a0b; --ui-panel: #121214; --ui-text: #d8d6d2; --ui-muted: #77746f;
+      --ui-line: rgba(255,255,255,.09); --ui-accent: #c9b98a;
+      --font-ui: 'Inter', system-ui, sans-serif;
+    }
+    body { background: var(--ui-bg); color: var(--ui-text); font-family: var(--font-ui);
+           font-weight: 300; line-height: 1.6; -webkit-font-smoothing: antialiased;
+           padding: 3.2rem 2rem 7rem; }
+    .wrap { max-width: 1240px; margin: 0 auto; }
+    .eyebrow { font-size: .68rem; letter-spacing: .34em; text-transform: uppercase;
+               color: var(--ui-muted); margin-bottom: .9rem; }
+    h1 { font-weight: 400; font-size: clamp(1.6rem,3.4vw,2.2rem); letter-spacing: .01em;
+         line-height: 1.15; margin-bottom: .9rem; }
+    h2 { font-weight: 400; font-size: 1.05rem; letter-spacing: .02em; margin-bottom: .35rem; }
+    .lede { max-width: 70ch; color: var(--ui-muted); font-size: .92rem; margin-bottom: 2.2rem; }
+    .lede strong { color: var(--ui-text); font-weight: 400; }
+    section { margin-bottom: 3rem; }
+    .shead { display:flex; align-items:baseline; gap:.8rem; margin-bottom:1rem; flex-wrap:wrap; }
+    .snum { font-size:.68rem; letter-spacing:.2em; color:var(--ui-accent); text-transform:uppercase; }
+    .sdesc { font-size:.82rem; color:var(--ui-muted); max-width:72ch; margin-bottom:1.1rem; }
+    .sdesc b { color: var(--ui-text); font-weight: 400; }
+
+    button { font-family: var(--font-ui); font-size:.72rem; letter-spacing:.1em;
+             text-transform:uppercase; color:var(--ui-muted); background:transparent; cursor:pointer;
+             border:1px solid var(--ui-line); border-radius:3px; padding:.5rem .95rem;
+             transition:color .18s,border-color .18s,background .18s; }
+    button:hover { color:var(--ui-text); border-color:rgba(201,185,138,.55); }
+    button[aria-pressed="true"], button.on { color:#0a0a0b; background:var(--ui-accent); border-color:var(--ui-accent); }
+    button.primary { color:var(--ui-text); border-color:rgba(201,185,138,.45); }
+
+    /* ─── master frame ─── */
+    .frame { container-type:size; position:relative; width:100%; aspect-ratio:2.39/1;
+             background:#000; overflow:hidden; border:1px solid var(--ui-line); }
+    .guides .frame::after { content:''; position:absolute; inset:10%;
+             border:1px dashed rgba(201,185,138,.2); pointer-events:none; }
+
+    /* both titles are absolutely centred and stacked in the same frame */
+    .stack { position:absolute; inset:0; display:grid; place-items:center; }
+
+    /* ─── SHUFFLE (Option 6 "Tube") ─── */
+    .shuffle { font-family:'Inter',sans-serif; font-weight:200; font-size:11cqh;
+               letter-spacing:1.85em; white-space:nowrap; line-height:1; display:flex;
+               color:var(--lit); }
+    .shuffle .ch { opacity:var(--o,0); --bm:1;
+      /* Tighter, fainter than the comparison build, and tinted to the tube
+         colour — a white halo around warm glyphs is what reads as fake. */
+      text-shadow:
+        0 0 .038em rgba(var(--glow), calc(.42 * var(--bm) * var(--bt))),
+        0 0 .125em rgba(var(--glow), calc(.20 * var(--bm) * var(--bt))),
+        0 0 .38em  rgba(var(--glow), calc(.075 * var(--bm) * var(--bt))),
+        0 0 .95em  rgba(var(--glow), calc(.024 * var(--bm) * var(--bt)));
+    }
+    .shuffle .ch:last-child { margin-right:-1.85em; }
+
+    /* ─── BASED ON A TRUE STORY ─── */
+    /* Same family, no flicker, no ignition: one uniform gentle fade. */
+    .bats { font-family:'Inter',sans-serif; font-weight:300; font-size:3.5cqh;
+            letter-spacing:.52em; white-space:nowrap; line-height:1;
+            color:var(--bats-lit); opacity:0;
+            text-shadow: 0 0 .05em rgba(var(--bats-glow), .16); }
+    .bats span { margin-right:-.52em; }
+
+    /* ─── transport ─── */
+    .transport { margin-top:1rem; }
+    .trow { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; }
+    .tval { font-variant-numeric:tabular-nums; color:var(--ui-text); font-size:.78rem;
+            min-width:7.5em; letter-spacing:.04em; }
+    input[type=range] { width:100%; accent-color:var(--ui-accent); }
+    .scrubwrap { margin:.9rem 0 .35rem; }
+
+    /* phase strip */
+    .phases { display:flex; width:100%; height:34px; border:1px solid var(--ui-line);
+              border-radius:3px; overflow:hidden; font-size:.6rem; letter-spacing:.06em;
+              text-transform:uppercase; }
+    .ph { display:grid; place-items:center; text-align:center; color:var(--ui-muted);
+          border-right:1px solid var(--ui-line); padding:0 2px; overflow:hidden; white-space:nowrap; }
+    .ph:last-child { border-right:0; }
+    .ph.lit { background:rgba(201,185,138,.1); color:var(--ui-accent); }
+    .ph.cur { background:rgba(201,185,138,.26); color:#0a0a0b; }
+    .phlabels { display:flex; width:100%; font-size:.6rem; color:var(--ui-muted);
+                font-variant-numeric:tabular-nums; margin-top:.3rem; }
+    .phlabels div { border-right:1px solid transparent; text-align:center; }
+
+    /* ─── colour candidates ─── */
+    .cands { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1.1rem; }
+    .cand { cursor:pointer; border:1px solid var(--ui-line); border-radius:3px; padding:.8rem;
+            background:var(--ui-panel); transition:border-color .18s; }
+    .cand:hover { border-color:rgba(201,185,138,.5); }
+    .cand.sel { border-color:var(--ui-accent); }
+    .cand .frame { aspect-ratio:2.39/1; border:0; }
+    .cand-h { display:flex; align-items:baseline; gap:.5rem; margin-bottom:.6rem; }
+    .cand-k { font-size:.68rem; letter-spacing:.18em; color:var(--ui-accent); }
+    .cand-n { font-size:.84rem; }
+    .cand-hex { margin-left:auto; font-size:.68rem; color:var(--ui-muted);
+                font-variant-numeric:tabular-nums; }
+    .cand-note { font-size:.74rem; color:var(--ui-muted); margin-top:.55rem; line-height:1.45; }
+    .swatch { display:inline-block; width:.7em; height:.7em; border-radius:50%;
+              vertical-align:middle; margin-right:.35em; }
+
+    /* ─── readout ─── */
+    .readout { background:var(--ui-panel); border:1px solid var(--ui-line); border-radius:3px;
+               padding:1.1rem 1.2rem; font-size:.78rem; }
+    .readout table { border-collapse:collapse; width:100%; }
+    .readout td { padding:.3rem .8rem .3rem 0; vertical-align:top; }
+    .readout td:first-child { color:var(--ui-muted); white-space:nowrap; }
+    .readout td:last-child { font-variant-numeric:tabular-nums; }
+    .hashbox { margin-top:.9rem; padding:.6rem .7rem; background:#000; border:1px solid var(--ui-line);
+               border-radius:2px; font-family:ui-monospace,monospace; font-size:.74rem;
+               color:var(--ui-accent); word-break:break-all; }
+    @media (max-width:700px){ body{padding:2rem 1.1rem 4rem} }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Shift1 · Shuffle</div>
+  <h1>Full title sequence — approval build</h1>
+  <p class="lede">
+    Option 6 <strong>Tube</strong>, warmed to an ageing institutional fluorescent, followed by the
+    second card. The ignition choreography is <strong>unchanged</strong> from the version you picked;
+    the black beat is measured from the actual electrical cut at <strong>2.74s</strong>, so the whole
+    sequence totals <strong>5.75s = 138 frames at 24fps</strong>. Pick a tube colour, trim the bloom,
+    then send me the settings line at the bottom.
+  </p>
+
+  <!-- ══ 1. MASTER PREVIEW ══ -->
+  <section>
+    <div class="shead"><span class="snum">1</span><h2>The sequence</h2></div>
+    <div class="sdesc">Scrub to inspect any instant. The strip below the scrubber shows the phases;
+      the current one is highlighted. <b>Both titles live in the same frame</b>, so you are judging
+      their relative scale exactly as it will render.</div>
+
+    <div class="frame" id="master">
+      <div class="stack"><div class="shuffle" id="sh"></div></div>
+      <div class="stack"><div class="bats" id="bats"></div></div>
+    </div>
+
+    <div class="transport">
+      <div class="scrubwrap">
+        <input type="range" id="scrub" min="0" max="5750" step="1" value="0">
+        <div class="phases" id="phases"></div>
+      </div>
+      <div class="trow">
+        <button class="primary" id="play">▶ Play sequence</button>
+        <span class="tval" id="tv">0.000s · frame 0</span>
+        <button data-jump="1.30">Failed strike</button>
+        <button data-jump="2.00">Full burn</button>
+        <button data-jump="2.74">Electrical cut</button>
+        <button data-jump="3.00">Black beat</button>
+        <button data-jump="4.40">Second card</button>
+        <button id="half">Half speed</button>
+        <button id="guides">Safe area</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 2. COLOUR ══ -->
+  <section>
+    <div class="shead"><span class="snum">2</span><h2>Tube colour</h2></div>
+    <div class="sdesc">All four at full burn. The distinguishing feature of a <b>fluorescent</b> tube
+      rather than a warm lamp is a slight green component — that is what reads as institutional and
+      sickly instead of cosy. B pushes green above red; C is the warmest and drifts toward tungsten.
+      D is the original cold version for reference.</div>
+    <div class="cands" id="cands"></div>
+  </section>
+
+  <!-- ══ 3. BLOOM ══ -->
+  <section>
+    <div class="shead"><span class="snum">3</span><h2>Bloom restraint</h2></div>
+    <div class="sdesc">Bloom is tinted to the tube colour and tighter than the comparison build.
+      <b>1.00 is the new default</b> — already reduced from Option 6's original 1.25 because warmth
+      makes a halo read as signage. Below 0.8 the tube stops feeling lit; above 1.2 it starts to glow.</div>
+    <div class="trow">
+      <span class="tval" id="bv">bloom 1.00</span>
+      <input type="range" id="bloom" min="60" max="140" step="2" value="100" style="max-width:320px">
+    </div>
+  </section>
+
+  <!-- ══ 4. SECOND CARD ══ -->
+  <section>
+    <div class="shead"><span class="snum">4</span><h2>Second card, held</h2></div>
+    <div class="sdesc">Frozen at full hold so you can judge typography and scale. Same family as
+      SHUFFLE at weight 300 — <b>200 disappears at this size</b>, which is why it steps up one weight.
+      No ignition, no flicker: a single uniform fade. Peak opacity 0.62 and a desaturated tint, so it
+      keeps a trace of the tube hue while sitting far below SHUFFLE in luminance.</div>
+    <div class="frame" id="batsonly"><div class="stack"><div class="bats" id="bats2"></div></div></div>
+  </section>
+
+  <!-- ══ 5. READOUT ══ -->
+  <section>
+    <div class="shead"><span class="snum">5</span><h2>Render settings</h2></div>
+    <div class="readout">
+      <table id="rtable"></table>
+      <div class="hashbox" id="hash"></div>
+      <div class="cand-note" style="margin-top:.7rem">Send me this line and I will render exactly it.
+        I still need your <b>DaVinci Resolve timeline resolution</b> to match it frame for frame.</div>
+    </div>
+  </section>
+</div>
+
+<script src="shuffle-engine.js"></script>
+<script>
+const E = window.ShuffleEngine;
+const WORD = E.WORD, N = E.N, BATS_TEXT = E.BATS_TEXT, FPS = E.FPS;
+const IGN = E.IGN, SEQ = E.SEQ, BATS_PEAK = E.BATS_PEAK;
+const shuffleAt = E.shuffleAt, batsAt = E.batsAt;
+
+/* ══ colour ══ */
+const CANDS = [
+  { k: 'A', name: 'Aged warm white', hex: '#f2ecc9',
+    note: 'A clear warm cast that still reads primarily off-white. The safe choice — unmistakably an old tube without tipping into amber.' },
+  { k: 'B', name: 'Sickly institutional', hex: '#ecedbf',
+    note: 'Green pushed just above red. The most genuinely <b>fluorescent</b> of the four, and the most unpleasant — corridor, not living room.' },
+  { k: 'C', name: 'Dirty amber', hex: '#f5e7b4',
+    note: 'Warmest. Starts to read as tungsten rather than fluorescent, which loses the institutional quality — included so you can see the limit.' },
+  { k: 'D', name: 'Original (cold)', hex: '#f0f0ea',
+    note: 'The version you approved, for reference. Near-neutral — the comparison that shows how far the others move.' }
+];
+let sel = 'A', bloomTrim = 1.0, half = false;
+
+const hex2rgb = h => [1, 3, 5].map(i => parseInt(h.substr(i, 2), 16));
+const rgb2hex = a => '#' + a.map(v => Math.round(v).toString(16).padStart(2, '0')).join('');
+/* second card: same hue, pulled toward neutral so it is a trace not a statement */
+const batsHexFor = h => rgb2hex(hex2rgb(h).map((v, i) => v * 0.72 + [201, 200, 192][i] * 0.28));
+
+/* ══ build ══ */
+const sh = document.getElementById('sh'), bats = document.getElementById('bats'),
+      bats2 = document.getElementById('bats2');
+const chars = [];
+for (let i = 0; i < N; i++) {
+  const s = document.createElement('span'); s.className = 'ch'; s.textContent = WORD[i];
+  sh.appendChild(s); chars.push(s);
+}
+[bats, bats2].forEach(el => { const s = document.createElement('span'); s.textContent = BATS_TEXT; el.appendChild(s); });
+
+function applyColour() {
+  const c = CANDS.filter(x => x.k === sel)[0];
+  const rgb = hex2rgb(c.hex).join(',');
+  const bh = batsHexFor(c.hex), brgb = hex2rgb(bh).join(',');
+  [document.getElementById('master'), document.getElementById('batsonly')].forEach(f => {
+    f.style.setProperty('--lit', c.hex);
+    f.style.setProperty('--glow', rgb);
+    f.style.setProperty('--bt', bloomTrim);
+    f.style.setProperty('--bats-lit', bh);
+    f.style.setProperty('--bats-glow', brgb);
+  });
+  document.querySelectorAll('.cand').forEach(el => el.classList.toggle('sel', el.dataset.k === sel));
+  readout();
+}
+
+function paint(t) {
+  for (let i = 0; i < N; i++) {
+    const b = shuffleAt(t, i);
+    const bm = b > 1 ? 1 + (b - 1) * 2.6 : b;
+    chars[i].style.setProperty('--o', Math.min(1, b).toFixed(4));
+    chars[i].style.setProperty('--bm', Math.max(0, bm).toFixed(4));
+  }
+  bats.style.opacity = batsAt(t).toFixed(4);
+  const f = Math.round(t * SEQ.fps);
+  document.getElementById('tv').textContent = t.toFixed(3) + 's · frame ' + f;
+  document.getElementById('scrub').value = Math.round(t * 1000);
+  markPhase(t);
+}
+
+/* ══ phases ══ */
+const PH = [
+  ['Black',        0,            0.26],
+  ['Pre-glow',     0.26,         0.45],
+  ['Failed strikes', 0.45,       IGN.catch],
+  ['Ignition + burn', IGN.catch, SEQ.cut],
+  ['Cut',          SEQ.cut,      SEQ.batsT0],
+  ['Card fades in', SEQ.batsT0,  SEQ.batsFull],
+  ['Card holds',   SEQ.batsFull, SEQ.batsOutT],
+  ['Fade out',     SEQ.batsOutT, SEQ.batsEnd],
+  ['Black',        SEQ.batsEnd,  SEQ.total]
+];
+const phEl = document.getElementById('phases');
+PH.forEach(function (p) {
+  const d = document.createElement('div');
+  d.className = 'ph'; d.style.flex = (p[2] - p[1]);
+  d.textContent = p[0]; d.title = p[1].toFixed(2) + 's → ' + p[2].toFixed(2) + 's';
+  phEl.appendChild(d);
+});
+function markPhase(t) {
+  [].forEach.call(phEl.children, function (d, i) {
+    d.classList.toggle('cur', t >= PH[i][1] && t < PH[i][2]);
+  });
+}
+
+/* ══ candidates ══ */
+const candHost = document.getElementById('cands');
+CANDS.forEach(function (c) {
+  const rgb = hex2rgb(c.hex).join(',');
+  const el = document.createElement('div');
+  el.className = 'cand'; el.dataset.k = c.k;
+  el.innerHTML =
+    '<div class="cand-h"><span class="cand-k">' + c.k + '</span>' +
+    '<span class="cand-n">' + c.name + '</span>' +
+    '<span class="cand-hex"><span class="swatch" style="background:' + c.hex + '"></span>' + c.hex + '</span></div>' +
+    '<div class="frame"><div class="stack"><div class="shuffle"></div></div></div>' +
+    '<div class="cand-note">' + c.note + '</div>';
+  const t = el.querySelector('.shuffle');
+  for (let i = 0; i < N; i++) {
+    const s = document.createElement('span'); s.className = 'ch'; s.textContent = WORD[i];
+    // frozen at stable burn
+    const b = shuffleAt(2.0, i);
+    s.style.setProperty('--o', Math.min(1, b).toFixed(4));
+    s.style.setProperty('--bm', b.toFixed(4));
+    t.appendChild(s);
+  }
+  const fr = el.querySelector('.frame');
+  fr.style.setProperty('--lit', c.hex); fr.style.setProperty('--glow', rgb); fr.style.setProperty('--bt', 1);
+  el.addEventListener('click', function () { sel = c.k; applyColour(); });
+  candHost.appendChild(el);
+});
+
+/* ══ readout ══ */
+function readout() {
+  const c = CANDS.filter(x => x.k === sel)[0];
+  const rows = [
+    ['Sequence', SEQ.total.toFixed(2) + 's · ' + SEQ.frames + ' frames @ ' + SEQ.fps + ' fps · 2.39:1'],
+    ['SHUFFLE', 'Inter 200 · 11cqh · tracking 1.85em · ' + c.hex + ' (' + c.k + ' ' + c.name + ')'],
+    ['Ignition', 'catch ' + IGN.catch.toFixed(2) + 's · burn ' + (SEQ.cut - IGN.catch).toFixed(2) +
+                 's · cut ' + SEQ.cut.toFixed(2) + 's · 1-frame tail'],
+    ['Bloom', bloomTrim.toFixed(2) + ' (tinted to tube colour, 4 layers, widest .95em)'],
+    ['Black beat', SEQ.beat.toFixed(2) + 's  (' + SEQ.cut.toFixed(2) + 's → ' + SEQ.batsT0.toFixed(2) + 's)'],
+    ['Second card', 'Inter 300 · 3.5cqh · tracking .52em · ' + batsHexFor(c.hex) + ' · peak ' + BATS_PEAK],
+    ['Card timing', 'in ' + SEQ.batsIn.toFixed(2) + 's · hold ' + SEQ.batsHold.toFixed(2) +
+                    's · out ' + SEQ.batsOut.toFixed(2) + 's (ends ' + SEQ.batsEnd.toFixed(2) + 's)'],
+    ['Audio', 'none — buzz / strikes / CLICK added in Resolve']
+  ];
+  document.getElementById('rtable').innerHTML =
+    rows.map(r => '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>').join('');
+  document.getElementById('hash').textContent =
+    'APPROVE  #tube=' + sel + '&bloom=' + bloomTrim.toFixed(2) + '&res=<your timeline, e.g. 2048x858>';
+}
+
+/* ══ transport ══ */
+let playing = false, t0 = 0;
+function loop(now) {
+  if (playing) {
+    let t = (now - t0) / 1000; if (half) t /= 2;
+    if (t >= SEQ.total) { playing = false; paint(SEQ.total); }
+    else paint(t);
+  }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+document.getElementById('play').addEventListener('click', function () {
+  playing = true; t0 = performance.now();
+});
+document.getElementById('scrub').addEventListener('input', function () {
+  playing = false; paint(+this.value / 1000);
+});
+document.querySelectorAll('[data-jump]').forEach(function (b) {
+  b.addEventListener('click', function () { playing = false; paint(parseFloat(this.dataset.jump)); });
+});
+document.getElementById('half').addEventListener('click', function () {
+  half = !half; this.classList.toggle('on', half);
+});
+document.getElementById('guides').addEventListener('click', function () {
+  document.body.classList.toggle('guides'); this.classList.toggle('on');
+});
+const bl = document.getElementById('bloom');
+bl.addEventListener('input', function () {
+  bloomTrim = +this.value / 100;
+  document.getElementById('bv').textContent = 'bloom ' + bloomTrim.toFixed(2);
+  applyColour();
+});
+
+/* hash: #tube=B&bloom=1.10&t=4.4 */
+function applyHash() {
+  const h = location.hash.slice(1); if (!h) return;
+  const q = {}; h.split('&').forEach(function (kv) { const a = kv.split('='); q[a[0]] = a[1]; });
+  if (q.tube && CANDS.some(c => c.k === q.tube)) sel = q.tube;
+  if (q.bloom) { bloomTrim = parseFloat(q.bloom); bl.value = Math.round(bloomTrim * 100);
+                 document.getElementById('bv').textContent = 'bloom ' + bloomTrim.toFixed(2); }
+  if (q.guides) document.body.classList.add('guides');
+  applyColour();
+  if (q.t !== undefined) paint(parseFloat(q.t));
+}
+
+function init() {
+  applyColour();
+  // second card frozen at full hold for the detail frame
+  bats2.style.opacity = BATS_PEAK;
+  paint(0);
+  applyHash();
+}
+init();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () {
+  init(); document.body.dataset.fonts = 'ready';
+});
+
+/* ── render hook ── */
+window.SEQ_RENDER = {
+  SEQ: SEQ, IGN: IGN, total: SEQ.total, frames: SEQ.frames, fps: SEQ.fps,
+  shuffleAt: shuffleAt, batsAt: batsAt,
+  setTime: function (t) { playing = false; paint(t); return true; },
+  setColour: function (k, b) { if (k) sel = k; if (b) bloomTrim = b; applyColour(); },
+  settings: function () { return { tube: sel, bloom: bloomTrim, batsHex: batsHexFor(
+      CANDS.filter(x => x.k === sel)[0].hex) }; }
+};
+</script>
+</body>
+</html>
