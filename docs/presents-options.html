@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift1 Presents — Title Card Options</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --page: #000;
+      --text: #e8e4de;
+      --text-muted: #8a8580;
+      --accent: #e8d5a3;
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--page);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 4rem 2rem 6rem;
+    }
+    .wrap { max-width: 1240px; margin: 0 auto; }
+
+    .eyebrow {
+      font-size: 0.7rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 1rem;
+    }
+    h1 {
+      font-family: var(--font-heading); font-weight: 700;
+      font-size: clamp(1.8rem, 4vw, 2.5rem); letter-spacing: 0.02em;
+      line-height: 1.1; margin-bottom: 1.1rem;
+    }
+    .lede { max-width: 64ch; color: var(--text-muted); margin-bottom: 2rem; font-size: 0.95rem; }
+    .lede strong { color: var(--text); font-weight: 400; }
+
+    .controls {
+      display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center;
+      margin-bottom: 3rem; padding-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    button {
+      font-family: var(--font-body); font-size: 0.78rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-muted); background: transparent;
+      cursor: pointer; border: 1px solid rgba(255,255,255,0.15); border-radius: 3px;
+      padding: 0.55rem 1.1rem; transition: color .2s, border-color .2s, background .2s;
+    }
+    button:hover { color: var(--text); border-color: rgba(232,213,163,0.5); }
+    button[aria-pressed="true"] { color: #000; background: var(--accent); border-color: var(--accent); }
+    .hint { font-size: 0.76rem; color: var(--text-muted); margin-left: auto; }
+
+    /* ─── OPTION LIST ─── */
+    .opts { display: grid; grid-template-columns: 1fr; gap: 3.4rem; }
+
+    .opt-head {
+      display: flex; align-items: baseline; gap: 0.7rem;
+      margin-bottom: 0.9rem;
+    }
+    .opt-id {
+      font-family: var(--font-heading); font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.16em; color: var(--accent);
+    }
+    .opt-name { font-family: var(--font-heading); font-size: 0.95rem; font-weight: 500; }
+    .opt-note { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; margin-top: 0.8rem; max-width: 58ch; }
+    .opt-note b { color: var(--text); font-weight: 400; }
+
+    /* the 16:9 frame — a title card, not an icon */
+    .frame {
+      position: relative; width: 100%; aspect-ratio: 16 / 9; background: #000;
+      border: 1px solid rgba(255,255,255,0.09);
+      display: grid; place-items: center; overflow: hidden;
+    }
+    /* safe-title guide: broadcast convention, 10% inset */
+    .guides .frame::after {
+      content: ''; position: absolute; inset: 10%;
+      border: 1px dashed rgba(232,213,163,0.28);
+    }
+    .small { max-width: 300px; }
+    .row { display: flex; align-items: flex-start; gap: 1.4rem; }
+    .row > :first-child { flex: 1; min-width: 0; }
+    .row > :last-child { width: 210px; flex: none; }
+    .size-tag {
+      font-size: 0.62rem; letter-spacing: 0.1em; color: var(--text-muted);
+      text-transform: uppercase; margin-top: 0.5rem;
+    }
+    .dl { margin-top: 1rem; }
+
+    /* ─── THE LOCKUPS ─── */
+    /* Frame font-size drives everything; the wordmark is 1em and "presents"
+       is a fraction of it, so a lockup scales without redrawing. */
+    .lock {
+      font-family: var(--font-heading); font-weight: 700; line-height: 1;
+      color: var(--text); white-space: nowrap;
+      font-size: calc(var(--s, 46) * 1px);
+    }
+    .lock .wm { font-size: 1em; letter-spacing: 0.02em; }
+    .lock .one { color: var(--accent); }
+    /* "presents" — same family, lighter weight, muted, wide tracking.
+       Nothing here should compete with the wordmark. */
+    .pr {
+      font-family: var(--font-heading); font-weight: 400;
+      color: var(--text-muted); text-transform: lowercase;
+    }
+    .pr-i { font-family: var(--font-body); font-weight: 300; }
+
+    .baseline { display: flex; align-items: baseline; }
+    .colstack { display: flex; flex-direction: column; }
+
+    /* A — baseline, same family */
+    .a .pr { font-size: 0.145em; letter-spacing: 0.3em; margin-left: 0.38em; }
+    /* B — baseline, body face, uppercase micro */
+    .b .pr { font-size: 0.105em; letter-spacing: 0.46em; margin-left: 0.42em;
+             text-transform: uppercase; }
+    /* C — hairline rule between */
+    .c .rule { width: 1px; height: 0.5em; background: rgba(232,228,222,0.24);
+               margin: 0 0.24em; align-self: center; }
+    .c .pr { font-size: 0.135em; letter-spacing: 0.3em; }
+    /* D — hanging under the right edge */
+    .d .wm { display: block; }
+    .d .pr { font-size: 0.125em; letter-spacing: 0.34em; align-self: flex-end;
+             margin-top: 0.55em; margin-right: 0.04em; }
+    /* E — raised to the cap line, trademark position */
+    .e .pr { font-size: 0.1em; letter-spacing: 0.4em; margin-left: 0.3em;
+             align-self: flex-start; margin-top: 0.12em; text-transform: uppercase; }
+    /* F — accent rule lead-in, borrowing the site's hero line */
+    .f .lead { width: 0.3em; height: 1px; background: var(--accent); opacity: 0.6;
+               margin: 0 0.22em; align-self: center; }
+    .f .pr { font-size: 0.135em; letter-spacing: 0.32em; }
+
+    .clean .opt-head, .clean .opt-note, .clean .dl, .clean .size-tag,
+    .clean .controls, .clean .eyebrow, .clean h1, .clean .lede { display: none; }
+    .clean .frame { border-color: transparent; }
+
+    @media (max-width: 640px) { body { padding: 2.5rem 1.2rem 4rem; } .hint { margin-left: 0; } }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Shift1 Productions</div>
+  <h1>&ldquo;Shift1 presents&rdquo; — title card options</h1>
+  <p class="lede">
+    Six lockups, each in a 16:9 frame on black, as it reads on screen. In all of them
+    <strong>presents</strong> is set in the logo&rsquo;s own family at a lighter weight, small size
+    and muted value, so it registers as a credit line and never competes with the wordmark.
+    The percentages under each are the real size relationship.
+  </p>
+
+  <div class="controls">
+    <button id="btn-guides" aria-pressed="false">Safe-title guide</button>
+    <button id="btn-clean" aria-pressed="false">Clean view</button>
+    <button id="btn-big" aria-pressed="false">Larger in frame</button>
+    <span class="hint">Export writes a transparent 3840&times;2160 PNG — the frame is a preview, not a background.</span>
+  </div>
+
+  <div class="opts" id="opts"></div>
+</div>
+<div id="stage" style="position:fixed;left:-9000px;top:0"></div>
+
+<script>
+/* Each lockup is markup + the class that positions "presents". */
+const OPTS = [
+  { id: 'A', cls: 'a baseline', name: 'Baseline, same family',
+    html: '<span class="wm">SH<span class="one">1</span>FT</span><span class="pr">presents</span>',
+    ratio: 14.5, face: 'Space Grotesk 400',
+    note: 'The classic credit line: <b>presents</b> sits on the wordmark’s own baseline in the same typeface, ' +
+          'two weights lighter and wide-tracked. Reads as one lockup rather than two elements. Safest of the six.' },
+
+  { id: 'B', cls: 'b baseline', name: 'Baseline, body face, micro caps',
+    html: '<span class="wm">SH<span class="one">1</span>FT</span><span class="pr pr-i">presents</span>',
+    ratio: 10.5, face: 'Inter 300',
+    note: 'Swaps to the site’s body face and goes uppercase at 10% — the most recessive option here. ' +
+          'The face change is deliberate: it stops <b>presents</b> reading as part of the logo at all.' },
+
+  { id: 'C', cls: 'c baseline', name: 'Hairline rule',
+    html: '<span class="wm">SH<span class="one">1</span>FT</span><span class="rule"></span><span class="pr">presents</span>',
+    ratio: 13.5, face: 'Space Grotesk 400',
+    note: 'A 1px rule does the separating, so <b>presents</b> needs no extra size or weight to feel distinct. ' +
+          'Useful if the wordmark and the word start to crowd at small scale.' },
+
+  { id: 'D', cls: 'd colstack', name: 'Hanging, right-aligned',
+    html: '<span class="wm">SH<span class="one">1</span>FT</span><span class="pr">presents</span>',
+    ratio: 12.5, face: 'Space Grotesk 400',
+    note: 'Tucked under the wordmark’s right edge rather than beside it. Keeps the lockup nearly square, ' +
+          'which suits a centred title card better than a wide one. <b>Not</b> the old subtitle — it hangs right, not centred.' },
+
+  { id: 'E', cls: 'e baseline', name: 'Raised to the cap line',
+    html: '<span class="wm">SH<span class="one">1</span>FT</span><span class="pr">presents</span>',
+    ratio: 10, face: 'Space Grotesk 400',
+    note: 'Sits at the top of the caps, in the position a trademark mark would occupy. The most understated ' +
+          'placement — the eye reads <b>SH1FT</b> and only then notices the word.' },
+
+  { id: 'F', cls: 'f baseline', name: 'Accent rule lead-in',
+    html: '<span class="wm">SH<span class="one">1</span>FT</span><span class="lead"></span><span class="pr">presents</span>',
+    ratio: 13.5, face: 'Space Grotesk 400',
+    note: 'Borrows the gold hero rule from the homepage as the connector, so the lockup carries one brand ' +
+          'cue beyond the typeface. The only option where the accent appears twice — check it does not feel busy.' },
+];
+
+const SIZES = { normal: 118, big: 152 };
+let sizeKey = 'normal';
+
+function lockup(o, s) {
+  const d = document.createElement('div');
+  d.className = 'lock ' + o.cls;
+  d.style.setProperty('--s', s);
+  d.innerHTML = o.html;
+  return d;
+}
+
+function render() {
+  const host = document.getElementById('opts');
+  host.innerHTML = '';
+  OPTS.forEach(function (o) {
+    const wrap = document.createElement('div');
+    wrap.className = 'opt';
+    wrap.innerHTML =
+      '<div class="opt-head"><span class="opt-id">' + o.id + '</span>' +
+      '<span class="opt-name">' + o.name + '</span></div>' +
+      '<div class="row">' +
+        '<div style="flex:1"><div class="frame f-big"></div>' +
+          '<div class="size-tag">16:9 frame &middot; title card</div></div>' +
+        '<div><div class="frame f-small"></div>' +
+          '<div class="size-tag">same lockup, small</div></div>' +
+      '</div>' +
+      '<div class="opt-note">' + o.note + '</div>' +
+      '<div class="opt-note">&ldquo;presents&rdquo; at <b>' + o.ratio + '%</b> of the wordmark, ' +
+        o.face + ', <b>#8a8580</b> against the wordmark’s #e8e4de.</div>' +
+      '<button class="dl">Download 3840&times;2160 PNG</button>';
+
+    wrap.querySelector('.f-big').appendChild(lockup(o, SIZES[sizeKey]));
+    wrap.querySelector('.f-small').appendChild(lockup(o, Math.round(SIZES[sizeKey] * 0.23)));
+    wrap.querySelector('.dl').addEventListener('click', function () { download(o, this); });
+    host.appendChild(wrap);
+  });
+}
+render();
+
+/* ─── controls ─── */
+function wire(id, fn) {
+  const b = document.getElementById(id);
+  b.addEventListener('click', function () {
+    const on = this.getAttribute('aria-pressed') !== 'true';
+    this.setAttribute('aria-pressed', on ? 'true' : 'false');
+    fn(on, this);
+  });
+}
+wire('btn-guides', function (on) { document.body.classList.toggle('guides', on); });
+wire('btn-clean',  function (on) { document.body.classList.toggle('clean', on); });
+wire('btn-big',    function (on) { sizeKey = on ? 'big' : 'normal'; render(); });
+
+/* ─── export: transparent 3840x2160 ─── */
+function download(o, btn) {
+  if (typeof html2canvas !== 'function') { btn.textContent = 'Offline — screenshot instead'; return; }
+  const label = btn.innerHTML;
+  btn.textContent = 'Rendering…';
+  const stage = document.getElementById('stage');
+  const box = document.createElement('div');
+  box.style.cssText = 'width:1920px;height:1080px;display:grid;place-items:center;background:transparent';
+  box.appendChild(lockup(o, 300));
+  stage.appendChild(box);
+
+  html2canvas(box, { backgroundColor: null, scale: 2, logging: false })
+    .then(function (c) {
+      const a = document.createElement('a');
+      a.download = 'shift1-presents-' + o.id.toLowerCase() + '-3840.png';
+      a.href = c.toDataURL('image/png');
+      a.click();
+      btn.innerHTML = label;
+    })
+    .catch(function () { btn.textContent = 'Render failed'; })
+    .then(function () { stage.removeChild(box); });
+}
+</script>
+</body>
+</html>
