@@ -63,6 +63,7 @@ const tubeKey = TUBE[q.tube] ? q.tube : 'A';
 const bloom = q.bloom !== undefined ? parseFloat(q.bloom) : 1.0;
 const drop = q.drop !== undefined ? parseFloat(q.drop) : 13;
 const dim  = q.dim  !== undefined ? parseFloat(q.dim)  : E.BATS_PEAK;
+if (q.decay !== undefined) E.SEQ.shuffleOutF = parseInt(q.decay, 10);
 const t = q.f !== undefined ? (parseInt(q.f, 10) / E.FPS) : parseFloat(q.t || 0);
 
 const hex2rgb = h => [1, 3, 5].map(i => parseInt(h.substr(i, 2), 16));
@@ -102,7 +103,7 @@ function paint(time) {
 
 paint(t);
 window.RENDER_INFO = { w: W, h: H, t: t, frame: Math.round(t * E.FPS), tube: tubeKey,
-                       bloom: bloom, drop: drop, dim: dim, lit: lit, batsLit: bh,
+                       bloom: bloom, drop: drop, dim: dim, decay: E.SEQ.shuffleOutF, lit: lit, batsLit: bh,
                        frames: E.SEQ.frames };
 /* only declare ready once webfonts are in, or glyph metrics differ per frame */
 if (document.fonts && document.fonts.ready) {

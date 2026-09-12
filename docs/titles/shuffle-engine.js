@@ -47,7 +47,12 @@ IGN.glow.t0 = fr(IGN.glow.f0); IGN.glow.t1 = fr(IGN.glow.f1);
    two would be lit on the same frame) and the card switches on at full
    value in the same instant. No black between them, no fade in.
    ─────────────────────────────────────────────────────────────── */
-const SEQ = { fps: FPS, holdF: 22, outF: 8, tailF: 2 };
+const SEQ = { fps: FPS, holdF: 22, outF: 8, tailF: 2,
+              /* SHUFFLE's decay at the CLICK, in frames. 0 = hard cut.
+                 Adjustable at runtime; the card still switches on instantly,
+                 so for these frames both are briefly lit — that overlap is
+                 what makes the transfer feel like a dying tube. */
+              shuffleOutF: 3 };
 SEQ.swapF     = IGN.cutF;                    // 66 — SHUFFLE off / card on
 SEQ.outStartF = SEQ.swapF + SEQ.holdF;       // 88 — card begins to fade
 SEQ.endF      = SEQ.outStartF + SEQ.outF;    // 96 — card fully black
@@ -71,9 +76,19 @@ function edge(t, t0, t1, soft) {
 }
 const smooth = x => x * x * (3 - 2 * x);
 
-/* SHUFFLE brightness, 0 .. ~1.18. Hard zero from the CLICK onward. */
+/* SHUFFLE brightness, 0 .. ~1.18.
+   At the CLICK it decays over SEQ.shuffleOutF frames on an exponential
+   curve — phosphor falls off fast and then tails, which a linear ramp
+   does not do. shuffleOutF = 0 restores the hard single-frame cut. */
 function shuffleAt(t, i) {
-  if (t < 0 || t >= IGN.cut) return 0;
+  if (t < 0) return 0;
+  if (t >= IGN.cut) {
+    const n = SEQ.shuffleOutF;
+    if (n <= 0) return 0;
+    const df = (t - IGN.cut) * FPS;
+    if (df >= n) return 0;
+    return Math.exp(-3.0 * (df / n)) * UNEVEN[i];
+  }
   if (t >= IGN.catch) {
     const df = (t - IGN.catch) * FPS;                    // frames, so overshoot is visible
     let b;
