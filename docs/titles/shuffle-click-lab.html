@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHUFFLE — Click Lab</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--ui:#d8d6d2;--mut:#77746f;--acc:#c9b98a;--line:rgba(255,255,255,.1)}
+  body{background:#08080a;color:var(--ui);font-family:'Inter',system-ui,sans-serif;
+       font-weight:300;-webkit-font-smoothing:antialiased;padding:2.4rem 1.6rem 5rem}
+  .wrap{max-width:1060px;margin:0 auto}
+  h1{font-weight:400;font-size:1.3rem;letter-spacing:.02em;margin-bottom:.5rem}
+  .lede{font-size:.87rem;color:var(--mut);max-width:76ch;margin-bottom:1.6rem}
+  .lede b{color:var(--ui);font-weight:400}
+  h2{font-weight:400;font-size:.95rem;margin:1.8rem 0 .7rem}
+  button{font-family:inherit;font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--mut);background:transparent;cursor:pointer;border:1px solid var(--line);
+    border-radius:3px;padding:.52rem 1rem;transition:all .15s}
+  button:hover{color:var(--ui);border-color:rgba(201,185,138,.6)}
+  button.on{color:#08080a;background:var(--acc);border-color:var(--acc)}
+  button.big{color:var(--ui);border-color:rgba(201,185,138,.5);padding:.62rem 1.5rem;font-size:.78rem}
+  .row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;margin-bottom:1rem}
+  .presets{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.4rem}
+
+  .ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));
+    gap:.5rem 2rem;padding:1.2rem 1.3rem;border:1px solid var(--line);border-radius:4px;background:#0e0e10}
+  .c{display:flex;align-items:center;gap:.7rem}
+  .c label{font-size:.71rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);
+    width:9.4em;flex:none}
+  .c input{flex:1;min-width:80px;accent-color:var(--acc)}
+  .c .v{font-variant-numeric:tabular-nums;font-size:.76rem;width:5.2em;text-align:right;color:var(--acc)}
+  .hint{font-size:.74rem;color:var(--mut);margin-top:.9rem;line-height:1.55}
+  .hint b{color:var(--ui);font-weight:400}
+  canvas{display:block;width:100%;height:150px;background:#000;border:1px solid var(--line);
+    border-radius:3px;margin:1rem 0 .4rem}
+  .cap{font-size:.68rem;color:var(--mut)}
+  .out{margin-top:1.3rem;padding:.75rem .9rem;background:#000;border:1px solid var(--line);
+    border-radius:3px;font-family:ui-monospace,monospace;font-size:.75rem;color:var(--acc);
+    word-break:break-all;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>SHUFFLE — switch-off click lab</h1>
+<p class="lede">
+  Everything here is synthesized in the browser sample by sample — the same maths as the final
+  render, so <b>nothing is sampled or downloaded</b>. A real light switch is <b>two transients</b>:
+  the mechanism trips, then the toggle hits its end stop 10–20 ms later. That double impulse is
+  what the earlier attempts were missing. Audition, then send me the settings line at the bottom
+  (or hit <b>Download WAV</b> and I'll splice your exact file in).
+</p>
+
+<div class="presets" id="presets"></div>
+
+<div class="row">
+  <button class="big" id="play">▶ Play click</button>
+  <button class="big" id="ctx">▶ Play in context</button>
+  <button id="loop">Loop</button>
+  <button id="dl">Download WAV</button>
+</div>
+
+<canvas id="scope" width="2000" height="300"></canvas>
+<div class="cap" id="scopecap"></div>
+
+<h2>Contact</h2>
+<div class="ctrls" id="c1"></div>
+<h2>Body &amp; tone</h2>
+<div class="ctrls" id="c2"></div>
+
+<div class="hint">
+  <b>Gap</b> is the interval between the two impulses — set it to 0 for a single tick like the
+  original. <b>Second hit</b> is how loud the end-stop is relative to the trip. <b>Body</b> is the
+  plastic housing resonance: a switch has some, a relay has more, and too much becomes a thud.
+  <b>High-pass</b> keeps it dry — below about 200 Hz you start to get thump, which the brief rules out.
+</div>
+
+<div class="out" id="out"></div>
+</div>
+
+<script>
+const SR = 48000;
+
+/* ── parameter model ──────────────────────────────────────────────── */
+const P = [
+  ['level',  'Peak level',    0.05, 0.85, 0.005, 0.34, v=>(20*Math.log10(v)).toFixed(1)+' dB'],
+  ['tau1',   'Snap decay',    0.10, 2.00, 0.05,  0.35, v=>v.toFixed(2)+' ms'],
+  ['gap',    'Gap',           0.0,  40.0, 0.5,   13.0, v=>v.toFixed(1)+' ms'],
+  ['second', 'Second hit',    0.0,  1.0,  0.02,  0.62, v=>v.toFixed(2)],
+  ['tau2',   'End-stop decay',0.10, 3.00, 0.05,  0.55, v=>v.toFixed(2)+' ms'],
+  ['bright', 'Brightness',    2000, 16000,250,   8000, v=>(v/1000).toFixed(1)+' kHz'],
+  ['hp',     'High-pass',     120,  1600, 20,    500,  v=>Math.round(v)+' Hz'],
+  ['bodyF',  'Body freq',     300,  2600, 25,    1400, v=>Math.round(v)+' Hz'],
+  ['bodyAmt','Body amount',   0.0,  0.9,  0.02,  0.35, v=>v.toFixed(2)],
+  ['bodyTau','Body decay',    0.5,  10.0, 0.25,  2.50, v=>v.toFixed(2)+' ms'],
+];
+const G1 = ['level','tau1','gap','second','tau2'];
+const val = {}; P.forEach(p => val[p[0]] = p[5]);
+
+const PRESETS = {
+  'Light switch':   {level:.34,tau1:.35,gap:13,second:.62,tau2:.55,bright:8000,hp:500,bodyF:1400,bodyAmt:.35,bodyTau:2.5},
+  'Toggle, harder': {level:.40,tau1:.22,gap:11,second:.70,tau2:.40,bright:11000,hp:620,bodyF:1750,bodyAmt:.28,bodyTau:1.8},
+  'Rocker, softer': {level:.30,tau1:.55,gap:18,second:.50,tau2:.85,bright:6000,hp:360,bodyF:900,bodyAmt:.50,bodyTau:4.0},
+  'Single tick (v1)':{level:.23,tau1:.50,gap:0,second:0,tau2:.50,bright:9000,hp:600,bodyF:1600,bodyAmt:.12,bodyTau:1.5},
+  'Breaker':        {level:.38,tau1:.70,gap:24,second:.78,tau2:1.20,bright:5000,hp:200,bodyF:550,bodyAmt:.58,bodyTau:6.0},
+};
+
+/* ── deterministic noise, so the sound is reproducible ──────────── */
+function mulberry(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;
+  let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296*2-1;};}
+
+function onepoleLP(b,fc){const a=Math.exp(-2*Math.PI*fc/SR);let y=0;
+  for(let i=0;i<b.length;i++){y=(1-a)*b[i]+a*y;b[i]=y;}return b;}
+function onepoleHP(b,fc){const a=Math.exp(-2*Math.PI*fc/SR);let y=0,p=0;
+  for(let i=0;i<b.length;i++){y=a*(y+b[i]-p);p=b[i];b[i]=y;}return b;}
+
+/* one impulse: contact crack + damped housing resonance */
+function impulse(buf,off,amp,tauMs,rnd){
+  const tau=tauMs/1000, bt=val.bodyTau/1000;
+  const n=Math.ceil(Math.max(tau*8,bt*8)*SR);
+  for(let j=0;j<n;j++){
+    const t=j/SR;
+    let v=rnd()*Math.exp(-t/tau);
+    v+=val.bodyAmt*Math.sin(2*Math.PI*val.bodyF*t)*Math.exp(-t/bt);
+    v+=val.bodyAmt*0.45*Math.sin(2*Math.PI*val.bodyF*1.93*t)*Math.exp(-t/(bt*0.7));
+    const i=off+j; if(i<buf.length) buf[i]+=v*amp;
+  }
+}
+
+function render(){
+  const dur=0.09, N=Math.round(dur*SR);
+  const b=new Float32Array(N);
+  const rnd=mulberry(12345);
+  impulse(b,0,1.0,val.tau1,rnd);
+  if(val.second>0.001) impulse(b,Math.round(val.gap/1000*SR),val.second,val.tau2,mulberry(999));
+  onepoleLP(b,val.bright);
+  onepoleHP(b,val.hp);
+  let pk=0; for(let i=0;i<N;i++) pk=Math.max(pk,Math.abs(b[i]));
+  if(pk>0) for(let i=0;i<N;i++) b[i]=b[i]/pk*val.level;
+  return b;
+}
+
+/* a little synthesized hum, so the click can be judged in context */
+function hum(sec){
+  const N=Math.round(sec*SR), b=new Float32Array(N);
+  for(let i=0;i<N;i++){const t=i/SR;
+    b[i]=(Math.sin(2*Math.PI*120*t)+0.42*Math.sin(2*Math.PI*240*t)
+         +0.13*Math.sin(2*Math.PI*360*t))/1.55*0.0058;}
+  return b;
+}
+
+/* ── audio ──────────────────────────────────────────────────────── */
+let AC=null, looping=false, loopTimer=null;
+const ac=()=>AC||(AC=new (window.AudioContext||window.webkitAudioContext)({sampleRate:SR}));
+function playBuf(f32){
+  const c=ac(); const buf=c.createBuffer(2,f32.length,SR);
+  buf.copyToChannel(f32,0); buf.copyToChannel(f32,1);
+  const s=c.createBufferSource(); s.buffer=buf; s.connect(c.destination); s.start();
+  return buf.duration;
+}
+function playClick(){ playBuf(render()); }
+function playContext(){
+  const h=hum(1.1), c=render();
+  const out=new Float32Array(h.length+c.length+Math.round(0.9*SR));
+  out.set(h,0);
+  for(let i=0;i<c.length;i++) out[h.length+i]+=c[i];   // click starts as hum stops
+  playBuf(out);
+}
+
+/* ── scope ──────────────────────────────────────────────────────── */
+const cv=document.getElementById('scope'), cx=cv.getContext('2d');
+function draw(){
+  const b=render(), W=cv.width, H=cv.height;
+  cx.fillStyle='#000'; cx.fillRect(0,0,W,H);
+  cx.strokeStyle='rgba(255,255,255,.10)'; cx.beginPath();
+  cx.moveTo(0,H/2); cx.lineTo(W,H/2); cx.stroke();
+  // 10ms gridlines
+  cx.strokeStyle='rgba(201,185,138,.14)';
+  for(let ms=10;ms<90;ms+=10){const x=ms/1000*SR/b.length*W;
+    cx.beginPath();cx.moveTo(x,0);cx.lineTo(x,H);cx.stroke();}
+  cx.strokeStyle='#c9b98a'; cx.lineWidth=1; cx.beginPath();
+  for(let x=0;x<W;x++){
+    const i=Math.floor(x/W*b.length);
+    const y=H/2-b[i]*(H/2)/0.9;
+    x?cx.lineTo(x,y):cx.moveTo(x,y);
+  }
+  cx.stroke();
+  let pk=0,last=0;
+  for(let i=0;i<b.length;i++){if(Math.abs(b[i])>pk)pk=Math.abs(b[i]);
+    if(Math.abs(b[i])>0.0008)last=i;}
+  document.getElementById('scopecap').textContent =
+    'gridlines every 10 ms · peak ' + (20*Math.log10(pk||1e-9)).toFixed(1) +
+    ' dBFS · audible length ' + (last/SR*1000).toFixed(1) + ' ms';
+  document.getElementById('out').textContent =
+    'CLICK  ' + P.map(p=>p[0]+'='+(+val[p[0]]).toString()).join('  ');
+}
+
+/* ── build controls ─────────────────────────────────────────────── */
+function build(){
+  P.forEach(p=>{
+    const [k,label,min,max,step,,fmt]=p;
+    const host=document.getElementById(G1.includes(k)?'c1':'c2');
+    const d=document.createElement('div'); d.className='c';
+    d.innerHTML='<label>'+label+'</label><input type="range" min="'+min+'" max="'+max+
+      '" step="'+step+'" value="'+val[k]+'"><span class="v"></span>';
+    const inp=d.querySelector('input'), out=d.querySelector('.v');
+    const upd=()=>{out.textContent=fmt(+val[k]);};
+    inp.addEventListener('input',function(){val[k]=+this.value;upd();draw();});
+    upd(); host.appendChild(d); p.push(inp,upd);
+  });
+}
+build();
+
+const ph=document.getElementById('presets');
+Object.keys(PRESETS).forEach(name=>{
+  const b=document.createElement('button'); b.textContent=name;
+  b.addEventListener('click',()=>{
+    Object.assign(val,PRESETS[name]);
+    P.forEach(p=>{const inp=p[7],upd=p[8]; if(inp){inp.value=val[p[0]];upd();}});
+    document.querySelectorAll('#presets button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); draw(); playClick();
+  });
+  ph.appendChild(b);
+});
+ph.firstChild.classList.add('on');
+
+document.getElementById('play').addEventListener('click',playClick);
+document.getElementById('ctx').addEventListener('click',playContext);
+document.getElementById('loop').addEventListener('click',function(){
+  looping=!looping; this.classList.toggle('on',looping);
+  if(looping){loopTimer=setInterval(playClick,900);} else clearInterval(loopTimer);
+});
+
+/* ── 24-bit WAV export ──────────────────────────────────────────── */
+document.getElementById('dl').addEventListener('click',()=>{
+  const b=render(), n=b.length, bytes=n*2*3;
+  const buf=new ArrayBuffer(44+bytes), d=new DataView(buf);
+  const str=(o,s)=>{for(let i=0;i<s.length;i++)d.setUint8(o+i,s.charCodeAt(i));};
+  str(0,'RIFF'); d.setUint32(4,36+bytes,true); str(8,'WAVE');
+  str(12,'fmt '); d.setUint32(16,16,true); d.setUint16(20,1,true);
+  d.setUint16(22,2,true); d.setUint32(24,SR,true);
+  d.setUint32(28,SR*2*3,true); d.setUint16(32,6,true); d.setUint16(34,24,true);
+  str(36,'data'); d.setUint32(40,bytes,true);
+  let o=44;
+  for(let i=0;i<n;i++){
+    const q=Math.max(-1,Math.min(1,b[i]))*8388607|0;
+    for(let ch=0;ch<2;ch++){
+      d.setUint8(o++,q&255); d.setUint8(o++,(q>>8)&255); d.setUint8(o++,(q>>16)&255);
+    }
+  }
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([buf],{type:'audio/wav'}));
+  a.download='shuffle_click.wav'; a.click();
+});
+
+draw();
+window.CLICKLAB={get:()=>({...val}),render:render};
+</script>
+</body>
+</html>
