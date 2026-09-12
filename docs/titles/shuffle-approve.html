@@ -113,7 +113,7 @@
       <span class="v" id="dropv"></span>
     </div>
     <div class="row">
-      <label>Card dim</label>
+      <label>Card bright</label>
       <input type="range" id="dim" min="20" max="90" step="1" value="50">
       <span class="v" id="dimv"></span>
     </div>
@@ -125,7 +125,9 @@
   </div>
 
   <div class="hint">
-    <b>SHUFFLE decay</b> is how many frames SHUFFLE takes to die once the card switches on.
+    <b>Card bright</b> is the second title's brightness, where <b>1.00</b> would match SHUFFLE at
+    full burn — so 0.50 is half as luminous, same hue. <b>SHUFFLE decay</b> is how many frames
+    SHUFFLE takes to die once the card switches on.
     <b>0</b> is a hard single-frame cut; higher values let it fall off like phosphor while the card
     already holds. The card itself always switches on instantly on <b>f66</b> — that never fades in.
     Step f65 → f66 → f67 → f68 to see the handover frame by frame.
@@ -173,7 +175,7 @@ function style() {
   document.getElementById('soutv').textContent = E.SEQ.shuffleOutF + 'f';
   document.getElementById('out').textContent =
     'tube=' + tube + '  bloom=' + bloom.toFixed(2) + '  drop=' + drop.toFixed(1) +
-    '  dim=' + dim.toFixed(2) + '  decay=' + E.SEQ.shuffleOutF + 'f';
+    '  bright=' + dim.toFixed(2) + '  decay=' + E.SEQ.shuffleOutF + 'f';
   document.getElementById('meta').textContent =
     E.SEQ.frames + ' frames · ' + E.SEQ.total.toFixed(3) + 's · 24fps · 2.39:1';
 }
