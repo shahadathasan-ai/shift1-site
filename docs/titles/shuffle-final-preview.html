@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHUFFLE — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&display=swap" rel="stylesheet">
+<script src="shuffle-engine.js"></script>
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  body{background:#08080a;color:#d8d6d2;font-family:'Inter',system-ui,sans-serif;
+       font-weight:300;-webkit-font-smoothing:antialiased;padding:2.6rem 1.6rem 4rem}
+  .wrap{max-width:1180px;margin:0 auto}
+  .top{display:flex;align-items:baseline;gap:.9rem;margin-bottom:1rem;flex-wrap:wrap}
+  h1{font-weight:400;font-size:1.1rem;letter-spacing:.02em}
+  .meta{font-size:.73rem;color:#77746f;margin-left:auto;font-variant-numeric:tabular-nums}
+
+  .frame{container-type:size;position:relative;width:100%;aspect-ratio:2.39/1;
+         background:#000;overflow:hidden;border:1px solid rgba(255,255,255,.1)}
+  .stack{position:absolute;inset:0;display:grid;place-items:center}
+  .shuffle{font-family:'Inter',sans-serif;font-weight:200;font-size:11cqh;
+    letter-spacing:1.85em;white-space:nowrap;line-height:1;display:flex;color:#f5e7b4}
+  .shuffle .ch{opacity:var(--o,0);--bm:1;
+    text-shadow:
+      0 0 .038em rgba(245,231,180,calc(.42*var(--bm)*1.4)),
+      0 0 .125em rgba(245,231,180,calc(.20*var(--bm)*1.4)),
+      0 0 .38em  rgba(245,231,180,calc(.075*var(--bm)*1.4)),
+      0 0 .95em  rgba(245,231,180,calc(.024*var(--bm)*1.4))}
+  .shuffle .ch:last-child{margin-right:-1.85em}
+  .bats{font-family:'Inter',sans-serif;font-weight:300;font-size:3.5cqh;
+    letter-spacing:.52em;white-space:nowrap;line-height:1;color:#e2d5b0;opacity:0;
+    transform:translateY(20cqh);text-shadow:0 0 .022em rgba(226,213,176,.085)}
+
+  .bar{display:flex;gap:1.1rem;align-items:center;flex-wrap:wrap;margin-top:1.1rem}
+  button{font-family:inherit;font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;
+    color:#d8d6d2;background:transparent;cursor:pointer;border:1px solid rgba(201,185,138,.5);
+    border-radius:3px;padding:.62rem 1.5rem;transition:all .15s}
+  button:hover{border-color:#c9b98a}
+  button.on{color:#08080a;background:#c9b98a;border-color:#c9b98a}
+  button.small{font-size:.7rem;padding:.5rem 1rem;color:#77746f;border-color:rgba(255,255,255,.12)}
+  button.small:hover{color:#d8d6d2}
+  .vol{display:flex;align-items:center;gap:.7rem;font-size:.72rem;letter-spacing:.09em;
+       text-transform:uppercase;color:#77746f}
+  .vol input{width:190px;accent-color:#c9b98a}
+  .vol .v{font-variant-numeric:tabular-nums;color:#c9b98a;width:3.2em;text-align:right}
+  .t{font-variant-numeric:tabular-nums;font-size:.75rem;color:#77746f;min-width:9em}
+  .note{font-size:.75rem;color:#77746f;margin-top:1.3rem;line-height:1.6;max-width:80ch}
+  .note b{color:#d8d6d2;font-weight:400}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <h1>SHUFFLE — locked picture + sound</h1>
+    <span class="meta" id="meta"></span>
+  </div>
+
+  <div class="frame" id="frame">
+    <div class="stack"><div class="shuffle" id="sh"></div></div>
+    <div class="stack"><div class="bats" id="bats"></div></div>
+  </div>
+
+  <div class="bar">
+    <button id="play">▶ Play</button>
+    <button class="small" id="loop">Loop</button>
+    <span class="t" id="tv">—</span>
+    <div class="vol">
+      <span>Volume</span>
+      <input type="range" id="vol" min="0" max="100" step="1" value="80">
+      <span class="v" id="volv">80</span>
+    </div>
+  </div>
+
+  <div class="note" id="note">
+    The click is a <b>sharp double-snap</b>: the switch trips, then the toggle hits its end stop
+    11 ms later. Picture is driven off the audio clock, so what you see and hear is frame-locked.
+    Everything is as approved — tube C, bloom 1.40, drop 20, card 0.50, decay 8f, half speed.
+  </div>
+</div>
+
+<script>
+const E = window.ShuffleEngine;
+E.SEQ.shuffleOutF = 8;          // locked
+const DIM = 0.50, SPEED = 2;    // locked
+const TOTAL = E.SEQ.total * SPEED;
+
+const sh = document.getElementById('sh'), bats = document.getElementById('bats');
+const chars = [];
+for (let i = 0; i < E.N; i++) {
+  const s = document.createElement('span');
+  s.className = 'ch'; s.textContent = E.WORD[i];
+  sh.appendChild(s); chars.push(s);
+}
+bats.appendChild(Object.assign(document.createElement('span'), { textContent: E.BATS_TEXT }));
+
+document.getElementById('meta').textContent =
+  (E.SEQ.frames * SPEED) + ' frames · ' + TOTAL.toFixed(3) + 's · 24fps · 2.39:1 · 48kHz';
+
+function paint(tOut) {
+  const t = tOut / SPEED;                     // output time -> engine time
+  for (let i = 0; i < E.N; i++) {
+    const b = E.shuffleAt(t, i);
+    const bm = b > 1 ? 1 + (b - 1) * 2.6 : b;
+    chars[i].style.setProperty('--o', Math.min(1, b).toFixed(5));
+    chars[i].style.setProperty('--bm', Math.max(0, bm).toFixed(5));
+  }
+  bats.style.opacity = (E.batsAt(t) / E.BATS_PEAK * DIM).toFixed(5);
+  document.getElementById('tv').textContent =
+    Math.min(E.SEQ.frames * SPEED, Math.round(tOut * 24)) + ' / ' + (E.SEQ.frames * SPEED) +
+    '   ' + tOut.toFixed(2) + 's';
+}
+
+/* ── audio: one file, one gain, driving the picture clock ── */
+let AC = null, buf = null, gain = null, src = null, startAt = 0, playing = false, looping = false;
+let vol = 0.80;
+
+async function load() {
+  AC = new (window.AudioContext || window.webkitAudioContext)();
+  gain = AC.createGain(); gain.gain.value = vol; gain.connect(AC.destination);
+  const r = await fetch('shuffle_audio.wav');
+  buf = await AC.decodeAudioData(await r.arrayBuffer());
+  document.getElementById('note').insertAdjacentHTML('beforeend',
+    '<br>Audio loaded: ' + buf.duration.toFixed(3) + 's, ' + buf.sampleRate / 1000 +
+    ' kHz, ' + buf.numberOfChannels + ' ch.');
+}
+
+async function play() {
+  if (!AC) await load();
+  if (AC.state === 'suspended') await AC.resume();
+  if (src) { try { src.stop(); } catch (e) {} }
+  src = AC.createBufferSource(); src.buffer = buf; src.connect(gain);
+  startAt = AC.currentTime; src.start();
+  playing = true;
+}
+
+function frame() {
+  if (playing && AC) {
+    const t = AC.currentTime - startAt;
+    if (t >= TOTAL) {
+      paint(TOTAL);
+      if (looping) play(); else playing = false;
+    } else paint(t);
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+document.getElementById('play').addEventListener('click', play);
+document.getElementById('loop').addEventListener('click', function () {
+  looping = !looping; this.classList.toggle('on', looping);
+});
+const vs = document.getElementById('vol');
+vs.addEventListener('input', function () {
+  vol = +this.value / 100;
+  document.getElementById('volv').textContent = this.value;
+  if (gain) gain.gain.value = vol;
+});
+
+paint(0);
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => paint(0));
+</script>
+</body>
+</html>
