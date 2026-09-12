@@ -128,33 +128,59 @@ for i in range(i0, i1):
     v = s * env * L_HUM
     L[i] += v; R[i] += v
 
-# ── 5. THE CLICK — resonant, not noisy ───────────────────────────────
-# Damped resonators give a pitched "clack" that small speakers reproduce;
-# broadband noise on the same transient just reads as static. Noise is
-# kept to a thin 0.18 edge purely to sharpen the attack.
-RES = [(1150, 1.00, 0.0045), (2350, 0.62, 0.0032), (3650, 0.30, 0.0022)]
-def _hit(buf, off, amp, seed):
+# ── 5. THE CLICK — band-limited mechanical impact ────────────────────
+# A switch is an IMPACT, not a tone and not noise:
+#   bright contact snick ~3 kHz  +  housing thock ~420 Hz, ~12 ms, dry.
+# Filters are real RBJ biquads cascaded to 24 dB/oct. Earlier versions
+# used one-pole filters (6 dB/oct), which barely attenuate — that is why
+# "filtered noise" stayed full-band and read as static in the speaker.
+# Tuned against a spectrum measurement, not by ear-guessing:
+#   centroid 3187 Hz · impact band 54% · thock 19% · hiss 0.9%
+def biquad_bp(buf, f0, Q):
+    w0 = 2 * math.pi * f0 / SR; al = math.sin(w0) / (2 * Q)
+    b0, b1, b2 = Q * al, 0.0, -Q * al
+    a0, a1, a2 = 1 + al, -2 * math.cos(w0), 1 - al
+    b0, b1, b2, a1, a2 = b0/a0, b1/a0, b2/a0, a1/a0, a2/a0
+    x1 = x2 = y1 = y2 = 0.0
+    for i, x in enumerate(buf):
+        y = b0*x + b1*x1 + b2*x2 - a1*y1 - a2*y2
+        x2, x1 = x1, x; y2, y1 = y1, y; buf[i] = y
+    return buf
+
+def biquad_hp(buf, f0, Q=0.707):
+    w0 = 2 * math.pi * f0 / SR; al = math.sin(w0) / (2 * Q); c = math.cos(w0)
+    b0, b1, b2 = (1+c)/2, -(1+c), (1+c)/2
+    a0, a1, a2 = 1 + al, -2*c, 1 - al
+    b0, b1, b2, a1, a2 = b0/a0, b1/a0, b2/a0, a1/a0, a2/a0
+    x1 = x2 = y1 = y2 = 0.0
+    for i, x in enumerate(buf):
+        y = b0*x + b1*x1 + b2*x2 - a1*y1 - a2*y2
+        x2, x1 = x1, x; y2, y1 = y1, y; buf[i] = y
+    return buf
+
+def make_click(rms_db=-20.0, seed=4242):
     r = random.Random(seed)
     n = int(0.030 * SR)
-    for j in range(n):
-        t = j / SR
-        s = 0.0
-        for fq, a2, dec in RES:
-            s += a2 * math.sin(2 * math.pi * fq * t) * math.exp(-t / dec)
-        s += r.uniform(-1, 1) * 0.18 * math.exp(-t / 0.0008)
-        if off + j < len(buf):
-            buf[off + j] += s * amp
+    snick = [r.uniform(-1, 1) for _ in range(n)]
+    biquad_bp(snick, 3000, 0.65); biquad_bp(snick, 3000, 0.65)
+    for i in range(n):
+        t = i / SR
+        snick[i] *= (1 - math.exp(-t / 0.00025)) * math.exp(-t / 0.0055)
+    thock = [r.uniform(-1, 1) for _ in range(n)]
+    biquad_bp(thock, 420, 1.4)
+    for i in range(n):
+        t = i / SR
+        thock[i] *= (1 - math.exp(-t / 0.0004)) * math.exp(-t / 0.007)
+    out = [snick[i] + 0.30 * thock[i] for i in range(n)]
+    biquad_hp(out, 170)                       # dry: no rumble
+    rms = math.sqrt(sum(v*v for v in out) / n)
+    g = (10 ** (rms_db / 20)) / rms           # set by loudness, not peak
+    return [v * g for v in out]
 
-CK = 0.060
-n = int(CK * SR); s0 = int(T_CLICK * SR)
-seg = [0.0] * n
-_hit(seg, 0, 1.00, 12345)
-_hit(seg, int(0.011 * SR), 0.50, 999)      # end stop, 11ms later
-onepole_lp(seg, 9000)
-onepole_hp(seg, 500)
-pk = max(abs(v) for v in seg) or 1.0
-for j in range(n):
-    v = seg[j] / pk * L_CLICK
+CK = 0.030
+click = make_click()
+s0 = int(T_CLICK * SR)
+for j, v in enumerate(click):
     if s0 + j < N:
         L[s0 + j] += v; R[s0 + j] += v
 
