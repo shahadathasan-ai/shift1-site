@@ -7,7 +7,7 @@ nothing enters this file but numbers. Festival-safe by construction.
 Half-speed timebase: 196 output frames at 24fps = 8.1667s.
 Engine frame f maps to output time f/12.
 """
-import wave, struct, math, random
+import wave, struct, math, random, sys
 
 SR      = 48000
 FPS     = 24
@@ -31,6 +31,9 @@ L_HUM     = 0.0058   # stable burn — almost subliminal
 L_CLICK   = 0.230    # the one real transient
 
 MAINS = 120.0        # 60Hz mains -> 120Hz ballast fundamental
+
+CLICK_VARIANT = int(sys.argv[1]) if len(sys.argv) > 1 else 2
+OUTFILE = sys.argv[2] if len(sys.argv) > 2 else 'shuffle_audio.wav'
 
 rng = random.Random(20260912)   # seeded: identical output every run
 
@@ -140,26 +143,42 @@ for i in range(i0, i1):
     L[i] += v; R[i] += v
 
 # ── 5. THE CLICK — dry, electrical, on the exact frame ───────────────
-# Relay-style: a sharp broadband transient with a short damped ring.
-# No reverb, no tail. Everything after it is silence.
-CK = 0.014
-n = int(CK * SR)
+# A real switch has two parts: a broadband contact snap, and a short
+# mechanical body from the housing. The body is what makes it read as a
+# switch rather than a tick, so each variant is snap + damped resonances.
+# High-passed to keep it dry: no thump, no bass hit, no boom.
+CLICKS = {
+ 1: dict(name='dry relay (original)',    lvl=0.230, dur=0.014, snap=0.0011,
+         hp=220, res=[(2150,0.42,0.0042),(3400,0.20,0.0042)], nzlo=900,  nzhi=9000),
+ 2: dict(name='defined switch',          lvl=0.400, dur=0.030, snap=0.0009,
+         hp=140, res=[(420,0.55,0.013),(780,0.40,0.010),(1250,0.26,0.0075)],
+         nzlo=700, nzhi=9000),
+ 3: dict(name='harder contact',          lvl=0.470, dur=0.026, snap=0.0007,
+         hp=170, res=[(520,0.44,0.010),(980,0.42,0.0085),(1900,0.28,0.006)],
+         nzlo=1100, nzhi=12000),
+ 4: dict(name='heavy breaker',           lvl=0.420, dur=0.044, snap=0.0013,
+         hp=120, res=[(280,0.60,0.020),(520,0.42,0.015),(900,0.24,0.011)],
+         nzlo=500, nzhi=7000),
+}
+CV = CLICKS[CLICK_VARIANT]
+n = int(CV['dur'] * SR)
 s0 = int(T_CLICK * SR)
+seg = [0.0] * n
 for j in range(n):
-    d_fast = math.exp(-j / (0.0011 * SR))               # the snap
-    d_ring = math.exp(-j / (0.0042 * SR))               # small mechanical body
-    nz = rng.uniform(-1, 1) * d_fast
-    ring = math.sin(2 * math.pi * 2150 * j / SR) * 0.42 * d_ring
-    ring += math.sin(2 * math.pi * 3400 * j / SR) * 0.20 * d_ring
-    v = (nz + ring) * L_CLICK
+    t = j / SR
+    snap = rng.uniform(-1, 1) * math.exp(-t / CV['snap'])      # contact crack
+    body = 0.0
+    for fq, amp, dec in CV['res']:                              # mechanical body
+        body += amp * math.sin(2 * math.pi * fq * t) * math.exp(-t / dec)
+    seg[j] = snap + body
+onepole_lp(seg, CV['nzhi'])
+onepole_hp(seg, CV['hp'])
+pk = max(abs(v) for v in seg) or 1.0
+for j in range(n):
+    v = seg[j] / pk * CV['lvl']
     if s0 + j < N:
         L[s0 + j] += v; R[s0 + j] += v
-# dry it out: remove anything below 220Hz so there is no thump or bass hit
-seg0, seg1 = s0, min(N, s0 + int(0.05 * SR))
-for buf in (L, R):
-    seg = buf[seg0:seg1]
-    onepole_hp(seg, 220)
-    buf[seg0:seg1] = seg
+CK = CV['dur']
 
 # ── 6. ENFORCE SILENCE AFTER THE CLICK ───────────────────────────────
 hard = int((T_CLICK + CK + 0.004) * SR)
@@ -168,6 +187,7 @@ for i in range(hard, N):
 
 # ── write 24-bit / 48kHz stereo WAV ──────────────────────────────────
 peak = max(max(abs(v) for v in L), max(abs(v) for v in R))
+print('click variant %d: %s' % (CLICK_VARIANT, CV['name']))
 print('peak linear  %.4f   (%.1f dBFS)' % (peak, 20 * math.log10(peak)))
 assert peak < 0.95, 'clipping'
 
@@ -177,11 +197,11 @@ for i in range(N):
         q = int(max(-1.0, min(1.0, v)) * 8388607)
         out += struct.pack('<i', q)[0:3]          # 24-bit little-endian
 
-w = wave.open('shuffle_audio.wav', 'wb')
+w = wave.open(OUTFILE, 'wb')
 w.setnchannels(2); w.setsampwidth(3); w.setframerate(SR)
 w.writeframes(bytes(out)); w.close()
 
 print('crackle events: %d over %.2fs (mean gap %.3fs, no fixed interval)'
       % (len(events), T_CATCH - T_GLOW, (T_CATCH - T_GLOW) / max(1, len(events))))
-print('wrote shuffle_audio.wav  %.4fs  %d frames @ %dfps  24-bit/%dkHz stereo'
+print('wrote ' + OUTFILE + '  %.4fs  %d frames @ %dfps  24-bit/%dkHz stereo'
       % (DUR, FRAMES, FPS, SR // 1000))
