@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHUFFLE — Title Card Options</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400&family=Libre+Franklin:wght@300;400;600&family=Barlow+Condensed:wght@400;500&family=EB+Garamond:wght@400;500&family=IBM+Plex+Mono:wght@300;400&family=Archivo:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ui-bg: #0a0a0b;
+      --ui-panel: #121214;
+      --ui-text: #d8d6d2;
+      --ui-muted: #77746f;
+      --ui-line: rgba(255,255,255,0.09);
+      --ui-accent: #c9b98a;
+      --font-ui: 'Inter', system-ui, sans-serif;
+      --warm: 0;            /* global warmth trim, 0-100 */
+    }
+
+    body {
+      background: var(--ui-bg); color: var(--ui-text);
+      font-family: var(--font-ui); font-weight: 300; line-height: 1.6;
+      -webkit-font-smoothing: antialiased; padding: 3.5rem 2rem 7rem;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; }
+
+    .eyebrow { font-size: .68rem; letter-spacing: .34em; text-transform: uppercase; color: var(--ui-muted); margin-bottom: .9rem; }
+    h1 { font-weight: 400; font-size: clamp(1.7rem, 3.6vw, 2.3rem); letter-spacing: .01em; line-height: 1.15; margin-bottom: 1rem; }
+    .lede { max-width: 68ch; color: var(--ui-muted); font-size: .93rem; margin-bottom: 1.4rem; }
+    .lede strong { color: var(--ui-text); font-weight: 400; }
+
+    /* ─── global controls ─── */
+    .bar {
+      position: sticky; top: 0; z-index: 20; background: rgba(10,10,11,.93);
+      backdrop-filter: blur(6px); border: 1px solid var(--ui-line); border-radius: 4px;
+      padding: .9rem 1.1rem; margin-bottom: 2.6rem;
+      display: flex; flex-wrap: wrap; gap: .7rem; align-items: center;
+    }
+    button {
+      font-family: var(--font-ui); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--ui-muted); background: transparent; cursor: pointer;
+      border: 1px solid var(--ui-line); border-radius: 3px; padding: .5rem .95rem;
+      transition: color .18s, border-color .18s, background .18s;
+    }
+    button:hover { color: var(--ui-text); border-color: rgba(201,185,138,.55); }
+    button[aria-pressed="true"] { color: #0a0a0b; background: var(--ui-accent); border-color: var(--ui-accent); }
+    button.primary { color: var(--ui-text); border-color: rgba(201,185,138,.45); }
+
+    .slider { display: flex; align-items: center; gap: .55rem; font-size: .7rem; color: var(--ui-muted);
+              letter-spacing: .08em; text-transform: uppercase; }
+    input[type=range] { width: 150px; accent-color: var(--ui-accent); }
+    .tval { font-variant-numeric: tabular-nums; color: var(--ui-text); min-width: 3.6em; }
+
+    /* ─── option ─── */
+    .opt { margin-bottom: 3.2rem; }
+    .opt-head { display: flex; align-items: baseline; gap: .75rem; margin-bottom: .8rem; flex-wrap: wrap; }
+    .opt-id { font-size: .7rem; font-weight: 400; letter-spacing: .2em; color: var(--ui-accent); }
+    .opt-name { font-size: .98rem; font-weight: 400; letter-spacing: .02em; }
+    .opt-spec { font-size: .74rem; color: var(--ui-muted); margin-left: auto; letter-spacing: .04em; }
+
+    /* the 2.39:1 frame */
+    .frame {
+      container-type: size;
+      position: relative; width: 100%; aspect-ratio: 2.39 / 1;
+      background: #000; overflow: hidden;
+      display: grid; place-items: center;
+      border: 1px solid var(--ui-line);
+    }
+    .guides .frame::after {
+      content: ''; position: absolute; inset: 10%;
+      border: 1px dashed rgba(201,185,138,.22); pointer-events: none;
+    }
+    /* optional grain — off by default; real grain belongs in Resolve */
+    .frame .grain {
+      position: absolute; inset: -50%; pointer-events: none; opacity: 0;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='120' height='120' filter='url(%23n)' opacity='.5'/></svg>");
+      mix-blend-mode: overlay;
+    }
+    .grainy .frame .grain { opacity: .09; animation: gr .5s steps(1) infinite; }
+    @keyframes gr { 0%{transform:translate(0,0)} 25%{transform:translate(-2%,1%)} 50%{transform:translate(1%,-2%)} 75%{transform:translate(2%,2%)} }
+
+    .opt-foot { display: flex; gap: .7rem; align-items: center; margin-top: .8rem; flex-wrap: wrap; }
+    .opt-note { font-size: .8rem; color: var(--ui-muted); line-height: 1.55; max-width: 66ch; margin-top: .7rem; }
+    .opt-note b { color: var(--ui-text); font-weight: 400; }
+
+    /* ─── THE TITLE ─── */
+    /* One deterministic engine drives these: JS writes --o (opacity) and
+       --bm (bloom multiplier) per letter at a given time t. No CSS animation,
+       so the browser preview and the frame-accurate render agree exactly. */
+    .title {
+      --lit: #eef1f2;          /* per-option base colour */
+      --tr: .4em;              /* tracking */
+      --sz: 9cqh;              /* size as % of frame height (container units) */
+      font-size: var(--sz);
+      letter-spacing: var(--tr);
+      white-space: nowrap; line-height: 1;
+      display: flex;
+      color: color-mix(in srgb, var(--lit), #efdcaa calc(var(--warm) * 1%));
+      will-change: opacity;
+    }
+    .title .ch {
+      opacity: var(--o, 0);
+      --bm: 1;
+      text-shadow:
+        0 0 .045em rgba(255,253,246, calc(.50 * var(--bm))),
+        0 0 .16em  rgba(250,248,238, calc(.26 * var(--bm))),
+        0 0 .52em  rgba(246,242,228, calc(.11 * var(--bm))),
+        0 0 1.5em  rgba(242,236,214, calc(.045 * var(--bm)));
+    }
+    .title .ch:last-child { margin-right: calc(-1 * var(--tr)); }
+
+    .lower { align-self: end; margin-bottom: 11%; }
+    .upper { align-self: start; margin-top: 12%; }
+
+    /* #sheet — compact comparison grid; #t=<seconds> freezes the instant */
+    body.sheet { padding: 2.2rem 2rem 3rem; }
+    body.sheet .lede, body.sheet .bar, body.sheet .opt-note, body.sheet .opt-foot { display: none; }
+    body.sheet #opts { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem 1.6rem; }
+    body.sheet .opt { margin-bottom: 0; }
+    body.sheet .opt-head { margin-bottom: .5rem; }
+    body.sheet .opt-spec { font-size: .68rem; }
+    .stamp { font-size: .72rem; color: var(--ui-muted); letter-spacing: .12em;
+             text-transform: uppercase; margin-bottom: 1.6rem; display: none; }
+    body.sheet .stamp { display: block; }
+
+    @media (max-width: 700px) {
+      body { padding: 2.2rem 1.1rem 4rem; }
+      .opt-spec { margin-left: 0; width: 100%; }
+      input[type=range] { width: 110px; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="eyebrow">Shift1 · Shuffle</div>
+  <h1>SHUFFLE — opening title, fluorescent ignition</h1>
+  <p class="lede">
+    Eight treatments on pure black in a <strong>2.39:1</strong> frame. Every version runs the same
+    physical model of an old magnetic-ballast tube: cathode pre-glow, partial strikes that light
+    <strong>sections of the word rather than the whole word dimly</strong>, irregular failures, a
+    long dead beat, then full ignition with overshoot, a held stable burn, and a hard electrical cut.
+    Timing is identical across options so you are comparing typography and light, not choreography.
+  </p>
+
+  <div class="bar">
+    <button class="primary" id="playAll">▶ Play all</button>
+    <div class="slider">
+      <span>Scrub</span>
+      <input type="range" id="scrub" min="0" max="3000" value="0" step="1">
+      <span class="tval" id="tval">0.00s</span>
+    </div>
+    <div class="slider">
+      <span>Warmth</span>
+      <input type="range" id="warm" min="0" max="100" value="0" step="1">
+      <span class="tval" id="wval">0%</span>
+    </div>
+    <button id="btnGuides" aria-pressed="false">Safe area</button>
+    <button id="btnGrain" aria-pressed="false">Grain</button>
+    <button id="btnHalf" aria-pressed="false">Half speed</button>
+  </div>
+
+  <div class="stamp" id="stamp"></div>
+  <div id="opts"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   FLUORESCENT IGNITION ENGINE
+   brightness(profile, t, letterIndex) -> 0 .. ~1.2
+   Pure function of time. Drives both preview and final render.
+   ═══════════════════════════════════════════════════════════════ */
+
+const WORD = 'SHUFFLE';           // 7 letters, indices 0-6
+const N = WORD.length;
+
+/* Per-letter fixed unevenness: a real tube never lights perfectly evenly.
+   Fixed (not random per play) so the look is reproducible frame to frame. */
+const UNEVEN = [0.985, 1.0, 0.975, 0.995, 0.965, 1.0, 0.98];
+
+/* A strike is {t0, t1, lvl, set, soft}. `set` is 'all' or an index list.
+   Hard edges on strikes (electrical); soft edges only on glow/ghost. */
+function makeProfile(kind) {
+  // shared spine: the long dead beat before the real catch is what sells it
+  const base = {
+    // cathode filaments warming — barely there, only the outer letters
+    glow:   { t0: 0.26, t1: 0.38, lvl: 0.07, set: [0, 6], soft: true },
+    strikes: [
+      { t0: 0.45, t1: 0.505, lvl: 0.58, set: [1, 2, 3] },
+      { t0: 0.63, t1: 0.672, lvl: 0.82, set: [0, 1, 4, 5, 6] },
+      { t0: 0.71, t1: 0.79,  lvl: 0.14, set: 'all', soft: true },
+      /* ── long dead beat 0.79 → 1.06 ── */
+      { t0: 1.06, t1: 1.128, lvl: 0.92, set: [0, 1, 2, 3, 5, 6] },
+      { t0: 1.205, t1: 1.238, lvl: 1.0, set: 'all' },
+      { t0: 1.252, t1: 1.30,  lvl: 0.30, set: 'all' },
+      { t0: 1.305, t1: 1.362, lvl: 0.86, set: 'all' }
+    ],
+    catch: 1.44,      // full ignition
+    cut: 2.42,        // hard electrical cut
+    end: 3.0
+  };
+
+  if (kind === 'restrained') {
+    // fewer attempts, shorter, more confident — maximum restraint
+    base.strikes = [
+      { t0: 0.46, t1: 0.50, lvl: 0.52, set: [1, 2, 3] },
+      { t0: 0.70, t1: 0.76, lvl: 0.13, set: 'all', soft: true },
+      { t0: 1.10, t1: 1.15, lvl: 0.88, set: [0, 1, 2, 3, 5, 6] }
+    ];
+    base.catch = 1.30;
+    base.cut = 2.30;
+    base.end = 2.85;
+  }
+  if (kind === 'stubborn') {
+    // the tube really does not want to light
+    base.strikes = base.strikes.concat([
+      { t0: 1.52, t1: 1.57, lvl: 0.42, set: [2, 3, 4] },
+      { t0: 1.60, t1: 1.655, lvl: 0.95, set: 'all' }
+    ]);
+    base.catch = 1.74;
+    base.cut = 2.74;
+    base.end = 3.3;
+  }
+  return base;
+}
+
+const PROFILES = {
+  restrained: makeProfile('restrained'),
+  standard:   makeProfile('standard'),
+  stubborn:   makeProfile('stubborn')
+};
+
+function inSet(set, i) { return set === 'all' || set.indexOf(i) !== -1; }
+
+/* soft edge ramp so faint glows do not pop */
+function edge(t, t0, t1, soft) {
+  if (t < t0 || t >= t1) return 0;
+  if (!soft) return 1;
+  const r = Math.min(0.035, (t1 - t0) / 3);
+  if (t < t0 + r) return (t - t0) / r;
+  if (t > t1 - r) return (t1 - t) / r;
+  return 1;
+}
+
+function brightness(p, t, i) {
+  if (t < 0 || t >= p.end) return 0;
+
+  // hard cut, with a single-frame phosphor tail so it reads analogue not digital
+  if (t >= p.cut) {
+    const tail = 1 / 24;
+    if (t < p.cut + tail) return 0.10 * (1 - (t - p.cut) / tail) * UNEVEN[i];
+    return 0;
+  }
+
+  // stable burn after full ignition, with overshoot on the strike
+  if (t >= p.catch) {
+    const dt = t - p.catch;
+    let b;
+    if (dt < 0.03) b = 1.0 + 0.18 * (dt / 0.03);                    // rise into overshoot
+    else if (dt < 0.14) b = 1.18 - 0.18 * ((dt - 0.03) / 0.11);      // settle
+    else b = 1.0;
+    // ~100Hz mains ripple, subliminal. Aliases at 24fps exactly as real footage does.
+    b *= 1 + 0.011 * Math.sin(2 * Math.PI * 100 * t);
+    return b * UNEVEN[i];
+  }
+
+  // pre-ignition: take the strongest event covering this letter
+  let lvl = 0;
+  const g = p.glow;
+  if (inSet(g.set, i)) lvl = Math.max(lvl, g.lvl * edge(t, g.t0, g.t1, g.soft));
+  for (let k = 0; k < p.strikes.length; k++) {
+    const s = p.strikes[k];
+    if (inSet(s.set, i)) lvl = Math.max(lvl, s.lvl * edge(t, s.t0, s.t1, s.soft));
+  }
+  return lvl * UNEVEN[i];
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   OPTIONS
+   ═══════════════════════════════════════════════════════════════ */
+const OPTS = [
+  { id: 1, name: 'Clinical', profile: 'restrained',
+    font: "'Inter', sans-serif", weight: 300, size: '12cqh', track: '.5em',
+    lit: '#eef1f2', bloom: 0.7, pos: 'center',
+    spec: 'Inter 300 · tracking .50em · coldest',
+    note: 'Maximum restraint: light weight, very wide tracking, small in frame. Reads as a <b>label</b> ' +
+          'rather than a title — clinical, institutional, no opinion. Lowest bloom of the eight. Fewest ignition attempts.' },
+
+  { id: 2, name: 'Institutional', profile: 'standard',
+    font: "'Libre Franklin', sans-serif", weight: 600, size: '15cqh', track: '.17em',
+    lit: '#f4f0e2', bloom: 1.0, pos: 'center',
+    spec: 'Libre Franklin 600 · tracking .17em · warm-white',
+    note: 'Franklin Gothic lineage — the face of American municipal signage and case files. ' +
+          'Heavier and warmer: the <b>dirty yellow</b> reads as an aged tube rather than a clean one.' },
+
+  { id: 3, name: 'Freight', profile: 'stubborn',
+    font: "'Barlow Condensed', sans-serif", weight: 500, size: '22cqh', track: '.05em',
+    lit: '#e9eef0', bloom: 0.9, pos: 'center',
+    spec: 'Barlow Condensed 500 · tracking .05em · cold',
+    note: 'Condensed and tall, close to stencilled industrial signage — the elevator itself. ' +
+          'Given the <b>stubborn</b> ignition: the most attempts, the longest fight before it catches.' },
+
+  { id: 4, name: 'Dossier', profile: 'restrained',
+    font: "'IBM Plex Mono', monospace", weight: 400, size: '11.5cqh', track: '.36em',
+    lit: '#e8eef0', bloom: 0.55, pos: 'center',
+    spec: 'IBM Plex Mono 400 · tracking .36em · coldest, least bloom',
+    note: 'Monospace reads as <b>record, report, evidence</b> — it will sit naturally against the ' +
+          '"based on a true story" card you are adding later. Almost no bloom; the coldest white here.' },
+
+  { id: 5, name: 'Literary', profile: 'standard',
+    font: "'EB Garamond', serif", weight: 500, size: '17cqh', track: '.3em',
+    lit: '#f3ecdc', bloom: 1.05, pos: 'center',
+    spec: 'EB Garamond 500 · tracking .30em · warmest',
+    note: 'The prestige-drama register. Serifs catch bloom differently from a grotesque — the thin ' +
+          'strokes ignite first and the stems lag, which gives the flicker a <b>softer, older</b> quality.' },
+
+  { id: 6, name: 'Tube', profile: 'stubborn',
+    font: "'Inter', sans-serif", weight: 200, size: '11cqh', track: '1.85em',
+    lit: '#f0f0ea', bloom: 1.25, pos: 'center',
+    spec: 'Inter 200 · tracking 1.85em · widest, most bloom',
+    note: 'Tracked out until the word spans the frame like <b>the tube itself</b>. Thinnest weight, ' +
+          'highest bloom — the letters read as filament rather than type. The most stylised option.' },
+
+  { id: 7, name: 'Weight', profile: 'standard',
+    font: "'Archivo', sans-serif", weight: 600, size: '19cqh', track: '.03em',
+    lit: '#f2efe6', bloom: 0.85, pos: 'center',
+    spec: 'Archivo 600 · tracking .03em · faint warmth',
+    note: 'Large, tight and heavy — the only option with real <b>mass</b>. Fills the frame and states ' +
+          'the title without apology. Faintest yellow trace, restrained bloom so the weight does the work.' },
+
+  { id: 8, name: 'Low and small', profile: 'restrained',
+    font: "'Libre Franklin', sans-serif", weight: 300, size: '9.5cqh', track: '.44em',
+    lit: '#eceff0', bloom: 0.6, pos: 'lower',
+    spec: 'Libre Franklin 300 · tracking .44em · sits low in frame',
+    note: 'Small and placed <b>below centre</b>, leaving the top of the frame empty and black. ' +
+          'The most severe composition here — it makes the darkness the subject and the title an afterthought.' }
+];
+
+/* ═══════════════════════════════════════════════════════════════
+   BUILD + DRIVE
+   ═══════════════════════════════════════════════════════════════ */
+const host = document.getElementById('opts');
+const views = [];   // {o, chars[], playing, t0}
+
+OPTS.forEach(function (o) {
+  const el = document.createElement('div');
+  el.className = 'opt';
+  el.innerHTML =
+    '<div class="opt-head">' +
+      '<span class="opt-id">OPTION ' + o.id + '</span>' +
+      '<span class="opt-name">' + o.name + '</span>' +
+      '<span class="opt-spec">' + o.spec + '</span>' +
+    '</div>' +
+    '<div class="frame"><div class="grain"></div></div>' +
+    '<div class="opt-foot">' +
+      '<button class="replay">↻ Replay</button>' +
+      '<span class="opt-spec" style="margin-left:0">' + PROFILES[o.profile].end.toFixed(2) + 's · ' +
+        o.profile + ' ignition</span>' +
+    '</div>' +
+    '<div class="opt-note">' + o.note + '</div>';
+
+  const title = document.createElement('div');
+  title.className = 'title ' + (o.pos === 'lower' ? 'lower' : o.pos === 'upper' ? 'upper' : '');
+  title.style.fontFamily = o.font;
+  title.style.fontWeight = o.weight;
+  title.style.setProperty('--sz', o.size);
+  title.style.setProperty('--tr', o.track);
+  title.style.setProperty('--lit', o.lit);
+
+  const chars = [];
+  for (let i = 0; i < N; i++) {
+    const s = document.createElement('span');
+    s.className = 'ch';
+    s.textContent = WORD[i];
+    title.appendChild(s);
+    chars.push(s);
+  }
+  el.querySelector('.frame').appendChild(title);
+  host.appendChild(el);
+
+  const view = { o: o, chars: chars, playing: false, t0: 0 };
+  views.push(view);
+  el.querySelector('.replay').addEventListener('click', function () { play(view); });
+});
+
+function paint(v, t) {
+  const p = PROFILES[v.o.profile];
+  for (let i = 0; i < N; i++) {
+    const b = brightness(p, t, i);
+    const op = Math.min(1, b);
+    // overshoot above 1 becomes extra bloom rather than impossible opacity
+    const bm = (b > 1 ? 1 + (b - 1) * 2.6 : b) * v.o.bloom;
+    const st = v.chars[i].style;
+    st.setProperty('--o', op.toFixed(4));
+    st.setProperty('--bm', Math.max(0, bm).toFixed(4));
+  }
+}
+
+let half = false;
+function play(v) {
+  v.playing = true;
+  v.t0 = performance.now();
+}
+function playAll() { views.forEach(play); }
+
+let scrubbing = false;
+const scrub = document.getElementById('scrub');
+const tval = document.getElementById('tval');
+
+function frame(now) {
+  if (!scrubbing) {
+    let anyPlaying = false;
+    views.forEach(function (v) {
+      if (!v.playing) return;
+      const p = PROFILES[v.o.profile];
+      let t = (now - v.t0) / 1000;
+      if (half) t /= 2;
+      if (t >= p.end) { v.playing = false; paint(v, p.end); return; }
+      anyPlaying = true;
+      paint(v, t);
+    });
+    if (anyPlaying) {
+      // reflect the longest-running clock on the scrubber
+      const lead = views.filter(function (v) { return v.playing; })[0];
+      if (lead) {
+        let t = (now - lead.t0) / 1000; if (half) t /= 2;
+        scrub.value = Math.round(Math.min(3000, t * 1000));
+        tval.textContent = t.toFixed(2) + 's';
+      }
+    }
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+
+/* scrub drives every option to the same instant — the real comparison tool */
+scrub.addEventListener('input', function () {
+  scrubbing = true;
+  views.forEach(function (v) { v.playing = false; });
+  const t = +this.value / 1000;
+  tval.textContent = t.toFixed(2) + 's';
+  views.forEach(function (v) { paint(v, t); });
+});
+scrub.addEventListener('change', function () { scrubbing = false; });
+
+/* controls */
+document.getElementById('playAll').addEventListener('click', playAll);
+function toggle(id, fn) {
+  const b = document.getElementById(id);
+  b.addEventListener('click', function () {
+    const on = this.getAttribute('aria-pressed') !== 'true';
+    this.setAttribute('aria-pressed', on ? 'true' : 'false');
+    fn(on);
+  });
+}
+toggle('btnGuides', function (on) { document.body.classList.toggle('guides', on); });
+toggle('btnGrain',  function (on) { document.body.classList.toggle('grainy', on); });
+toggle('btnHalf',   function (on) { half = on; });
+
+const warm = document.getElementById('warm'), wval = document.getElementById('wval');
+warm.addEventListener('input', function () {
+  document.documentElement.style.setProperty('--warm', this.value);
+  wval.textContent = this.value + '%';
+});
+
+/* start on black, then play once fonts are ready */
+views.forEach(function (v) { paint(v, 0); });
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(function () {
+    views.forEach(function (v) { paint(v, 0); });
+    applyHash();
+    document.body.dataset.fonts = 'ready';
+  });
+}
+
+/* ── URL hash: #sheet for the compact grid, #t=1.9 to freeze an instant ── */
+function applyHash() {
+  const h = location.hash.slice(1);
+  if (!h) return;
+  const q = {};
+  h.split('&').forEach(function (kv) { const a = kv.split('='); q[a[0]] = a[1] === undefined ? '1' : a[1]; });
+  if (q.sheet) document.body.classList.add('sheet');
+  if (q.guides) document.body.classList.add('guides');
+  if (q.warm) { document.documentElement.style.setProperty('--warm', q.warm); }
+  if (q.t !== undefined) {
+    const t = parseFloat(q.t);
+    views.forEach(function (v) { v.playing = false; paint(v, t); });
+    const st = document.getElementById('stamp');
+    if (st) st.textContent = 'Frozen at t = ' + t.toFixed(2) + 's · all eight at the same instant';
+  }
+}
+applyHash();
+window.addEventListener('hashchange', applyHash);
+
+/* ── hook for the frame-accurate headless renderer (Task 2) ── */
+window.SHUFFLE = {
+  word: WORD, options: OPTS, profiles: PROFILES, brightness: brightness,
+  setTime: function (optId, t) {
+    const v = views.filter(function (x) { return x.o.id === optId; })[0];
+    if (!v) return false;
+    v.playing = false; paint(v, t); return true;
+  },
+  setTimeAll: function (t) { views.forEach(function (v) { v.playing = false; paint(v, t); }); }
+};
+</script>
+</body>
+</html>
