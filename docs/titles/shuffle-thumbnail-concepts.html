@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>SHUFFLE — Thumbnail Concepts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--ui:#d8d6d2;--mut:#77746f;--acc:#c9b98a;--line:rgba(255,255,255,.1)}
+  body{background:#08080a;color:var(--ui);font-family:'Inter',system-ui,sans-serif;
+       font-weight:300;-webkit-font-smoothing:antialiased;padding:3rem 1.8rem 6rem}
+  .wrap{max-width:1280px;margin:0 auto}
+  .eyebrow{font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;color:var(--mut);margin-bottom:.9rem}
+  h1{font-weight:400;font-size:clamp(1.5rem,3.2vw,2rem);letter-spacing:.01em;margin-bottom:.9rem}
+  .lede{font-size:.9rem;color:var(--mut);max-width:78ch;margin-bottom:.9rem}
+  .lede b{color:var(--ui);font-weight:400}
+  .caveat{font-size:.83rem;color:var(--mut);max-width:78ch;border-left:2px solid rgba(201,185,138,.4);
+          padding:.6rem 0 .6rem 1rem;margin-bottom:2rem;line-height:1.6}
+  .caveat b{color:var(--acc);font-weight:400}
+
+  .bar{position:sticky;top:0;z-index:20;background:rgba(8,8,10,.94);backdrop-filter:blur(6px);
+       border:1px solid var(--line);border-radius:4px;padding:.85rem 1rem;margin-bottom:2.6rem;
+       display:flex;gap:.55rem;align-items:center;flex-wrap:wrap}
+  button{font-family:inherit;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--mut);background:transparent;cursor:pointer;border:1px solid var(--line);
+    border-radius:3px;padding:.5rem .95rem;transition:all .15s}
+  button:hover{color:var(--ui);border-color:rgba(201,185,138,.6)}
+  button.on{color:#08080a;background:var(--acc);border-color:var(--acc)}
+  .barnote{font-size:.72rem;color:var(--mut);margin-left:auto}
+
+  .concept{margin-bottom:3.6rem}
+  .chead{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.9rem;flex-wrap:wrap}
+  .cnum{font-size:.68rem;letter-spacing:.2em;color:var(--acc)}
+  .cname{font-family:'Inter',sans-serif;font-weight:400;font-size:1.05rem;letter-spacing:.06em}
+  .ctag{font-size:.74rem;color:var(--mut);margin-left:auto}
+
+  .row{display:flex;gap:1.4rem;align-items:flex-start}
+  .big{flex:1;min-width:0}
+  .thumbs{width:236px;flex:none}
+  .plate{position:relative;width:100%;aspect-ratio:16/9;background:#000;
+         border:1px solid var(--line);overflow:hidden}
+  .plate svg{display:block;width:100%;height:100%}
+  .guides .plate::after{content:'';position:absolute;inset:0;pointer-events:none;
+    background:
+      linear-gradient(to right,transparent 33.33%,rgba(201,185,138,.22) 33.33%,rgba(201,185,138,.22) calc(33.33% + 1px),transparent calc(33.33% + 1px)),
+      linear-gradient(to right,transparent 66.66%,rgba(201,185,138,.22) 66.66%,rgba(201,185,138,.22) calc(66.66% + 1px),transparent calc(66.66% + 1px)),
+      linear-gradient(to bottom,transparent 33.33%,rgba(201,185,138,.22) 33.33%,rgba(201,185,138,.22) calc(33.33% + 1px),transparent calc(33.33% + 1px)),
+      linear-gradient(to bottom,transparent 66.66%,rgba(201,185,138,.22) 66.66%,rgba(201,185,138,.22) calc(66.66% + 1px),transparent calc(66.66% + 1px))}
+  .squint .plate svg{filter:blur(7px) contrast(1.15)}
+  .squint .thumbs .plate svg{filter:blur(3px) contrast(1.15)}
+  .lift .plate svg{filter:brightness(2.6) contrast(.85)}
+  .squint.lift .plate svg{filter:blur(7px) brightness(2.6)}
+
+  .tlabel{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);
+          margin:.4rem 0 .8rem}
+  .note{font-size:.82rem;color:var(--mut);line-height:1.6;margin-top:.9rem;max-width:76ch}
+  .note b{color:var(--ui);font-weight:400}
+  .risk{color:#d98b7a}
+  @media(max-width:900px){.row{flex-direction:column}.thumbs{width:100%;max-width:236px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="eyebrow">Shift1 · Shuffle</div>
+<h1>Cover / thumbnail — composition studies</h1>
+<p class="lede">
+  Four 16:9 concepts as <b>value and framing studies</b>: where the light falls, how much of the frame
+  is black, how big the figure reads, where the eye lands. No typography, no creature, no blood.
+</p>
+<div class="caveat">
+  <b>These are not photographs and are not trying to be.</b> They are blocking diagrams — the thing a
+  director and DP compare before committing. Use them to choose a composition, then shoot it or hand
+  the chosen one to a photoreal pass as a precise brief. Judging a fake-photoreal render here would
+  tell you nothing true about the final image.
+</div>
+
+<div class="bar">
+  <button id="bSquint">Squint test</button>
+  <button id="bGuides">Thirds</button>
+  <button id="bLift">Lift shadows</button>
+  <span class="barnote">Squint = blur. If the composition still reads blurred, the silhouette is strong enough for a gallery grid.</span>
+</div>
+
+<div id="host"></div>
+</div>
+
+<script>
+/* Shared defs: one weak dirty-yellow practical, heavy falloff, fine grain.
+   Palette is deliberately narrow — nothing brighter than a dim tungsten. */
+const DEFS = `
+<defs>
+  <radialGradient id="pool" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#c9a85c" stop-opacity="0.55"/>
+    <stop offset="28%"  stop-color="#8a6f36" stop-opacity="0.26"/>
+    <stop offset="58%"  stop-color="#4a3b1e" stop-opacity="0.10"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="poolTight" cx="50%" cy="50%" r="50%">
+    <stop offset="0%"   stop-color="#d8b665" stop-opacity="0.72"/>
+    <stop offset="20%"  stop-color="#9a7c3e" stop-opacity="0.30"/>
+    <stop offset="55%"  stop-color="#3a2e18" stop-opacity="0.09"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="floorFall" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"   stop-color="#6b5628" stop-opacity="0.20"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="corridor" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0%"   stop-color="#7a6330" stop-opacity="0.30"/>
+    <stop offset="70%"  stop-color="#3a2f16" stop-opacity="0.13"/>
+    <stop offset="100%" stop-color="#000000" stop-opacity="0.02"/>
+  </linearGradient>
+  <radialGradient id="vig" cx="50%" cy="50%" r="72%">
+    <stop offset="55%"  stop-color="#000" stop-opacity="0"/>
+    <stop offset="100%" stop-color="#000" stop-opacity="0.85"/>
+  </radialGradient>
+  <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3"/>
+    <feColorMatrix type="saturate" values="0"/></filter>
+  <filter id="soft"><feGaussianBlur stdDeviation="10"/></filter>
+  <filter id="softer"><feGaussianBlur stdDeviation="22"/></filter>
+  <filter id="glowY"><feGaussianBlur stdDeviation="9" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>`;
+
+/* a man seen from behind — mass, not detail */
+const figureBack = (x, y, h, fill='#000') => {
+  const w = h * 0.34;
+  return `<g transform="translate(${x},${y}) scale(${h/200})" fill="${fill}">
+    <ellipse cx="0" cy="-176" rx="19" ry="22"/>
+    <path d="M -13,-158 C -30,-150 -40,-132 -42,-108 L -46,-44 L -34,-42 L -30,-96
+             L -28,-96 L -30,-6 L -12,-4 L -6,-70 L 6,-70 L 12,-4 L 30,-6 L 28,-96
+             L 30,-96 L 34,-42 L 46,-44 L 42,-108 C 40,-132 30,-150 13,-158 Z"/>
+  </g>`;
+};
+const grain = (o=0.055) => `<rect width="1600" height="900" filter="url(#grain)" opacity="${o}" style="mix-blend-mode:overlay"/>`;
+const vig   = () => `<rect width="1600" height="900" fill="url(#vig)"/>`;
+
+const CONCEPTS = [
+{
+  n:1, name:'THE DESCENT', tag:'wide · symmetrical · maximum negative space',
+  note:`Symmetry does the work: the car is drawn dead-centre so the box reads as architecture and
+    <b>Shay reads as small</b> — he is 19% of frame height, the cart bulkier than he is. The light
+    falls <b>on</b> them: lit tops, black fronts, and both standing inside the floor pool rather than
+    beside it. <b>At thumbnail size the eye lands on the lit floor first, then finds two dark shapes
+    standing in it.</b> <span class="risk">Risk:</span> the most information of the four, so the most
+    likely to mush in a dense grid — check the squint test.`,
+  svg:`
+  <rect width="1600" height="900" fill="#020202"/>
+  <path d="M 0,40 L 330,140 L 1270,140 L 1600,40 Z" fill="#010101"/>
+  <path d="M 0,40 L 330,140 L 330,800 L 0,890 Z" fill="#040403"/>
+  <path d="M 1600,40 L 1270,140 L 1270,800 L 1600,890 Z" fill="#040403"/>
+  <rect x="330" y="140" width="940" height="660" fill="#060505"/>
+  ${Array.from({length:9},(_,i)=>{const x=352+i*104;const d=Math.abs(x-800)/470;
+    return `<rect x="${x}" y="150" width="3" height="640" fill="#171410" opacity="${(0.5*(1-d)).toFixed(2)}"/>`;}).join('')}
+  <rect x="330" y="742" width="940" height="58" fill="#0a0806"/>
+  <!-- floor pool, centred under the fixture; the figures stand IN it -->
+  <ellipse cx="800" cy="788" rx="466" ry="118" fill="url(#pool)" opacity="0.85"/>
+  <!-- the practical -->
+  <ellipse cx="800" cy="188" rx="176" ry="42" fill="url(#poolTight)" opacity="0.30"/>
+  <rect x="748" y="181" width="104" height="9" rx="2" fill="#c9a85c" opacity="0.72"/>
+  <!-- cart: top face catches the light, front face is black -->
+  <g>
+    <path d="M 884,622 L 1150,622 L 1136,606 L 898,606 Z" fill="#6d5c34" opacity="0.46"/>
+    <rect x="884" y="622" width="266" height="142" fill="#0b0a09"/>
+    <rect x="884" y="622" width="266" height="5" fill="#8a7342" opacity="0.30"/>
+    <rect x="884" y="690" width="266" height="2" fill="#000" opacity="0.6"/>
+    <circle cx="916" cy="778" r="14" fill="#000"/><circle cx="1118" cy="778" r="14" fill="#000"/>
+  </g>
+  <!-- Shay, from behind -->
+  ${figureBack(736, 776, 172)}
+  <path d="M 723,606 C 729,597 743,597 749,606 L 747,613 C 741,606 731,606 725,613 Z"
+        fill="#c9a85c" opacity="0.26"/>
+  <path d="M 714,640 C 722,631 750,631 758,640 L 756,648 C 748,640 724,640 716,648 Z"
+        fill="#c9a85c" opacity="0.13"/>
+  ${vig()}${grain()}`
+},
+{
+  n:2, name:'THE CART', tag:'the mundane object as the subject',
+  note:`The cart is centred and lit like a portrait — <b>a waste cart given the gravity of a face</b>.
+    Its lid catches the practical, its front stays black, and Shay is reduced to a shoulder cropped by
+    the left edge so he reads as <b>arriving rather than present</b>. <b>The strongest thumbnail of the
+    four:</b> one lit object, one dark intrusion, nothing else to parse.
+    <span class="risk">Risk:</span> without the title it can read as merely a photograph of a bin.`,
+  svg:`
+  <rect width="1600" height="900" fill="#020202"/>
+  <rect x="0" y="110" width="1600" height="700" fill="#050504"/>
+  ${Array.from({length:7},(_,i)=>{const x=250+i*180;const d=Math.abs(x-812)/660;
+    return `<rect x="${x}" y="140" width="3" height="580" fill="#141210" opacity="${(0.45*(1-d)).toFixed(2)}"/>`;}).join('')}
+  <ellipse cx="812" cy="146" rx="132" ry="30" fill="url(#poolTight)" opacity="0.26"/>
+  <rect x="768" y="140" width="88" height="9" rx="2" fill="#c9a85c" opacity="0.66"/>
+  <ellipse cx="812" cy="706" rx="336" ry="104" fill="url(#pool)" opacity="0.9"/>
+  <!-- the cart -->
+  <g>
+    <path d="M 612,404 L 1016,404 L 992,380 L 636,380 Z" fill="#8a7342" opacity="0.50"/>
+    <path d="M 636,380 L 992,380 L 992,386 L 636,386 Z" fill="#c9a85c" opacity="0.28"/>
+    <rect x="612" y="404" width="404" height="278" fill="#0a0908"/>
+    <rect x="612" y="404" width="404" height="6" fill="#7d6a3e" opacity="0.34"/>
+    <rect x="612" y="486" width="404" height="3" fill="#000" opacity="0.7"/>
+    <rect x="612" y="404" width="10" height="278" fill="#1a1713" opacity="0.6"/>
+    <circle cx="662" cy="700" r="19" fill="#000"/><circle cx="966" cy="700" r="19" fill="#000"/>
+  </g>
+  <!-- Shay: shoulder and upper arm, cropped hard by the frame -->
+  <path d="M 0,352 C 60,340 126,368 158,414 C 186,454 196,516 198,586
+           L 202,900 L 0,900 Z" fill="#000"/>
+  <path d="M 150,410 C 172,446 186,506 190,580" stroke="#b8994f" stroke-width="3.5"
+        fill="none" opacity="0.16"/>
+  ${vig()}${grain()}`
+},
+{
+  n:3, name:'THE DOORS', tag:'vertical geometry · the dark is the threat',
+  note:`Shot from inside the car, so <b>the audience is already in the dangerous space</b> and the lit
+    corridor is what is being taken away. Two hard verticals narrow the frame to a slot; Shay and the
+    cart sit in it, small and backlit. <b>Reads at any size</b> — one bright vertical band on black is
+    the simplest shape of the four. <span class="risk">Risk:</span> the most "designed" of the four;
+    if the doors are too symmetrical it stops feeling like a grabbed frame.`,
+  svg:`
+  <rect width="1600" height="900" fill="#010101"/>
+  <!-- corridor: dim, and brighter at the floor than the ceiling -->
+  <rect x="636" y="70" width="330" height="794" fill="url(#corridor)" opacity="0.85"/>
+  <rect x="636" y="560" width="330" height="304" fill="#6b5628" opacity="0.10"/>
+  <rect x="636" y="70" width="330" height="200" fill="#000" opacity="0.45"/>
+  <!-- spill toward camera across the car floor -->
+  <path d="M 648,742 L 954,742 L 1042,864 L 560,864 Z" fill="#7a6330" opacity="0.09"/>
+  <!-- out in the corridor: pure silhouettes -->
+  <g>
+    <rect x="806" y="500" width="140" height="122" fill="#000"/>
+    <circle cx="826" cy="632" r="9" fill="#000"/><circle cx="926" cy="632" r="9" fill="#000"/>
+  </g>
+  ${figureBack(726, 626, 150, '#000')}
+  <!-- the doors -->
+  <rect x="0" y="0" width="638" height="900" fill="#030303"/>
+  <rect x="962" y="0" width="638" height="900" fill="#030303"/>
+  ${Array.from({length:4},(_,i)=>`<rect x="${140+i*126}" y="0" width="2" height="900" fill="#0b0a09"/>`).join('')}
+  ${Array.from({length:4},(_,i)=>`<rect x="${1010+i*126}" y="0" width="2" height="900" fill="#0b0a09"/>`).join('')}
+  <!-- leading edges pick up the corridor -->
+  <rect x="626" y="0" width="12" height="900" fill="#0f0d0a"/>
+  <rect x="962" y="0" width="12" height="900" fill="#0f0d0a"/>
+  <rect x="632" y="0" width="5" height="900" fill="#c9a85c" opacity="0.30"/>
+  <rect x="963" y="0" width="5" height="900" fill="#c9a85c" opacity="0.30"/>
+  ${vig()}${grain(0.05)}`
+},
+{
+  n:4, name:'THE YELLOW', tag:'macro · scientific · withholds everything',
+  note:`Almost the whole frame is black. One small unnatural yellow vessel holds the only light, shot
+    macro so the lab is nothing but soft dark. Shay is a <b>vague defocused mass</b> far behind —
+    present, unreadable, not facing us. <b>Scientific, not supernatural:</b> the object is small,
+    contained and ordinary in shape, so nothing explains why it matters.
+    <span class="risk">Risk:</span> at gallery size this can read as an abstract dot — the most
+    mysterious and the least legible as "a horror film".`,
+  svg:`
+  <rect width="1600" height="900" fill="#010101"/>
+  <rect x="0" y="560" width="1600" height="340" fill="#040404"/>
+  <rect x="0" y="557" width="1600" height="2" fill="#0f0e0d" opacity="0.6"/>
+  <!-- Shay: far back, heavily defocused, deliberately hard to resolve -->
+  <g filter="url(#softer)" opacity="0.30">${figureBack(1146, 566, 250, '#0b0a0a')}</g>
+  <!-- the vessel -->
+  <g filter="url(#soft)" opacity="0.40">
+    <ellipse cx="592" cy="566" rx="96" ry="58" fill="#8a6f2e" opacity="0.26"/>
+  </g>
+  <g filter="url(#glowY)">
+    <path d="M 574,486 L 612,486 L 609,556 C 609,573 577,573 577,556 Z"
+          fill="#141210" opacity="0.92"/>
+    <path d="M 577,500 L 609,500 L 608,520 L 578,520 Z" fill="#b89a52" opacity="0.18"/>
+    <ellipse cx="593" cy="556" rx="15" ry="12" fill="#e2bf57"/>
+    <ellipse cx="593" cy="553" rx="7.5" ry="6" fill="#f5df94"/>
+  </g>
+  <!-- tight reflection on the bench, not a smudge -->
+  <ellipse cx="593" cy="582" rx="52" ry="7" fill="#c9a85c" opacity="0.13"/>
+  <ellipse cx="593" cy="590" rx="112" ry="12" fill="#6b5628" opacity="0.05"/>
+  ${vig()}${grain(0.045)}`
+}];
+
+const host = document.getElementById('host');
+CONCEPTS.forEach(c=>{
+  const el = document.createElement('div');
+  el.className = 'concept';
+  const svg = s => `<svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">${DEFS}${s}</svg>`;
+  el.innerHTML = `
+    <div class="chead">
+      <span class="cnum">CONCEPT ${c.n}</span>
+      <span class="cname">${c.name}</span>
+      <span class="ctag">${c.tag}</span>
+    </div>
+    <div class="row">
+      <div class="big"><div class="plate">${svg(c.svg)}</div>
+        <div class="tlabel">16:9 · full size</div></div>
+      <div class="thumbs">
+        <div class="plate">${svg(c.svg)}</div>
+        <div class="tlabel">236px · festival grid</div>
+        <div class="plate" style="width:132px">${svg(c.svg)}</div>
+        <div class="tlabel">132px · dense grid</div>
+      </div>
+    </div>
+    <div class="note">${c.note}</div>`;
+  host.appendChild(el);
+});
+
+function tog(id, cls){
+  const b=document.getElementById(id);
+  b.addEventListener('click',function(){
+    document.body.classList.toggle(cls);
+    this.classList.toggle('on', document.body.classList.contains(cls));
+  });
+}
+tog('bSquint','squint'); tog('bGuides','guides'); tog('bLift','lift');
+</script>
+</body>
+</html>
