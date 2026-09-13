@@ -312,20 +312,6 @@
       border-color: rgba(201, 185, 154, 0.15);
     }
 
-    .card-status {
-      position: absolute;
-      top: 1.5rem;
-      left: 2rem;
-      z-index: 5;
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-weight: 500;
-    }
-
-    .status-complete { color: rgba(123, 201, 123, 0.6); }
-    .status-progress { color: rgba(201, 185, 154, 0.6); }
-
     .card-category {
       font-size: 0.65rem;
       letter-spacing: 0.25em;
@@ -360,9 +346,6 @@
       position: absolute; left: 0; right: 0; height: 60px; top: calc(var(--imgh) - 60px); z-index: 2;
       background: linear-gradient(to bottom, transparent, rgba(11,11,11,0.4));
     }
-    .tile-ic .card-status { color: rgba(123,201,123,0.9); text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
-    /* dark green reads on the cream paper; the artwork leaves the badge clear space */
-    .tile-shuffle .card-status { color: #2f6b33; text-shadow: none; }
 
     /* Shuffle — poster artwork. The image band's ratio moves with the grid,
        measured from 1.37 at the narrowest column to 2.59 when it collapses to
@@ -373,7 +356,7 @@
        any width. */
     .tile-shuffle .tile-bg {
       position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      background: url('read/frames/shuffle-tile.png') center / cover no-repeat;
+      background: url('read/frames/shuffle-tile-v2.png') center / cover no-repeat;
     }
     /* Icarus — sci-fi frame, centred */
     .tile-ic .tile-bg {
@@ -551,7 +534,6 @@
         <div class="card">
           <a href="nyc-midnight.html" class="card-front tile-nyc">
             <div class="logo-area"><img src="read/frames/nyc-logo.webp" alt="NYC Midnight" /></div>
-            <div class="card-status status-complete">Complete</div>
             <div class="tile-panel">
               <div class="card-category">Competition</div>
               <div class="card-title">NYC Midnight</div>
@@ -578,7 +560,6 @@
           <a href="read/icarus.html" class="card-front tile-ic">
             <div class="tile-bg"></div>
             <div class="edge"></div>
-            <div class="card-status status-complete">Complete</div>
             <div class="tile-panel">
               <div class="card-category">Animated Pilot</div>
               <div class="card-title">Icarus</div>
@@ -602,7 +583,6 @@
           <a href="read/shuffle.html" class="card-front tile-shuffle">
             <div class="tile-bg"></div>
             <div class="edge"></div>
-            <div class="card-status status-complete">Complete</div>
             <div class="tile-panel">
               <div class="card-category">Feature Screenplay</div>
               <div class="card-title">Shuffle</div>
@@ -624,7 +604,6 @@
       <div class="card-container reveal" style="--i:3">
         <div class="card">
           <div class="card-front">
-            <div class="card-status status-progress">In Progress</div>
             <div class="card-category">Novel</div>
             <div class="card-title">Lion Street</div>
             <div class="card-subtitle">Biopic</div>
@@ -646,7 +625,6 @@
       <div class="card-container no-flip reveal" style="--i:4">
         <div class="card">
           <div class="card-front">
-            <div class="card-status status-progress">In Progress</div>
             <div class="card-category">Feature Screenplay</div>
             <div class="card-title">Bombshell</div>
             <div class="card-subtitle">Comedy</div>
@@ -658,7 +636,6 @@
       <div class="card-container no-flip reveal" style="--i:5">
         <div class="card">
           <div class="card-front">
-            <div class="card-status status-progress">In Progress</div>
             <div class="card-category">Feature Screenplay</div>
             <div class="card-title">God has No Family</div>
             <div class="card-subtitle">Thriller / Sci-Fi</div>
@@ -670,7 +647,6 @@
       <div class="card-container no-flip reveal" style="--i:6">
         <div class="card">
           <div class="card-front">
-            <div class="card-status status-progress">In Progress</div>
             <div class="card-category">Feature Screenplay</div>
             <div class="card-title">Nostradamus</div>
             <div class="card-subtitle">Romantic Comedy</div>
