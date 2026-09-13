@@ -103,10 +103,46 @@ const OPTS = [
     preserves your composition exactly.</b> <span class="risk">Risk:</span> it spends 57% of the
     square on empty paper, so at icon sizes the artwork is tiny.`},
 ];
+
+const STACKS = [
+ {id:'S1', f:'S1_word_hand_tag', name:'Title · hand · line', tag:'balanced — the order you asked for',
+  note:`The arrangement you described, with all three at comfortable weight. <b>The most poster-like
+    of the eight</b> and the easiest to read as a complete object rather than a crop.`},
+ {id:'S2', f:'S2_word_HAND_tag', name:'Title · HAND · line', tag:'hand dominant',
+  note:`Same order, hand enlarged and type pulled back. <b>Survives small sizes best of the stacks</b>
+    because the glove carries the image and the type is decoration rather than load-bearing.`},
+ {id:'S3', f:'S3_WORD_hand_tag', name:'TITLE · hand · line', tag:'type dominant',
+  note:`Same order, type enlarged. Reads as a title card with an illustration under it.
+    <span class="risk">Risk:</span> the hand gets small enough that the red puncture disappears.`},
+ {id:'S4', f:'S4_word_tag_hand', name:'Title · line · hand', tag:'tagline as a deck',
+  note:`Tagline promoted to sit directly under the title like a deck, hand below as the payoff.
+    <b>The most editorial</b> — closest to a book jacket.`},
+ {id:'S5', f:'S5_hand_word_tag', name:'Hand · title · line', tag:'image first',
+  note:`Hand leads. The eye hits the glove before it learns the name, which suits a festival grid
+    where the image has to stop the scroll before the title matters.`},
+ {id:'S6', f:'S6_tag_hand_word', name:'Line · hand · title', tag:'title as the punchline',
+  note:`Tagline first, title last. <b>Unconventional and the most cinematic</b> — it reads like an
+    end card. Weakest where the title needs to be found fast.`},
+ {id:'S7', f:'S7_hand_tag_word', name:'Hand · line · title', tag:'title anchors the base',
+  note:`Hand, then tagline, then title along the bottom. The heavy black wordmark as a foot gives the
+    composition a firm base and stops it floating.`},
+ {id:'S8', f:'S8_tag_word_hand', name:'Line · title · hand', tag:'inverted deck',
+  note:`Tagline above the title, hand beneath. The small blue line over the heavy black word is a
+    nice tension. <span class="risk">Risk:</span> a tagline above a title is easy to misread as a
+    studio credit.`},
+];
+
 const SIZES = [320,110,56,32];
 const LABS = {320:'320px · store', 110:'110px · profile', 56:'56px · list', 32:'32px · feed'};
 const host = document.getElementById('host');
-OPTS.forEach(o=>{
+function section(title, sub){
+  const h=document.createElement('div');
+  h.innerHTML=`<div style="margin:2.6rem 0 1.6rem;padding-top:1.4rem;border-top:1px solid rgba(201,185,138,.25)">
+    <div style="font-size:.68rem;letter-spacing:.2em;color:var(--acc);text-transform:uppercase">${title}</div>
+    <div style="font-size:.84rem;color:var(--mut);margin-top:.5rem;max-width:78ch;line-height:1.6">${sub}</div></div>`;
+  host.appendChild(h);
+}
+function render(o){
   const el=document.createElement('div'); el.className='opt';
   el.innerHTML = `<div class="ohead"><span class="oid">${o.id}</span>
       <span class="oname">${o.name}</span><span class="otag">${o.tag}</span></div>
@@ -115,7 +151,11 @@ OPTS.forEach(o=>{
        <div class="lab">${LABS[s]}</div></div>`).join('')}</div>
     <div class="note">${o.note}</div>`;
   host.appendChild(el);
-});
+}
+section('Crops', 'Straight cuts from the artwork — one element wins, the others are sacrificed.');
+OPTS.forEach(render);
+section('Stacked', 'All three elements kept and recomposed for the square: title, hand and tagline in every order, plus proportion variants of the arrangement you asked for. Composited onto paper from the file itself, so the grain runs continuously and there are no seams.');
+STACKS.forEach(render);
 document.getElementById('bCircle').addEventListener('click',function(){
   document.body.classList.toggle('sq');
   this.classList.toggle('on', !document.body.classList.contains('sq'));
