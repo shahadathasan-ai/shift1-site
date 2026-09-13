@@ -356,17 +356,24 @@
       background: var(--bg-card); border-top: 1px solid rgba(232,213,163,0.14);
       padding: 1.5rem 2rem 1.4rem; display: flex; flex-direction: column; justify-content: flex-end;
     }
-    .tile-shuffle .edge, .tile-ic .edge {
+    .tile-ic .edge {
       position: absolute; left: 0; right: 0; height: 60px; top: calc(var(--imgh) - 60px); z-index: 2;
       background: linear-gradient(to bottom, transparent, rgba(11,11,11,0.4));
     }
-    .tile-shuffle .card-status, .tile-ic .card-status { color: rgba(123,201,123,0.9); text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
+    .tile-ic .card-status { color: rgba(123,201,123,0.9); text-shadow: 0 1px 8px rgba(0,0,0,0.85); }
+    /* dark green reads on the cream paper; the artwork leaves the badge clear space */
+    .tile-shuffle .card-status { color: #2f6b33; text-shadow: none; }
 
-    /* Shuffle — plaza, framing B (light pole never clipped); natural for now (colour treatment TBD) */
+    /* Shuffle — poster artwork. The image band's ratio moves with the grid,
+       measured from 1.37 at the narrowest column to 2.59 when it collapses to
+       one. The asset is therefore cut at 2.60 with the artwork composed inside
+       its central 1.37 region, so `cover` always shows at least that region and
+       only ever crops paper. Paper is part of the image rather than a CSS fill,
+       so there is no tone mismatch at the edges. Measured: nothing clipped at
+       any width. */
     .tile-shuffle .tile-bg {
       position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      background: url('read/frames/plaza.jpg') no-repeat;
-      background-size: auto 118%; background-position: center 0%;
+      background: url('read/frames/shuffle-tile.png') center / cover no-repeat;
     }
     /* Icarus — sci-fi frame, centred */
     .tile-ic .tile-bg {
