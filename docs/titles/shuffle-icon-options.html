@@ -3,170 +3,178 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>SHUFFLE — Icon From Artwork</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<title>SHUFFLE — Tile Artwork</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-  :root{--ui:#d8d6d2;--mut:#77746f;--acc:#c9b98a;--line:rgba(255,255,255,.1)}
-  body{background:#0a0a0b;color:var(--ui);font-family:'Inter',system-ui,sans-serif;
+  :root{--ui:#d8d6d2;--mut:#77746f;--acc:#c9b98a;--line:rgba(255,255,255,.1);
+        --bg-card:#161616;--site-text:#e8e4de;--site-mut:#8a8580;--site-acc:#e8d5a3}
+  body{background:#0b0b0b;color:var(--ui);font-family:'Inter',system-ui,sans-serif;
        font-weight:300;-webkit-font-smoothing:antialiased;padding:3rem 1.8rem 6rem}
-  .wrap{max-width:1240px;margin:0 auto}
+  .wrap{max-width:1400px;margin:0 auto}
   .eyebrow{font-size:.66rem;letter-spacing:.34em;text-transform:uppercase;color:var(--mut);margin-bottom:.9rem}
   h1{font-weight:400;font-size:clamp(1.5rem,3.2vw,2rem);margin-bottom:.9rem}
-  .lede{font-size:.9rem;color:var(--mut);max-width:80ch;margin-bottom:1.8rem;line-height:1.65}
+  .lede{font-size:.9rem;color:var(--mut);max-width:84ch;margin-bottom:1.4rem;line-height:1.65}
   .lede b{color:var(--ui);font-weight:400}
-  .src{display:flex;gap:1.2rem;align-items:flex-start;padding:1rem;border:1px solid var(--line);
-       border-radius:4px;margin-bottom:2.4rem;background:#101012}
-  .src img{width:420px;height:auto;display:block;border:1px solid var(--line)}
-  .src div{font-size:.8rem;color:var(--mut);line-height:1.6}
-  .src b{color:var(--ui);font-weight:400}
+  .fact{display:flex;gap:2rem;flex-wrap:wrap;padding:1rem 1.2rem;border:1px solid var(--line);
+        border-radius:4px;background:#111;margin-bottom:2.4rem;font-size:.8rem;color:var(--mut)}
+  .fact b{color:var(--acc);font-weight:400}
 
-  .bar{position:sticky;top:0;z-index:20;background:rgba(10,10,11,.94);backdrop-filter:blur(6px);
-       border:1px solid var(--line);border-radius:4px;padding:.8rem 1rem;margin-bottom:2.4rem;
+  .sec{margin:3rem 0 1.6rem;padding-top:1.4rem;border-top:1px solid rgba(201,185,138,.25)}
+  .sec h2{font-size:.7rem;letter-spacing:.2em;color:var(--acc);text-transform:uppercase;font-weight:400}
+  .sec p{font-size:.84rem;color:var(--mut);margin-top:.5rem;max-width:84ch;line-height:1.6}
+  .sec p b{color:var(--ui);font-weight:400}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:2rem}
+  .opt{}
+  .ohead{display:flex;align-items:baseline;gap:.6rem;margin-bottom:.7rem}
+  .oid{font-size:.68rem;letter-spacing:.18em;color:var(--acc)}
+  .oname{font-size:.9rem}
+  .otag{font-size:.7rem;color:var(--mut);margin-left:auto}
+
+  /* ── replica of the live .tile-shuffle card ── */
+  .tile{width:100%;max-width:330px;height:400px;position:relative;background:var(--bg-card);
+        border:1px solid rgba(255,255,255,.06);overflow:hidden}
+  .tile .bg{position:absolute;left:0;right:0;top:0;height:62%;background-size:cover;
+            background-position:center;z-index:0}
+  .tile .edge{position:absolute;left:0;right:0;height:60px;top:calc(62% - 60px);z-index:2;
+              background:linear-gradient(to bottom,transparent,rgba(11,11,11,.4))}
+  .tile .status{position:absolute;top:1.1rem;right:1.2rem;z-index:5;font-size:.62rem;
+                letter-spacing:.14em;text-transform:uppercase;color:rgba(123,201,123,.9);
+                text-shadow:0 1px 8px rgba(0,0,0,.85)}
+  .tile .panel{position:absolute;left:0;right:0;top:62%;bottom:0;z-index:4;background:var(--bg-card);
+               border-top:1px solid rgba(232,213,163,.14);padding:1.3rem 1.6rem 1.2rem;
+               display:flex;flex-direction:column;justify-content:flex-end}
+  .tile .cat{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--site-acc);
+             margin-bottom:.45rem}
+  .tile .ttl{font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:1.5rem;
+             color:var(--site-text);line-height:1.1}
+  .tile .sub{font-size:.78rem;color:var(--site-mut);margin-top:.3rem}
+  .tlab{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-top:.5rem}
+
+  .sq{display:flex;gap:.9rem;align-items:flex-start;margin-top:1rem;flex-wrap:wrap}
+  .sq img{display:block;border:1px solid var(--line)}
+  .sq .cell{text-align:center}
+  .sq .cell div{font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);margin-top:.35rem}
+  .note{font-size:.78rem;color:var(--mut);line-height:1.55;margin-top:.8rem}
+  .note b{color:var(--ui);font-weight:400}
+  .risk{color:#d98b7a}
+  .bar{position:sticky;top:0;z-index:30;background:rgba(11,11,11,.95);backdrop-filter:blur(6px);
+       border:1px solid var(--line);border-radius:4px;padding:.8rem 1rem;margin-bottom:2rem;
        display:flex;gap:.55rem;align-items:center;flex-wrap:wrap}
   button{font-family:inherit;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;
     color:var(--mut);background:transparent;cursor:pointer;border:1px solid var(--line);
-    border-radius:3px;padding:.5rem .95rem;transition:all .15s}
+    border-radius:3px;padding:.5rem .95rem}
   button:hover{color:var(--ui);border-color:rgba(201,185,138,.6)}
-  button.on{color:#0a0a0b;background:var(--acc);border-color:var(--acc)}
+  button.on{color:#0b0b0b;background:var(--acc);border-color:var(--acc)}
   .barnote{font-size:.72rem;color:var(--mut);margin-left:auto}
-
-  .opt{margin-bottom:2.6rem;padding-bottom:2.2rem;border-bottom:1px solid rgba(255,255,255,.06)}
-  .ohead{display:flex;align-items:baseline;gap:.8rem;margin-bottom:1rem;flex-wrap:wrap}
-  .oid{font-size:.7rem;letter-spacing:.2em;color:var(--acc)}
-  .oname{font-size:1rem;font-weight:400}
-  .otag{font-size:.75rem;color:var(--mut);margin-left:auto}
-  .row{display:flex;gap:1.6rem;align-items:flex-start;flex-wrap:wrap}
-  .row img{display:block;background:#000}
-  .cell{text-align:center}
-  .cell .lab{font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-top:.45rem}
-  .note{font-size:.82rem;color:var(--mut);line-height:1.6;margin-top:1rem;max-width:78ch}
-  .note b{color:var(--ui);font-weight:400}
-  .risk{color:#d98b7a}
-  .circle img{border-radius:50%}
-  body.sq img{border-radius:0!important}
+  body.nosq .sq{display:none}
+  body.notile .tile,body.notile .tlab{display:none}
 </style>
 </head>
 <body>
 <div class="wrap">
 
 <div class="eyebrow">Shift1 · Shuffle</div>
-<h1>Square icon from the existing thumbnail</h1>
+<h1>Shuffle tile artwork — square, in situ</h1>
 <p class="lede">
-  Six ways to get a <b>1:1 icon</b> out of your 2.33:1 artwork. These are real crops and
-  recompositions of your actual file — not redrawn. Where elements are moved, they are composited
-  onto paper taken from the artwork itself using a <b>darken</b> blend, so there are no visible
-  rectangular seams and the grain stays continuous.
+  Everything square, no circle masks — that was a hangover from the Instagram avatar work and was
+  wrong here. Each option is shown <b>inside a replica of your live <code>.tile-shuffle</code> card</b>,
+  so you can see what the site actually does to it, plus the square master beneath.
+</p>
+<div class="fact">
+  <div><b>Your tile:</b> 400px tall, column min 330px</div>
+  <div><b>Image area:</b> top 62% — about <b>330 × 248</b>, landscape</div>
+  <div><b>Panel below already says:</b> Feature Screenplay · Shuffle · Horror</div>
+</div>
+<p class="lede">
+  That last point is the important one, and it is why the new <b>Glove + tagline</b> set leads: the
+  card already carries the title, so repeating it inside the image is redundant. It is also why the
+  tile preview matters more than the square — <b>the site crops your square to a landscape band</b>,
+  so anything near the top or bottom edge is cut.
 </p>
 
-<div class="src">
-  <img src="shuffle-icon/img/F_letterbox.png" alt="">
-  <div>
-    <b>Source:</b> Shuffle Thumbnail.png · 2688 × 1152 · 2.33:1<br>
-    A square icon has to lose <b>57% of the frame</b>, so something must go. The decision is
-    really: <b>keep the hand, keep the type, or rebuild the relationship between them.</b><br><br>
-    The red puncture sits at (1997, 632) in the original — it survives every crop below that
-    includes the glove, which matters, because it is the only narrative detail in the image.
-  </div>
-</div>
-
 <div class="bar">
-  <button id="bCircle">Circle mask</button>
-  <button id="bDark">Dark page</button>
-  <span class="barnote">Circle mask = how it looks as a profile avatar. The 32px column is the one that decides it.</span>
+  <button id="bSq" class="on">Square masters</button>
+  <button id="bTile" class="on">Tile preview</button>
+  <span class="barnote">The tile preview is the real test — it is your actual card geometry.</span>
 </div>
 
 <div id="host"></div>
 </div>
 
 <script>
-const OPTS = [
- {id:'A', f:'A_hand', name:'The hand', tag:'full glove · red dot centred',
-  note:`The whole gesture, red dot roughly on centre. <b>The most recognisable single image</b> and it
-    keeps the puncture. Crops the fingertips slightly at the top-left.`},
- {id:'B', f:'B_pinch', name:'The pinch', tag:'tighter · dot more prominent',
-  note:`Pushes in so the pinching fingers and the puncture dominate. <b>Best at the smallest sizes</b>
-    because there is less to resolve. Loses the wrist, so it reads as a gesture rather than a hand.`},
- {id:'C', f:'C_wordmark', name:'The wordmark', tag:'type only · full tagline',
-  note:`Title and tagline on paper, nothing else. Unambiguous about what the film is called.
-    <span class="risk">Risk:</span> it is a text block — at 32px the tagline is gone and it competes
-    with every other type-only icon in a grid.`},
- {id:'D', f:'D_stacked', name:'Stacked', tag:'type above · hand below',
-  note:`Recomposed for the square: title on top, hand beneath. <b>Closest in spirit to the original
-    poster</b> and keeps both elements. Everything gets smaller as a result — the busiest of the six.`},
- {id:'E', f:'E_hand_type', name:'Hand + type', tag:'hand leads · title anchors',
-  note:`Hand high in the frame, title on clean paper below it so the type never sits on the glove.
-    <b>The best compromise if you want both</b> — the hand still carries the image and the title is
-    legible down to about 56px.`},
- {id:'F', f:'F_letterbox', name:'Letterboxed', tag:'nothing lost · everything small',
-  note:`The full artwork, padded with paper taken from the file itself. <b>The only option that
-    preserves your composition exactly.</b> <span class="risk">Risk:</span> it spends 57% of the
-    square on empty paper, so at icon sizes the artwork is tiny.`},
+const GROUPS = [
+{title:'Glove + tagline — no title',
+ blurb:'What you asked for. The card already shows "Shuffle" underneath, so these carry only the image and the line. <b>This is the set I would choose from.</b>',
+ items:[
+  {id:'G1', f:'G1_glove_tag',  name:'Glove, line below', tag:'balanced',
+   note:`Glove high, tagline low. <b>Survives the tile crop best</b> of the pair-ups — the glove sits in the upper 62% where the image band actually falls.`},
+  {id:'G2', f:'G2_tag_glove',  name:'Line above, glove', tag:'line as a header',
+   note:`Tagline reads first. <span class="risk">Risk:</span> in the tile crop the line sits right at the top edge and can feel pinned to it.`},
+  {id:'G3', f:'G3_GLOVE_tag',  name:'Glove large, line small', tag:'image dominant',
+   note:`The glove nearly fills the square and the line is a quiet footnote. <b>Strongest at small sizes</b> and the closest in spirit to a film still.`},
+  {id:'G4', f:'G4_offset',     name:'Offset, line lower-left', tag:'asymmetric — poster echo',
+   note:`Glove right, line lower-left, echoing the original poster's balance. <b>The most designed</b> and the least like a crop.`},
+  {id:'G5', f:'G5_glove_only', name:'Glove only', tag:'no type at all',
+   note:`No text whatsoever. Given the card supplies the title and the category, <b>this may be all the image needs to do.</b> Purest and most confident.`},
+  {id:'G6', f:'G6_pinch_tag',  name:'Pinch, line below', tag:'tightest',
+   note:`Pushed in on the gesture and the puncture. <b>The red dot is most visible here</b> — at tile size it is the only version where it clearly registers.`},
+ ]},
+{title:'Crops — one element wins',
+ blurb:'Straight cuts from the poster. Kept for reference.',
+ items:[
+  {id:'A', f:'A_hand',      name:'The hand', tag:'full glove', note:`The whole gesture with the puncture near centre.`},
+  {id:'B', f:'B_pinch',     name:'The pinch', tag:'tighter', note:`Best of the crops at small sizes.`},
+  {id:'C', f:'C_wordmark',  name:'The wordmark', tag:'type only', note:`<span class="risk">Redundant here</span> — the card already shows the title.`},
+  {id:'F', f:'F_letterbox', name:'Letterboxed', tag:'nothing lost', note:`Full artwork padded with its own paper. In the tile crop it becomes a thin strip.`},
+ ]},
+{title:'Stacked — title, glove and tagline',
+ blurb:'All three elements in every order. Useful if you ever need a standalone square that carries the title itself — a poster thumbnail, a social card — but redundant on the site card.',
+ items:[
+  {id:'S1', f:'S1_word_hand_tag', name:'Title · glove · line', tag:'balanced', note:`The order you asked for.`},
+  {id:'S2', f:'S2_word_HAND_tag', name:'Title · GLOVE · line', tag:'glove dominant', note:`<b>Best of the stacks small</b> — the glove carries it.`},
+  {id:'S3', f:'S3_WORD_hand_tag', name:'TITLE · glove · line', tag:'type dominant', note:`The puncture disappears at this scale.`},
+  {id:'S4', f:'S4_word_tag_hand', name:'Title · line · glove', tag:'line as a deck', note:`Most editorial, like a book jacket.`},
+  {id:'S5', f:'S5_hand_word_tag', name:'Glove · title · line', tag:'image first', note:`Image stops the scroll before the name lands.`},
+  {id:'S6', f:'S6_tag_hand_word', name:'Line · glove · title', tag:'title last', note:`Reads like an end card.`},
+  {id:'S7', f:'S7_hand_tag_word', name:'Glove · line · title', tag:'title anchors', note:`The heavy wordmark gives it a firm base.`},
+  {id:'S8', f:'S8_tag_word_hand', name:'Line · title · glove', tag:'inverted deck', note:`<span class="risk">Risk:</span> a line above a title reads as a studio credit.`},
+ ]},
 ];
 
-const STACKS = [
- {id:'S1', f:'S1_word_hand_tag', name:'Title · hand · line', tag:'balanced — the order you asked for',
-  note:`The arrangement you described, with all three at comfortable weight. <b>The most poster-like
-    of the eight</b> and the easiest to read as a complete object rather than a crop.`},
- {id:'S2', f:'S2_word_HAND_tag', name:'Title · HAND · line', tag:'hand dominant',
-  note:`Same order, hand enlarged and type pulled back. <b>Survives small sizes best of the stacks</b>
-    because the glove carries the image and the type is decoration rather than load-bearing.`},
- {id:'S3', f:'S3_WORD_hand_tag', name:'TITLE · hand · line', tag:'type dominant',
-  note:`Same order, type enlarged. Reads as a title card with an illustration under it.
-    <span class="risk">Risk:</span> the hand gets small enough that the red puncture disappears.`},
- {id:'S4', f:'S4_word_tag_hand', name:'Title · line · hand', tag:'tagline as a deck',
-  note:`Tagline promoted to sit directly under the title like a deck, hand below as the payoff.
-    <b>The most editorial</b> — closest to a book jacket.`},
- {id:'S5', f:'S5_hand_word_tag', name:'Hand · title · line', tag:'image first',
-  note:`Hand leads. The eye hits the glove before it learns the name, which suits a festival grid
-    where the image has to stop the scroll before the title matters.`},
- {id:'S6', f:'S6_tag_hand_word', name:'Line · hand · title', tag:'title as the punchline',
-  note:`Tagline first, title last. <b>Unconventional and the most cinematic</b> — it reads like an
-    end card. Weakest where the title needs to be found fast.`},
- {id:'S7', f:'S7_hand_tag_word', name:'Hand · line · title', tag:'title anchors the base',
-  note:`Hand, then tagline, then title along the bottom. The heavy black wordmark as a foot gives the
-    composition a firm base and stops it floating.`},
- {id:'S8', f:'S8_tag_word_hand', name:'Line · title · hand', tag:'inverted deck',
-  note:`Tagline above the title, hand beneath. The small blue line over the heavy black word is a
-    nice tension. <span class="risk">Risk:</span> a tagline above a title is easy to misread as a
-    studio credit.`},
-];
-
-const SIZES = [320,110,56,32];
-const LABS = {320:'320px · store', 110:'110px · profile', 56:'56px · list', 32:'32px · feed'};
-const host = document.getElementById('host');
-function section(title, sub){
-  const h=document.createElement('div');
-  h.innerHTML=`<div style="margin:2.6rem 0 1.6rem;padding-top:1.4rem;border-top:1px solid rgba(201,185,138,.25)">
-    <div style="font-size:.68rem;letter-spacing:.2em;color:var(--acc);text-transform:uppercase">${title}</div>
-    <div style="font-size:.84rem;color:var(--mut);margin-top:.5rem;max-width:78ch;line-height:1.6">${sub}</div></div>`;
-  host.appendChild(h);
-}
-function render(o){
-  const el=document.createElement('div'); el.className='opt';
-  el.innerHTML = `<div class="ohead"><span class="oid">${o.id}</span>
-      <span class="oname">${o.name}</span><span class="otag">${o.tag}</span></div>
-    <div class="row circle">${SIZES.map(s=>
-      `<div class="cell"><img src="shuffle-icon/img/sizes/${o.f}_${s}.png" width="${s}" height="${s}">
-       <div class="lab">${LABS[s]}</div></div>`).join('')}</div>
-    <div class="note">${o.note}</div>`;
-  host.appendChild(el);
-}
-section('Crops', 'Straight cuts from the artwork — one element wins, the others are sacrificed.');
-OPTS.forEach(render);
-section('Stacked', 'All three elements kept and recomposed for the square: title, hand and tagline in every order, plus proportion variants of the arrangement you asked for. Composited onto paper from the file itself, so the grain runs continuously and there are no seams.');
-STACKS.forEach(render);
-document.getElementById('bCircle').addEventListener('click',function(){
-  document.body.classList.toggle('sq');
-  this.classList.toggle('on', !document.body.classList.contains('sq'));
+const P='shuffle-icon/img/';
+const host=document.getElementById('host');
+GROUPS.forEach(g=>{
+  const s=document.createElement('div'); s.className='sec';
+  s.innerHTML=`<h2>${g.title}</h2><p>${g.blurb}</p>`;
+  host.appendChild(s);
+  const grid=document.createElement('div'); grid.className='grid';
+  g.items.forEach(o=>{
+    const el=document.createElement('div'); el.className='opt';
+    el.innerHTML=`
+      <div class="ohead"><span class="oid">${o.id}</span><span class="oname">${o.name}</span>
+        <span class="otag">${o.tag}</span></div>
+      <div class="tile">
+        <div class="bg" style="background-image:url('${P}${o.f}.png')"></div>
+        <div class="edge"></div><div class="status">Complete</div>
+        <div class="panel"><div class="cat">Feature Screenplay</div>
+          <div class="ttl">Shuffle</div><div class="sub">Horror</div></div>
+      </div>
+      <div class="tlab">in your tile · image band is the top 62%</div>
+      <div class="sq">
+        <div class="cell"><img src="${P}sizes/${o.f}_200.png" width="200" height="200"><div>200px square</div></div>
+        <div class="cell"><img src="${P}sizes/${o.f}_120.png" width="120" height="120"><div>120px</div></div>
+      </div>
+      <div class="note">${o.note}</div>`;
+    grid.appendChild(el);
+  });
+  host.appendChild(grid);
 });
-document.getElementById('bCircle').classList.add('on');
-document.getElementById('bDark').addEventListener('click',function(){
-  const d=document.body.style.background==='rgb(255, 255, 255)';
-  document.body.style.background = d ? '#0a0a0b' : '#fff';
-  document.body.style.color = d ? '#d8d6d2' : '#222';
-  this.classList.toggle('on');
-});
+function tog(id,cls){const b=document.getElementById(id);
+  b.addEventListener('click',function(){document.body.classList.toggle(cls);
+    this.classList.toggle('on',!document.body.classList.contains(cls));});}
+tog('bSq','nosq'); tog('bTile','notile');
 </script>
 </body>
 </html>
