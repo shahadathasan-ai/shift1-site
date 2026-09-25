@@ -179,11 +179,23 @@
       border-bottom: 6px solid transparent;
     }
     .player-caption {
-      display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.4rem;
       margin-top: 1rem;
       font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
       color: var(--text-muted);
     }
+    /* Pushed to the right so it reads as an action, not another spec. Gives
+       anyone who wants to like or subscribe somewhere to go — an embedded play
+       counts as a view, but engagement mostly happens on YouTube itself. */
+    .yt-link {
+      margin-left: auto;
+      color: var(--accent); text-decoration: none;
+      border-bottom: 1px solid rgba(232, 213, 163, 0.3);
+      padding-bottom: 1px;
+      transition: border-color 0.3s ease;
+    }
+    .yt-link:hover { border-color: var(--accent); }
+    @media (max-width: 620px) { .yt-link { margin-left: 0; } }
 
     /* ─── NOTES ─── */
     /* 380px floor keeps this at two columns on desktop — four notes then sit as a
@@ -279,6 +291,8 @@
       <span>9 min 15 sec</span>
       <span>1920 &times; 1080</span>
       <span>Contains flashing images</span>
+      <a class="yt-link" href="https://www.youtube.com/watch?v=q3-elUKAhjM"
+         target="_blank" rel="noopener">Watch on YouTube &nearr;</a>
     </div>
   </section>
 
@@ -289,9 +303,13 @@
     <div class="section-label">Background</div>
     <h2 class="section-title">About this piece</h2>
     <p class="section-text">
-      This was made for a <strong>Higgsfield competition</strong>. It puts a short portion of
-      the story on screen rather than the whole thing, and it was also a way to test what the
-      AI tools can actually do.
+      Made for the <strong>Higgsfield Film Festival</strong>, using Higgsfield's tools
+      throughout. It puts a short portion of the story on screen rather than the whole thing,
+      and it was a way to see first-hand how this technology is going to change the way films
+      get made.
+    </p>
+    <p class="section-text">
+      We still plan to shoot this one for real, as a live-action film.
     </p>
   </section>
 
@@ -317,11 +335,9 @@
       </div>
 
       <div class="note">
-        <h3>It is still being made properly</h3>
+        <h3>The live-action version</h3>
         <p>
-          Shuffle is in development as a <strong>live-action short</strong>, with
-          <strong>Tony Lew</strong> as director of photography. That film is still the plan, and
-          this is not a replacement for it.
+          <strong>Tony Lew</strong> is attached as director of photography.
         </p>
         <p>
           What this version gave us was a way to see the story standing up — to watch it play
@@ -387,9 +403,8 @@
          Vimeo     { kind: 'vimeo',   id: '123456789' }
          Self-host { kind: 'file',    src: 'assets/shuffle.mp4' }
 
-       Left null until the link is confirmed — rather than ship a guessed URL,
-       the poster stays up and says so. */
-    const FILM = null;
+       youtube.com/watch?v=q3-elUKAhjM */
+    const FILM = { kind: 'youtube', id: 'q3-elUKAhjM' };
 
     const player = document.getElementById('player');
     const playBtn = document.getElementById('playBtn');
