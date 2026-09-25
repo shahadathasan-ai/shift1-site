@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shuffle — Shift1 Studios</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0b0b0b;
+      --bg-card: #161616;
+      --text: #e8e4de;
+      --text-muted: #8a8580;
+      --accent: #e8d5a3;
+      --accent-dim: rgba(201, 185, 154, 0.12);
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      background: linear-gradient(to bottom, var(--bg) 60%, transparent);
+    }
+    .nav-logo {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 400;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── SECTIONS ─── */
+    section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+      position: relative;
+      z-index: 1;
+    }
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+    }
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+    .section-text { font-size: 1.05rem; color: var(--text-muted); max-width: 640px; line-height: 1.8; }
+    .section-text + .section-text { margin-top: 1.4rem; }
+    .section-text strong { color: var(--text); font-weight: 400; }
+
+    /* ─── MASTHEAD ─── */
+    .masthead { padding-top: 9rem; padding-bottom: 2rem; }
+    .back-link {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+      margin-bottom: 2.5rem;
+      transition: color 0.3s ease;
+    }
+    .back-link:hover { color: var(--accent); }
+    .film-title {
+      font-family: var(--font-heading);
+      font-size: clamp(3rem, 9vw, 6rem);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      margin-bottom: 1.2rem;
+    }
+    .film-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem 1.6rem;
+      font-size: 0.74rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+    .film-meta .sep { color: var(--accent); opacity: 0.5; }
+    .tagline {
+      font-size: 1.15rem;
+      color: var(--text);
+      max-width: 40ch;
+      line-height: 1.7;
+    }
+
+    /* ─── FILM ─── */
+    .film { padding-top: 1rem; }
+    .player {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000 center / cover no-repeat;
+      border: 1px solid rgba(232, 213, 163, 0.14);
+      border-radius: 4px;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+    .player iframe, .player video { width: 100%; height: 100%; border: 0; display: block; }
+
+    /* Poster facade: the embed is only fetched once someone asks for it, so the
+       page costs nothing to load and no third party sees a visit that isn't one. */
+    .player-poster {
+      position: absolute; inset: 0;
+      background: url('read/frames/shuffle-tile-v2.png') center / cover no-repeat;
+      display: grid; place-items: center;
+      cursor: pointer; border: 0; padding: 0; width: 100%;
+    }
+    .player-poster::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(11, 11, 11, 0.45);
+      transition: background 0.3s ease;
+    }
+    .player-poster:hover::after { background: rgba(11, 11, 11, 0.3); }
+    .play-badge {
+      position: relative; z-index: 2;
+      display: flex; align-items: center; gap: 0.8rem;
+      font-family: var(--font-heading);
+      font-size: 0.78rem; font-weight: 500;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--text);
+      background: rgba(11, 11, 11, 0.72);
+      border: 1px solid rgba(232, 213, 163, 0.45);
+      border-radius: 3px;
+      padding: 0.85rem 1.5rem;
+    }
+    .play-badge .tri {
+      width: 0; height: 0;
+      border-left: 10px solid var(--accent);
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+    }
+    .player-caption {
+      display: flex; flex-wrap: wrap; gap: 0.5rem 1.4rem;
+      margin-top: 1rem;
+      font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* ─── NOTES ─── */
+    /* 380px floor keeps this at two columns on desktop — four notes then sit as a
+       tidy 2x2 instead of 3 + 1 with a hole in the second row. min() caps that
+       floor at the container width, so on a phone narrower than 380px the column
+       shrinks instead of forcing the whole page to scroll sideways. */
+    .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 2.8rem 3.5rem; }
+    .note h3 {
+      font-family: var(--font-heading);
+      font-size: 1.05rem; font-weight: 600;
+      letter-spacing: 0.01em;
+      margin-bottom: 0.8rem;
+      color: var(--text);
+    }
+    .note p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.75; }
+    .note p + p { margin-top: 0.9rem; }
+    .note strong { color: var(--text); font-weight: 400; }
+
+    /* ─── CALLOUT ─── */
+    .callout {
+      border-left: 1px solid var(--accent);
+      padding: 0.3rem 0 0.3rem 1.8rem;
+      margin: 2.5rem 0 0;
+      max-width: 640px;
+    }
+    .callout p {
+      font-family: var(--font-heading);
+      font-size: 1.15rem; font-weight: 400;
+      line-height: 1.65; color: var(--text);
+    }
+
+    /* ─── SCRIPT LINK ─── */
+    .script-row {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 1.2rem 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.07);
+      padding-top: 2.5rem; margin-top: 1rem;
+    }
+    .script-link {
+      font-family: var(--font-heading);
+      font-size: 0.8rem; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--accent); text-decoration: none;
+      border: 1px solid rgba(232, 213, 163, 0.35);
+      border-radius: 3px; padding: 0.8rem 1.4rem;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+    .script-link:hover { background: var(--accent); color: var(--bg); }
+    .script-note { font-size: 0.85rem; color: var(--text-muted); }
+
+    /* ─── DIVIDER + FOOTER ─── */
+    .divider { max-width: 1200px; margin: 0 auto; padding: 0 3rem; }
+    .divider-line { height: 1px; background: rgba(255, 255, 255, 0.07); }
+    footer {
+      text-align: center;
+      padding: 2rem 3rem 3rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      opacity: 0.4;
+    }
+
+    @media (max-width: 760px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .nav-links { gap: 1.4rem; }
+      section { padding: 3.5rem 1.5rem; }
+      .masthead { padding-top: 7rem; }
+      .divider { padding: 0 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">SH1FT</a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Projects</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- MASTHEAD -->
+  <section class="masthead">
+    <a href="index.html#projects" class="back-link">&larr; All projects</a>
+    <h1 class="film-title">Shuffle</h1>
+    <div class="film-meta">
+      <span>Horror</span>
+      <span class="sep">/</span>
+      <span>Short film</span>
+      <span class="sep">/</span>
+      <span>9 min 15 sec</span>
+      <span class="sep">/</span>
+      <span>Based on a true story</span>
+    </div>
+    <p class="tagline">Some night shifts are quieter than others. For one laboratory worker, the silence is only the beginning.</p>
+  </section>
+
+  <!-- FILM -->
+  <section class="film">
+    <div class="player" id="player">
+      <button class="player-poster" id="playBtn" aria-label="Play Shuffle">
+        <span class="play-badge"><span class="tri"></span> Watch the film</span>
+      </button>
+    </div>
+    <div class="player-caption">
+      <span>9 min 15 sec</span>
+      <span>1920 &times; 1080</span>
+      <span>Contains flashing images</span>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <!-- BACKGROUND -->
+  <section>
+    <div class="section-label">Background</div>
+    <h2 class="section-title">Why this exists</h2>
+    <p class="section-text">
+      Shuffle was made for a <strong>Higgsfield competition</strong>, to a deadline, with one
+      question behind it: how far can these tools actually be pushed right now? Not in a
+      thirty-second showreel where nothing has to hold together — inside a finished piece of
+      work, with a story that has to carry for nine minutes and an audience that will notice
+      the moment it stops working.
+    </p>
+    <p class="section-text">
+      That seemed like the only honest way to find out. A demo tells you what a tool does well.
+      A film tells you what it does badly, because you cannot cut around the parts it cannot do.
+    </p>
+
+    <div class="callout">
+      <p>We wanted to know where the tools break. The fastest way to find out was to try to finish something with them.</p>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <!-- THE STORY -->
+  <section>
+    <div class="section-label">The story</div>
+    <h2 class="section-title">It is a real story first</h2>
+
+    <div class="notes">
+      <div class="note">
+        <h3>The script came first</h3>
+        <p>
+          Shuffle is <strong>based on a true story</strong>, and the screenplay was finished long
+          before any of this was a video. It was never a technical exercise with a narrative
+          bolted on afterwards to give it a shape.
+        </p>
+        <p>
+          That ordering matters. The story set the brief, and the tools either met it or they
+          did not.
+        </p>
+      </div>
+
+      <div class="note">
+        <h3>It is still being made properly</h3>
+        <p>
+          Shuffle is in development as a <strong>live-action short</strong>, with
+          <strong>Tony Lew</strong> as director of photography. That film is still the plan, and
+          this is not a replacement for it.
+        </p>
+        <p>
+          What this version gave us was a way to see the story standing up — to watch it play
+          at length, with sound, and learn what the script was actually doing before a camera
+          ever gets pointed at anything.
+        </p>
+      </div>
+
+      <div class="note">
+        <h3>The part we were really watching</h3>
+        <p>
+          Our industry is going to be changed by this technology, whether or not anyone in it
+          votes for that. We would rather understand the change from the inside than argue
+          about it from a distance.
+        </p>
+        <p>
+          So this was an opportunity taken deliberately: make a real thing, under real
+          constraints, and pay attention to what got easier, what got harder, and what still
+          cannot be done at all.
+        </p>
+      </div>
+
+      <div class="note">
+        <h3>Built from source</h3>
+        <p>
+          The opening title sequence is generated rather than assembled. Every frame comes from
+          a script, and the whole soundtrack under it was synthesised procedurally — oscillators,
+          damped resonators, a seeded random number generator and filters. No samples, no stock
+          library, no third-party audio.
+        </p>
+        <p>
+          Both generators are committed to this site's repository, so every frame and every
+          sample is reproducible from source.
+        </p>
+      </div>
+    </div>
+
+    <div class="script-row">
+      <a href="read/shuffle.html" class="script-link">Read the script &rarr;</a>
+      <span class="script-note">The screenplay the film was made from.</span>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
+
+  <!-- CONTACT -->
+  <section>
+    <div class="section-label">Get in touch</div>
+    <p class="section-text">
+      <a href="mailto:stories@shift1.co" style="color:var(--accent);text-decoration:none">stories@shift1.co</a>
+    </p>
+  </section>
+
+  <footer>
+    &copy; 2026 Shift1&trade; Studios. All rights reserved.
+  </footer>
+
+  <script>
+    /* ─── FILM SOURCE ───────────────────────────────────────────────────────
+       Set FILM to point at the finished cut, then this page needs no other edit.
+
+         YouTube   { kind: 'youtube', id: 'VIDEO_ID' }       // the part after v=
+         Vimeo     { kind: 'vimeo',   id: '123456789' }
+         Self-host { kind: 'file',    src: 'assets/shuffle.mp4' }
+
+       Left null until the link is confirmed — rather than ship a guessed URL,
+       the poster stays up and says so. */
+    const FILM = null;
+
+    const player = document.getElementById('player');
+    const playBtn = document.getElementById('playBtn');
+
+    function embedFor(film) {
+      if (film.kind === 'youtube') {
+        return '<iframe src="https://www.youtube-nocookie.com/embed/' + film.id +
+               '?autoplay=1&rel=0" title="Shuffle" allow="accelerometer; autoplay; clipboard-write; ' +
+               'encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      }
+      if (film.kind === 'vimeo') {
+        return '<iframe src="https://player.vimeo.com/video/' + film.id +
+               '?autoplay=1" title="Shuffle" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+      }
+      return '<video src="' + film.src + '" controls autoplay playsinline ' +
+             'poster="read/frames/shuffle-tile-v2.png"></video>';
+    }
+
+    playBtn.addEventListener('click', function () {
+      if (!FILM) {
+        playBtn.querySelector('.play-badge').innerHTML = 'Film going up shortly';
+        return;
+      }
+      player.innerHTML = embedFor(FILM);
+    });
+  </script>
+
+</body>
+</html>
