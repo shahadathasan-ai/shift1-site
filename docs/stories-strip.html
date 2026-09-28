@@ -70,17 +70,22 @@
     #stories{ height:100dvh; position:relative; z-index:1; scroll-snap-align:start;
       display:flex; flex-direction:column; justify-content:center; overflow:hidden; }
 
-    /* the film itself */
+    /* two reels, stacked — twice the width per frame */
+    .reels{ display:flex; flex-direction:column; gap:26px; }
     .gate{ position:relative; width:100%; }
-    #film{ will-change:transform; }                 /* scroll drives this one   */
-    #reel{ animation:reel 15s ease-in-out infinite; } /* and this one idles      */
-    @keyframes reel{ 0%,100%{transform:translateX(-10px)} 50%{transform:translateX(10px)} }
+    .film{ will-change:transform; }                    /* scroll drives this one */
+    /* the two reels idle in opposite directions, like two spools */
+    .gate[data-r="0"] .reel{ animation:reelA 15s ease-in-out infinite; }
+    .gate[data-r="1"] .reel{ animation:reelB 17s ease-in-out infinite; }
+    @keyframes reelA{ 0%,100%{transform:translateX(-10px)} 50%{transform:translateX(10px)} }
+    @keyframes reelB{ 0%,100%{transform:translateX(10px)}  50%{transform:translateX(-10px)} }
 
     .band{ position:absolute; left:-8%; right:-8%; background:#0f0f0f;
       border-top:1px solid #1e1e1e; border-bottom:1px solid #1e1e1e; }
     .rail{ position:absolute; left:-8%; right:-8%; height:15px;
       background:repeating-linear-gradient(90deg,transparent 0 13px,#1d1d1d 13px 26px);
       animation:perf 6s linear infinite; }
+    .gate[data-r="1"] .rail{ animation-direction:reverse; }
     @keyframes perf{ to{ background-position:-26px 0 } }
 
     /* laid out from the left with a measured offset.  justify-content:center
@@ -90,11 +95,15 @@
       align-items:center; padding:22px 0; width:max-content; }
 
     /* a blank frame at each end, so the film runs off the edges of the screen */
-    .leader{ flex:0 0 auto; border:1px solid #1a1a1a; border-radius:3px;
-      background:#0d0d0d; opacity:.6; }
+    /* pure spacer — blank film between the frames, never a bordered box, or
+       the slack at the end of the short reel reads as a missing card */
+    .leader{ flex:0 0 auto; }
 
-    .frame{ flex:0 0 auto; perspective:1400px; opacity:0; transform:translateX(60px) scale(.96);
+        .frame{ flex:0 0 auto; perspective:1400px; opacity:0; transform:translateX(60px) scale(.96);
       transition:opacity .6s ease, transform .8s cubic-bezier(.16,.84,.34,1); }
+    /* :not(.in) matters — without it this rule outranks .frame.in on
+       specificity and the bottom reel never finishes arriving */
+    .gate[data-r="1"] .frame:not(.in){ transform:translateX(-60px) scale(.96); }
     .frame.in{ opacity:1; transform:none; }
 
     .flipper{ position:relative; width:100%; height:100%; transform-style:preserve-3d;
@@ -135,8 +144,11 @@
 
     @media (max-width:1023px){
       nav{ padding:1.2rem 1.4rem }
-      #stories{ overflow-x:auto; scrollbar-width:none }
-      .film-row{ justify-content:flex-start; padding-left:1.4rem }
+      .reels{ gap:18px }
+      .gate{ overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none }
+      .gate::-webkit-scrollbar{ display:none }
+      .band,.rail{ left:0; right:0 }
+      .film-row{ justify-content:flex-start }
     }
   </style>
 </head>
@@ -166,14 +178,18 @@
 
   <!-- STORIES -->
   <section id="stories">
-    <div class="gate">
-      <div id="film">
-        <div id="reel">
-          <div class="band" id="band"></div>
-          <div class="rail" id="railTop"></div>
-          <div class="rail" id="railBot"></div>
-          <div class="film-row" id="row"></div>
-        </div>
+    <div class="reels">
+      <div class="gate" data-r="0">
+        <div class="film"><div class="reel">
+          <div class="band"></div><div class="rail"></div><div class="rail"></div>
+          <div class="film-row"></div>
+        </div></div>
+      </div>
+      <div class="gate" data-r="1">
+        <div class="film"><div class="reel">
+          <div class="band"></div><div class="rail"></div><div class="rail"></div>
+          <div class="film-row"></div>
+        </div></div>
       </div>
     </div>
 
@@ -206,103 +222,124 @@ const STORIES = [
   { t:'Nostradamus',       k:'Feature Screenplay', g:'Romantic Comedy', img:null },
 ];
 
-/* ── size the film to the window: seven frames across, full height used ── */
-const row = document.getElementById('row');
+/* ── two reels: four frames over three ───────────────────────────────── */
+const ROWS  = [[0,1,2,3],[4,5,6]];
+const gates = [...document.querySelectorAll('.gate')];
+
 function art(s){
   if(!s.img) return '<div class="art none"></div>';
   if(s.logo) return `<div class="art logo"><img src="${s.img}" alt="${s.t}"></div>`;
   return `<div class="art"><img src="${s.img}" alt="${s.t}"></div>`;
 }
+
+function card(i, slot){
+  const s = STORIES[i], flip = !!s.back;
+  const tag = s.href ? 'a' : 'div', href = s.href ? ` href="${s.href}"` : '';
+  return `<article class="frame${flip?' can-flip':''}" data-i="${i}"
+            style="transition-delay:${slot*70}ms">
+    <div class="flipper">
+      <${tag}${href} class="face front">
+        ${art(s)}
+        <div class="cap">
+          <div class="card-category">${s.k}</div>
+          <div class="card-title">${s.t}</div>
+          <div class="card-subtitle">${s.g}</div>
+        </div>
+      </${tag}>
+      ${flip ? `<${tag}${href} class="face back">
+        <div class="card-back-title">${s.backTitle}</div>
+        <div class="card-back-text">${s.back}</div>
+        ${s.link ? `<div class="card-back-link">${s.link}</div>` : ''}
+      </${tag}>` : ''}
+    </div>
+  </article>`;
+}
+
 function layout(){
   /* clientWidth, not innerWidth — innerWidth counts the scrollbar, which made
-     the film ~15px too wide and pushed the last frame off the edge */
+     the film too wide and pushed the last frame off the edge */
   const W = document.documentElement.clientWidth,
         H = document.documentElement.clientHeight, g = 13;
-  /* the second cap keeps the outermost real frame clear of the window edge
-     once the blank leaders are added on either side */
-  /* narrow screens can't hold seven frames, so the film runs off to the right
-     and you scroll it sideways — which is what a strip should do anyway */
+
+  /* narrow screens can't hold four frames, so each reel runs off to the right
+     and you swipe it — which is what a strip should do anyway */
   const narrow = W < 1024;
-  const tw = narrow ? Math.min(W*0.62, 240)
-                    : Math.min((W - 8*g)/7, (W/2 - 3*g - 12)/3.5, 268);
-  const artH = Math.round(tw/(16/9));                 /* wide, the way the stills are shot */
-  const capH = Math.max(64, Math.min(86, tw*0.36));
-  /* floor the card height so the longest synopsis on a turned card still fits
-     once the frames get narrow */
-  const th   = Math.max(artH + capH, 210);
-  const bkF  = Math.max(9.4, Math.min(11.4, tw*0.052));
-  const lead = tw*(narrow ? 0.12 : 0.7);   /* barely any leader on a phone */
-  const total = 2*lead + 7*tw + 8*g;
+  const n = ROWS[0].length;                       /* the wider row sets the size */
 
-  row.innerHTML =
-    `<div class="leader" style="width:${lead}px;height:${th}px"></div>` +
-    STORIES.map((s,i)=>{
-      const flip = !!s.back;
-      const tag  = s.href ? 'a' : 'div';
-      const href = s.href ? ` href="${s.href}"` : '';
-      return `<article class="frame${flip?' can-flip':''}" data-i="${i}"
-                style="width:${tw}px;height:${th}px;--artH:${artH}px;--bkF:${bkF.toFixed(1)}px;transition-delay:${i*70}ms">
-        <div class="flipper">
-          <${tag}${href} class="face front">
-            ${art(s)}
-            <div class="cap">
-              <div class="card-category">${s.k}</div>
-              <div class="card-title">${s.t}</div>
-              <div class="card-subtitle">${s.g}</div>
-            </div>
-          </${tag}>
-          ${flip ? `<${tag}${href} class="face back">
-            <div class="card-back-title">${s.backTitle}</div>
-            <div class="card-back-text">${s.back}</div>
-            ${s.link ? `<div class="card-back-link">${s.link}</div>` : ''}
-          </${tag}>` : ''}
-        </div>
-      </article>`;
-    }).join('') +
-    `<div class="leader" style="width:${lead}px;height:${th}px"></div>`;
+  /* width: the widest frame that still leaves the outermost one on screen
+     once the blank leaders are added.  height: two reels have to fit the
+     window, so cap the frame by that too. */
+  const capH  = tw => Math.max(64, Math.min(86, tw*0.36));
+  const byW   = Math.min((W - (2*n)*g)/n, (W/2 - 2*g - 14)/2);
+  const byH   = 1.78 * (((H - 150)/2 - 44) - 86);
+  const tw    = narrow ? Math.min(W*0.62, 250) : Math.max(210, Math.min(byW, byH, 420));
 
-  row.style.marginLeft = narrow ? '0px' : ((W - total)/2)+'px';  /* negative: runs off both edges */
+  const artH  = Math.round(tw/(16/9));            /* wide, the way the stills are shot */
+  /* floor the card height so the longest synopsis on a turned card still fits */
+  const th    = Math.max(artH + capH(tw), 210);
+  const bkF   = Math.max(9.4, Math.min(12.4, tw*0.032));
+  const bleed = narrow ? 0 : tw*0.3;              /* how far the film runs past the edge */
 
-  /* rails and backing sit against the film, not the window */
-  const band = document.getElementById('band');
-  const h = th + 44;
-  band.style.top = '0px'; band.style.height = h+'px';
-  document.getElementById('railTop').style.top = '0px';
-  document.getElementById('railBot').style.top = (h-15)+'px';
-  document.querySelector('.film-row').style.paddingTop = '22px';
+  gates.forEach((gate, r)=>{
+    const ids   = ROWS[r];
+    const row   = gate.querySelector('.film-row');
+    /* each reel is exactly one screen plus the bleed, whether it holds four
+       frames or three, so both run off the edges by the same amount */
+    const inner = ids.length*tw + (ids.length-1)*g;
+    const total = narrow ? inner + 44 : W + 2*bleed;
+    const lead  = narrow ? 22 : (total - inner)/2;
+
+    row.innerHTML =
+      `<div class="leader" style="width:${lead}px;height:${th}px"></div>` +
+      ids.map((id,slot)=>card(id, slot)).join('') +
+      `<div class="leader" style="width:${lead}px;height:${th}px"></div>`;
+
+    row.querySelectorAll('.frame').forEach(f=>{
+      f.style.width = tw+'px'; f.style.height = th+'px';
+      f.style.setProperty('--artH', artH+'px');
+      f.style.setProperty('--bkF',  bkF.toFixed(1)+'px');
+    });
+
+    row.style.marginLeft = narrow ? '0px' : ((W - total)/2)+'px';  /* negative: runs off both edges */
+
+    const h = th + 44;
+    gate.querySelector('.band').style.cssText += `;top:0;height:${h}px`;
+    const rails = gate.querySelectorAll('.rail');
+    rails[0].style.top = '0px';
+    rails[1].style.top = (h-15)+'px';
+
+    if(narrow) gate.scrollLeft = 0;   /* both reels start on the same frame */
+  });
 }
 layout();
-let rt; addEventListener('resize', ()=>{ clearTimeout(rt); rt = setTimeout(layout, 180); });
+let rt; addEventListener('resize', ()=>{ clearTimeout(rt); rt = setTimeout(()=>{ layout(); if(threaded) show(); }, 180); });
 
 /* ── motion 1: the frames thread in one after another the first time you
       arrive, the same way the homepage cards reveal on scroll ── */
 const sect = document.getElementById('stories');
 let threaded = false;
-function thread(){
-  if(threaded) return;
-  threaded = true;
-  row.querySelectorAll('.frame').forEach(f=>f.classList.add('in'));
-}
+function show(){ document.querySelectorAll('.frame').forEach(f=>f.classList.add('in')); }
+function thread(){ if(threaded) return; threaded = true; show(); }
 new IntersectionObserver(es=>{
   es.forEach(e=>{ if(e.isIntersecting) thread(); });
 }, { threshold:.25 }).observe(sect);
 
-/* ── motion 2: the film runs sideways as you come down the page, then
-      settles.  A timeout rather than rAF chains, so it can't be starved. ── */
-const film = document.getElementById('film');
+/* ── motion 2: the two reels run in from opposite sides as you come down the
+      page, then settle ── */
+const films = [...document.querySelectorAll('.film')];
 function run(){
   const top = sect.getBoundingClientRect().top;
   const p = Math.min(1, Math.max(0, 1 - top/Math.max(1, innerHeight)));
-  film.style.transform = `translateX(${(1-p)*16}vw)`;
+  films.forEach((f,r)=>{ f.style.transform = `translateX(${(r?-1:1)*(1-p)*14}vw)`; });
   /* the observer is the nice way in; this is the belt and braces, so the
      frames can never stay invisible if it doesn't fire */
-  if(sect.getBoundingClientRect().top < innerHeight*0.75) thread();
+  if(top < innerHeight*0.75) thread();
 }
 addEventListener('scroll', run, { passive:true });
 run();
 
 /* tap to turn a card over on touch, where there is no hover */
-row.addEventListener('click', e=>{
+document.addEventListener('click', e=>{
   const f = e.target.closest('.frame.can-flip');
   if(f && matchMedia('(hover:none)').matches){ e.preventDefault(); f.classList.toggle('on'); }
 });
