@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shift1 — Logo & Style Options</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&family=Outfit:wght@200;300;400;500;600;700;800&family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Cormorant+Garamond:wght@300;400;500;600;700&family=Bebas+Neue&family=Libre+Barcode+128+Text&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0b0b0b;
+      color: #e8e4de;
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── HEADER ─── */
+    .page-header {
+      text-align: center;
+      padding: 6rem 2rem 3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      margin-bottom: 0;
+    }
+
+    .page-header h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #c9b99a;
+      margin-bottom: 0.75rem;
+    }
+
+    .page-header p {
+      font-size: 0.85rem;
+      color: #666;
+      max-width: 500px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ─── OPTION SLIDE ─── */
+    .option {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 4rem 2rem;
+      position: relative;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .option-number {
+      position: absolute;
+      top: 2.5rem;
+      left: 3rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #444;
+    }
+
+    .option-desc {
+      position: absolute;
+      top: 2.5rem;
+      right: 3rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #555;
+      text-align: right;
+      max-width: 300px;
+    }
+
+    .logo-display {
+      text-align: center;
+    }
+
+    .logo-sub {
+      font-size: 0.8rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: #8a8580;
+      margin-top: 1rem;
+    }
+
+    .style-note {
+      margin-top: 3rem;
+      font-size: 0.75rem;
+      color: #555;
+      text-align: center;
+      max-width: 400px;
+      line-height: 1.7;
+    }
+
+    /* ─── OPTION 1: CURRENT (GEOMETRIC CLEAN) ─── */
+    .opt1 .logo-main {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #e8e4de;
+    }
+    .opt1 .logo-main .one { color: #c9b99a; }
+
+    /* ─── OPTION 2: ULTRA THIN ─── */
+    .opt2 { background: #080808; }
+    .opt2 .logo-main {
+      font-family: 'Outfit', sans-serif;
+      font-size: 8rem;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      color: #e8e4de;
+    }
+    .opt2 .logo-main .one {
+      font-weight: 400;
+      color: #e8e4de;
+    }
+    .opt2 .logo-sub { color: #4a4a4a; }
+
+    /* ─── OPTION 3: HEAVY CONDENSED ─── */
+    .opt3 .logo-main {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 10rem;
+      letter-spacing: 0.12em;
+      color: #e8e4de;
+      line-height: 0.85;
+    }
+    .opt3 .logo-main .one {
+      color: #c9b99a;
+    }
+    .opt3 .logo-sub {
+      letter-spacing: 0.5em;
+      font-size: 0.75rem;
+    }
+
+    /* ─── OPTION 4: EDITORIAL SERIF ─── */
+    .opt4 { background: #f5f1eb; }
+    .opt4 .logo-main {
+      font-family: 'Playfair Display', serif;
+      font-size: 7rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      color: #1a1815;
+      font-style: italic;
+    }
+    .opt4 .logo-main .one {
+      font-style: normal;
+      color: #8b7355;
+    }
+    .opt4 .logo-sub { color: #a09888; }
+    .opt4 .option-number, .opt4 .option-desc { color: #bbb; }
+    .opt4 .style-note { color: #bbb; }
+
+    /* ─── OPTION 5: BRUTALIST ─── */
+    .opt5 .logo-main {
+      font-family: 'Syne', sans-serif;
+      font-size: 7rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #e8e4de;
+      text-transform: uppercase;
+    }
+    .opt5 .logo-main .one {
+      color: #ff4d00;
+    }
+    .opt5 .logo-sub {
+      color: #ff4d00;
+      letter-spacing: 0.4em;
+    }
+
+    /* ─── OPTION 6: OUTLINE STROKE ─── */
+    .opt6 .logo-main {
+      font-family: 'Outfit', sans-serif;
+      font-size: 8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: transparent;
+      -webkit-text-stroke: 1.5px #e8e4de;
+    }
+    .opt6 .logo-main .one {
+      -webkit-text-stroke-color: #c9b99a;
+      color: transparent;
+    }
+
+    /* ─── OPTION 7: STACKED ─── */
+    .opt7 .logo-main {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 5.5rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: #e8e4de;
+      line-height: 1;
+    }
+    .opt7 .logo-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .opt7 .logo-top {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 5.5rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      color: #e8e4de;
+      line-height: 1;
+    }
+    .opt7 .logo-bottom {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      letter-spacing: 0.5em;
+      color: #c9b99a;
+      margin-top: 0.3rem;
+    }
+
+    /* ─── OPTION 8: MONOCHROME MINIMAL ─── */
+    .opt8 { background: #ffffff; }
+    .opt8 .logo-main {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 6rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      color: #1a1a1a;
+    }
+    .opt8 .logo-main .one {
+      font-weight: 700;
+    }
+    .opt8 .logo-sub { color: #bbb; }
+    .opt8 .option-number, .opt8 .option-desc { color: #ccc; }
+    .opt8 .style-note { color: #ccc; }
+
+    /* ─── OPTION 9: SPLIT MARK ─── */
+    .opt9 .logo-split {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .opt9 .logo-left {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #e8e4de;
+      line-height: 1;
+    }
+    .opt9 .logo-divider {
+      width: 2px;
+      height: 5rem;
+      background: #c9b99a;
+      margin: 0 0.8rem;
+      opacity: 0.5;
+    }
+    .opt9 .logo-right {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 7rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #c9b99a;
+      line-height: 1;
+    }
+
+    /* ─── OPTION 10: ELEGANT GARAMOND ─── */
+    .opt10 { background: #0e0c09; }
+    .opt10 .logo-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 7.5rem;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      color: #d4cfc7;
+    }
+    .opt10 .logo-main .one {
+      font-weight: 600;
+      color: #c9b99a;
+    }
+    .opt10 .logo-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      letter-spacing: 0.45em;
+      font-weight: 300;
+      color: #5a5549;
+    }
+
+    /* ─── OPTION 11: WARM DARK + GLOW ─── */
+    .opt11 { background: #0f0d0a; }
+    .opt11 .logo-main {
+      font-family: 'Outfit', sans-serif;
+      font-size: 7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #e8e4de;
+    }
+    .opt11 .logo-main .one {
+      color: #d4a054;
+      text-shadow: 0 0 40px rgba(212, 160, 84, 0.3), 0 0 80px rgba(212, 160, 84, 0.1);
+    }
+
+    /* ─── OPTION 12: COOL SILVER ─── */
+    .opt12 { background: #090b0e; }
+    .opt12 .logo-main {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: #c8cdd4;
+    }
+    .opt12 .logo-main .one {
+      color: #7ba0c9;
+      text-shadow: 0 0 50px rgba(123, 160, 201, 0.2);
+    }
+    .opt12 .logo-sub { color: #4a5568; }
+
+    /* ─── OPTION 13: MONOGRAM ICON + WORDMARK ─── */
+    .opt13 .logo-combo {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+    .opt13 .monogram {
+      width: 90px;
+      height: 90px;
+      border: 1.5px solid rgba(201, 185, 154, 0.4);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #c9b99a;
+      letter-spacing: 0.02em;
+    }
+    .opt13 .wordmark {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 4rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #e8e4de;
+    }
+    .opt13 .wordmark .one { color: #c9b99a; }
+
+    /* ─── OPTION 14: OVERSIZED 1 ─── */
+    .opt14 .logo-layered {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .opt14 .bg-one {
+      font-family: 'Outfit', sans-serif;
+      font-size: 18rem;
+      font-weight: 800;
+      color: rgba(201, 185, 154, 0.06);
+      position: absolute;
+      line-height: 1;
+    }
+    .opt14 .fg-text {
+      font-family: 'Outfit', sans-serif;
+      font-size: 5rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #e8e4de;
+      position: relative;
+      z-index: 1;
+    }
+    .opt14 .fg-text .one { color: #c9b99a; }
+
+    /* ─── OPTION 15: UNDERLINE ACCENT ─── */
+    .opt15 .logo-underlined {
+      position: relative;
+      display: inline-block;
+    }
+    .opt15 .logo-main {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 6.5rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #e8e4de;
+    }
+    .opt15 .logo-main .one { color: #c9b99a; }
+    .opt15 .logo-line {
+      position: absolute;
+      bottom: 0.2rem;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(to right, transparent 0%, #c9b99a 30%, #c9b99a 50%, transparent 100%);
+    }
+
+    /* ─── OPTION 16: DARK LUXURY ─── */
+    .opt16 { background: #0a0908; }
+    .opt16 .logo-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 6rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      color: #c9b99a;
+    }
+    .opt16 .logo-main .one {
+      color: #e8e4de;
+    }
+    .opt16 .logo-sub {
+      font-family: 'Cormorant Garamond', serif;
+      letter-spacing: 0.6em;
+      color: #4a4539;
+      font-size: 0.9rem;
+    }
+
+    /* ─── COMPARISON SECTION ─── */
+    .comparison {
+      padding: 6rem 3rem;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .comparison h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #c9b99a;
+      margin-bottom: 1rem;
+    }
+
+    .comparison p {
+      font-size: 0.8rem;
+      color: #555;
+      max-width: 500px;
+      margin: 0 auto 4rem;
+      line-height: 1.7;
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .mini-card {
+      background: #141414;
+      border: 1px solid rgba(255,255,255,0.04);
+      border-radius: 6px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      transition: border-color 0.3s;
+    }
+
+    .mini-card:hover {
+      border-color: rgba(201, 185, 154, 0.2);
+    }
+
+    .mini-card .mini-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    /* Mini versions */
+    .mini-card.m1 .mini-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #e8e4de;
+    }
+    .mini-card.m2 .mini-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 200;
+      letter-spacing: 0.25em;
+      color: #e8e4de;
+    }
+    .mini-card.m3 .mini-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.12em;
+      color: #e8e4de;
+    }
+    .mini-card.m4 .mini-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.04em;
+      color: #e8e4de;
+    }
+    .mini-card.m5 .mini-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 300;
+      letter-spacing: 0.12em;
+      color: #d4cfc7;
+    }
+    .mini-card.m6 .mini-logo {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: transparent;
+      -webkit-text-stroke: 1px #e8e4de;
+    }
+    .mini-card.m7 .mini-logo {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #e8e4de;
+    }
+    .mini-card.m8 .mini-logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      color: #e8e4de;
+    }
+
+    .mini-card .mini-logo .one { color: #c9b99a; }
+    .mini-card.m8 .mini-logo .one { color: #ff4d00; }
+
+    @media (max-width: 900px) {
+      .mini-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .option {
+        padding: 4rem 1.5rem;
+        min-height: 80vh;
+      }
+      .option-number { left: 1.5rem; }
+      .option-desc { right: 1.5rem; }
+      .opt1 .logo-main, .opt2 .logo-main, .opt4 .logo-main,
+      .opt5 .logo-main, .opt6 .logo-main, .opt8 .logo-main,
+      .opt10 .logo-main, .opt11 .logo-main, .opt12 .logo-main {
+        font-size: 4rem;
+      }
+      .opt3 .logo-main { font-size: 6rem; }
+      .opt7 .logo-top { font-size: 3.5rem; }
+      .opt9 .logo-left, .opt9 .logo-right { font-size: 4rem; }
+      .opt13 .wordmark { font-size: 2.5rem; }
+      .opt13 .monogram { width: 60px; height: 60px; font-size: 1.8rem; }
+      .opt14 .bg-one { font-size: 10rem; }
+      .opt14 .fg-text { font-size: 3.5rem; }
+      .opt15 .logo-main { font-size: 4rem; }
+      .opt16 .logo-main { font-size: 3.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <h1>Logo & Style Options</h1>
+    <p>Scroll through each option. All use the SH1FT concept — the 1 replaces the I. Pick what feels right, mix and match elements you like.</p>
+  </div>
+
+  <!-- OPTION 1: GEOMETRIC CLEAN (CURRENT) -->
+  <div class="option opt1">
+    <div class="option-number">Option 01</div>
+    <div class="option-desc">Geometric Clean — Current</div>
+    <div class="logo-display">
+      <div class="logo-main">SH<span class="one">1</span>FT</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Space Grotesk Bold. Warm gold accent on the 1. This is what's on the site now. Clean, confident, tech-adjacent.</div>
+  </div>
+
+  <!-- OPTION 2: ULTRA THIN -->
+  <div class="option opt2">
+    <div class="option-number">Option 02</div>
+    <div class="option-desc">Ultra Thin — Whisper</div>
+    <div class="logo-display">
+      <div class="logo-main">SH<span class="one">1</span>FT</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Outfit ExtraLight. The 1 is slightly heavier than the rest — it draws the eye without shouting. Understated, fashion-forward.</div>
+  </div>
+
+  <!-- OPTION 3: HEAVY CONDENSED -->
+  <div class="option opt3">
+    <div class="option-number">Option 03</div>
+    <div class="option-desc">Heavy Condensed — Billboard</div>
+    <div class="logo-display">
+      <div class="logo-main">SH<span class="one">1</span>FT</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Bebas Neue. Tall, tight, cinematic. The kind of type you see on movie posters. Makes a statement from across the room.</div>
+  </div>
+
+  <!-- OPTION 4: EDITORIAL SERIF -->
+  <div class="option opt4">
+    <div class="option-number">Option 04</div>
+    <div class="option-desc">Editorial Serif — Light Mode</div>
+    <div class="logo-display">
+      <div class="logo-main">Sh<span class="one">1</span>ft</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Playfair Display Italic on cream. Literary, editorial. The 1 breaks the italic flow — intentionally. For if the brand leans more "writer" than "studio."</div>
+  </div>
+
+  <!-- OPTION 5: BRUTALIST -->
+  <div class="option opt5">
+    <div class="option-number">Option 05</div>
+    <div class="option-desc">Brutalist — Impact</div>
+    <div class="logo-display">
+      <div class="logo-main">SH<span class="one">1</span>FT</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Syne ExtraBold. Orange-red accent. Aggressive, unapologetic. Closer to the energy of the original hand-drawn logos. Not subtle.</div>
+  </div>
+
+  <!-- OPTION 6: OUTLINE STROKE -->
+  <div class="option opt6">
+    <div class="option-number">Option 06</div>
+    <div class="option-desc">Outline Stroke — Ghost</div>
+    <div class="logo-display">
+      <div class="logo-main">SH<span class="one">1</span>FT</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Outfit Bold, stroke only. The 1 in gold stroke. Feels empty in a deliberate way — like a frame waiting to be filled. Works well animated (draw-on effect).</div>
+  </div>
+
+  <!-- OPTION 7: STACKED -->
+  <div class="option opt7">
+    <div class="option-number">Option 07</div>
+    <div class="option-desc">Stacked — Architectural</div>
+    <div class="logo-display">
+      <div class="logo-stack">
+        <div class="logo-top">SH1FT</div>
+        <div class="logo-bottom">Productions</div>
+      </div>
+    </div>
+    <div class="style-note">Plus Jakarta Sans ExtraBold, stacked layout. "Productions" sits below in a lighter weight with wide tracking. Structured, balanced.</div>
+  </div>
+
+  <!-- OPTION 8: MONOCHROME MINIMAL (LIGHT) -->
+  <div class="option opt8">
+    <div class="option-number">Option 08</div>
+    <div class="option-desc">Monochrome Minimal — Light</div>
+    <div class="logo-display">
+      <div class="logo-main">SH<span class="one">1</span>FT</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">DM Sans Light on white. The 1 is bold weight while the rest is light — the contrast IS the design. No colour, just weight. A24 energy.</div>
+  </div>
+
+  <!-- OPTION 9: SPLIT MARK -->
+  <div class="option opt9">
+    <div class="option-number">Option 09</div>
+    <div class="option-desc">Split Mark — Divided</div>
+    <div class="logo-display">
+      <div class="logo-split">
+        <div class="logo-left">SH</div>
+        <div class="logo-divider"></div>
+        <div class="logo-right">1FT</div>
+      </div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Split at the natural break. The divider line emphasises that the 1 is intentional, not a typo. Two halves, one name. Clean separation.</div>
+  </div>
+
+  <!-- OPTION 10: ELEGANT GARAMOND -->
+  <div class="option opt10">
+    <div class="option-number">Option 10</div>
+    <div class="option-desc">Elegant Serif — Garamond</div>
+    <div class="logo-display">
+      <div class="logo-main">SH<span class="one">1</span>FT</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Cormorant Garamond Light. Old-world elegance meets the modern 1. Feels like a publishing house or a film studio with heritage. The 1 is bolder — it anchors the word.</div>
+  </div>
+
+  <!-- OPTION 11: WARM GLOW -->
+  <div class="option opt11">
+    <div class="option-number">Option 11</div>
+    <div class="option-desc">Warm Glow — Ember</div>
+    <div class="logo-display">
+      <div class="logo-main">SH<span class="one">1</span>FT</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Outfit SemiBold. The 1 has a warm glow/bloom effect — like it's lit from within. Cinematic, warm, atmospheric. The glow is subtle enough to feel classy, not neon.</div>
+  </div>
+
+  <!-- OPTION 12: COOL SILVER -->
+  <div class="option opt12">
+    <div class="option-number">Option 12</div>
+    <div class="option-desc">Cool Silver — Steel</div>
+    <div class="logo-display">
+      <div class="logo-main">SH<span class="one">1</span>FT</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Space Grotesk SemiBold. Cool blue-steel palette instead of warm gold. Industrial, precise. For if the brand leans more sci-fi/thriller than drama.</div>
+  </div>
+
+  <!-- OPTION 13: MONOGRAM + WORDMARK -->
+  <div class="option opt13">
+    <div class="option-number">Option 13</div>
+    <div class="option-desc">Monogram + Wordmark — Dual</div>
+    <div class="logo-display">
+      <div class="logo-combo">
+        <div class="monogram">S1</div>
+        <div class="wordmark">SH<span class="one">1</span>FT</div>
+      </div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Boxed S1 monogram paired with the full wordmark. The monogram works as a favicon, social avatar, watermark. Two assets from one brand.</div>
+  </div>
+
+  <!-- OPTION 14: OVERSIZED 1 BACKGROUND -->
+  <div class="option opt14">
+    <div class="option-number">Option 14</div>
+    <div class="option-desc">Oversized 1 — Layered</div>
+    <div class="logo-display">
+      <div class="logo-layered">
+        <div class="bg-one">1</div>
+        <div class="fg-text">SH<span class="one">1</span>FT</div>
+      </div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">A massive ghost 1 in the background with the wordmark over it. The 1 is the brand — it's everywhere, even when you're not reading it. Works beautifully as a hero section.</div>
+  </div>
+
+  <!-- OPTION 15: UNDERLINE ACCENT -->
+  <div class="option opt15">
+    <div class="option-number">Option 15</div>
+    <div class="option-desc">Underline Accent — Ruled</div>
+    <div class="logo-display">
+      <div class="logo-underlined">
+        <div class="logo-main">SH<span class="one">1</span>FT</div>
+        <div class="logo-line"></div>
+      </div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Plus Jakarta Sans Bold with a gradient underline that peaks under the 1. The line adds structure without clutter. Feels professional, grounded.</div>
+  </div>
+
+  <!-- OPTION 16: DARK LUXURY INVERTED -->
+  <div class="option opt16">
+    <div class="option-number">Option 16</div>
+    <div class="option-desc">Dark Luxury — Inverted</div>
+    <div class="logo-display">
+      <div class="logo-main">SH<span class="one">1</span>FT</div>
+      <div class="logo-sub">Productions</div>
+    </div>
+    <div class="style-note">Cormorant Garamond SemiBold. Inverted — the word is gold, the 1 is white. The whole name feels precious. Dark luxury, private screening energy.</div>
+  </div>
+
+  <!-- COMPARISON GRID -->
+  <div class="comparison">
+    <h2>Side by Side</h2>
+    <p>All the fonts at a glance. Which ones pull your eye?</p>
+    <div class="mini-grid">
+      <div class="mini-card m1">
+        <div class="mini-label">01 — Space Grotesk</div>
+        <div class="mini-logo">SH<span class="one">1</span>FT</div>
+      </div>
+      <div class="mini-card m2">
+        <div class="mini-label">02 — Outfit Thin</div>
+        <div class="mini-logo">SH<span class="one">1</span>FT</div>
+      </div>
+      <div class="mini-card m3">
+        <div class="mini-label">03 — Bebas Neue</div>
+        <div class="mini-logo">SH<span class="one">1</span>FT</div>
+      </div>
+      <div class="mini-card m4">
+        <div class="mini-label">04 — Playfair Italic</div>
+        <div class="mini-logo">Sh<span class="one">1</span>ft</div>
+      </div>
+      <div class="mini-card m5">
+        <div class="mini-label">10 — Cormorant</div>
+        <div class="mini-logo">SH<span class="one">1</span>FT</div>
+      </div>
+      <div class="mini-card m6">
+        <div class="mini-label">06 — Outline</div>
+        <div class="mini-logo">SH<span class="one">1</span>FT</div>
+      </div>
+      <div class="mini-card m7">
+        <div class="mini-label">07 — Jakarta</div>
+        <div class="mini-logo">SH<span class="one">1</span>FT</div>
+      </div>
+      <div class="mini-card m8">
+        <div class="mini-label">05 — Syne Bold</div>
+        <div class="mini-logo">SH<span class="one">1</span>FT</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

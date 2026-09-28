@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:transparent}
+  body{display:grid;place-items:center;min-height:100vh}
+  .plate{display:grid;place-items:center}
+  .plate.dark{background:#0b0b0b}
+  .row{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;line-height:1;
+    color:#e8e4de;display:flex;align-items:center;
+  }
+  .word{letter-spacing:0.04em;white-space:nowrap}
+  .one{color:#e8d5a3}
+  .rule{width:0.06em;height:0.62em;background:rgba(232,213,163,0.55);margin:0 0.34em;flex:none}
+  .sub{
+    font-family:'Inter',sans-serif;font-weight:400;font-size:0.315em;
+    letter-spacing:0.34em;opacity:0.55;white-space:nowrap;
+    margin-right:-0.34em;
+  }
+</style>
+</head>
+<body>
+<div id="mount"></div>
+<script>
+const P=new URLSearchParams(location.search);
+const plate=document.createElement('div');
+plate.className='plate'+(P.get('surface')==='none'?'':' '+P.get('surface'));
+plate.style.width=P.get('w')+'px'; plate.style.height=P.get('h')+'px';
+plate.innerHTML='<div class="row" style="font-size:'+P.get('size')+'px">'+
+  '<span class="word">SH<span class="one">1</span>FT</span>'+
+  (P.get('sub')?'<span class="rule"></span><span class="sub">'+P.get('sub')+'</span>':'')+
+'</div>';
+document.getElementById('mount').appendChild(plate);
+document.fonts.ready.then(function(){document.title='ready'});
+</script>
+</body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Particle Options — Shift1</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0b0b0b;
+      --text: #e8e4de;
+      --text-muted: #8a8580;
+      --accent: #c9b99a;
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .page-header {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .page-header h1 {
+      font-family: var(--font-heading);
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    .page-header p {
+      font-size: 0.8rem;
+      color: #555;
+      max-width: 450px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ─── OPTION PANELS ─── */
+    .option {
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .option-label {
+      position: absolute;
+      top: 2rem;
+      left: 3rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #444;
+    }
+
+    .option-desc {
+      position: absolute;
+      top: 2rem;
+      right: 3rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #555;
+      text-align: right;
+      max-width: 350px;
+      line-height: 1.6;
+    }
+
+    .option-logo {
+      font-family: var(--font-heading);
+      font-size: clamp(4rem, 8vw, 7rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text);
+      z-index: 1;
+    }
+
+    .option-logo .one { color: var(--accent); }
+
+    .option-sub {
+      font-size: 0.8rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      z-index: 1;
+    }
+
+    .option-note {
+      position: absolute;
+      bottom: 2.5rem;
+      font-size: 0.7rem;
+      color: #444;
+      text-align: center;
+      max-width: 400px;
+      line-height: 1.6;
+    }
+
+    /* ─── PARTICLE CANVASES ─── */
+    .p-container {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    /* Shared particle base */
+    .p { position: absolute; border-radius: 50%; opacity: 0; }
+
+    /* ─── OPTION 1: MORE PARTICLES (current but denser) ─── */
+    .p-dense .p {
+      width: 2px; height: 2px;
+      background: var(--accent);
+      animation: rise linear infinite;
+    }
+
+    /* ─── OPTION 2: LARGER + VARIED SIZES ─── */
+    .p-varied .p {
+      background: var(--accent);
+      animation: rise linear infinite;
+    }
+
+    /* ─── OPTION 3: GENTLE FIREFLIES (pulse + drift) ─── */
+    .p-firefly .p {
+      background: var(--accent);
+      animation: firefly ease-in-out infinite;
+    }
+
+    @keyframes firefly {
+      0% { opacity: 0; transform: translate(0, 0); }
+      25% { opacity: 0.25; }
+      50% { opacity: 0.08; transform: translate(30px, -60px); }
+      75% { opacity: 0.2; }
+      100% { opacity: 0; transform: translate(-20px, -120px); }
+    }
+
+    /* ─── OPTION 4: SLOW SNOW / FALLING ─── */
+    .p-snow .p {
+      background: rgba(232, 228, 222, 0.6);
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { opacity: 0; transform: translateY(0) translateX(0); }
+      10% { opacity: 0.12; }
+      90% { opacity: 0.12; }
+      100% { opacity: 0; transform: translateY(100vh) translateX(30px); }
+    }
+
+    /* ─── OPTION 5: GOLD DUST (small, many, fast) ─── */
+    .p-dust .p {
+      background: var(--accent);
+      animation: rise linear infinite;
+    }
+
+    /* ─── OPTION 6: MIXED SIZES + SUBTLE GLOW ─── */
+    .p-glow .p {
+      background: var(--accent);
+      box-shadow: 0 0 6px rgba(201, 185, 154, 0.3);
+      animation: rise linear infinite;
+    }
+
+    /* ─── OPTION 7: CONSTELLATION (static dots, lines on scroll) ─── */
+    .p-constellation canvas {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ─── OPTION 8: EMBERS (warm, upward, glowing) ─── */
+    .p-ember .p {
+      background: #d4a054;
+      box-shadow: 0 0 8px rgba(212, 160, 84, 0.4);
+      animation: ember ease-out infinite;
+    }
+
+    @keyframes ember {
+      0% { opacity: 0; transform: translateY(0) translateX(0) scale(1); }
+      15% { opacity: 0.35; }
+      70% { opacity: 0.15; }
+      100% { opacity: 0; transform: translateY(-100vh) translateX(50px) scale(0.3); }
+    }
+
+    @keyframes rise {
+      0% { opacity: 0; transform: translateY(0) translateX(0); }
+      10% { opacity: 0.15; }
+      90% { opacity: 0.15; }
+      100% { opacity: 0; transform: translateY(-100vh) translateX(40px); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <h1>Particle Options</h1>
+    <p>Scroll through each option. Pick which background feel suits the site best.</p>
+  </div>
+
+  <!-- OPTION 1: DENSER (current style, just more) -->
+  <div class="option" id="opt1">
+    <div class="option-label">Option 01</div>
+    <div class="option-desc">Current style, 2x density</div>
+    <div class="p-container p-dense" id="dense"></div>
+    <div class="option-logo">SH<span class="one">1</span>FT</div>
+    <div class="option-sub">Productions</div>
+    <div class="option-note">Same 2px gold dots rising slowly — just more of them (60 vs 30). Subtle but noticeably alive.</div>
+  </div>
+
+  <!-- OPTION 2: VARIED SIZES -->
+  <div class="option" id="opt2">
+    <div class="option-label">Option 02</div>
+    <div class="option-desc">Varied sizes — depth effect</div>
+    <div class="p-container p-varied" id="varied"></div>
+    <div class="option-logo">SH<span class="one">1</span>FT</div>
+    <div class="option-sub">Productions</div>
+    <div class="option-note">Mix of 1px to 4px particles. Smaller = further away, larger = closer. Creates a sense of depth.</div>
+  </div>
+
+  <!-- OPTION 3: FIREFLIES -->
+  <div class="option" id="opt3">
+    <div class="option-label">Option 03</div>
+    <div class="option-desc">Fireflies — pulse + wander</div>
+    <div class="p-container p-firefly" id="firefly"></div>
+    <div class="option-logo">SH<span class="one">1</span>FT</div>
+    <div class="option-sub">Productions</div>
+    <div class="option-note">Particles pulse in and out as they drift. More organic, less mechanical. Whimsical.</div>
+  </div>
+
+  <!-- OPTION 4: SNOW / FALLING -->
+  <div class="option" id="opt4">
+    <div class="option-label">Option 04</div>
+    <div class="option-desc">Falling — soft white snow</div>
+    <div class="p-container p-snow" id="snow"></div>
+    <div class="option-logo">SH<span class="one">1</span>FT</div>
+    <div class="option-sub">Productions</div>
+    <div class="option-note">White particles drifting downward instead of up. Quieter, calmer. Like watching through a window.</div>
+  </div>
+
+  <!-- OPTION 5: GOLD DUST -->
+  <div class="option" id="opt5">
+    <div class="option-label">Option 05</div>
+    <div class="option-desc">Gold dust — small, many, faster</div>
+    <div class="p-container p-dust" id="dust"></div>
+    <div class="option-logo">SH<span class="one">1</span>FT</div>
+    <div class="option-sub">Productions</div>
+    <div class="option-note">100 tiny 1px particles, moving faster. Feels like the air itself is shimmering. More energy.</div>
+  </div>
+
+  <!-- OPTION 6: GLOW -->
+  <div class="option" id="opt6">
+    <div class="option-label">Option 06</div>
+    <div class="option-desc">Glow — soft halos on each dot</div>
+    <div class="p-container p-glow" id="glow"></div>
+    <div class="option-logo">SH<span class="one">1</span>FT</div>
+    <div class="option-sub">Productions</div>
+    <div class="option-note">Each particle has a subtle glow/halo. Warmer, more atmospheric. Cinematic.</div>
+  </div>
+
+  <!-- OPTION 7: CONSTELLATION -->
+  <div class="option" id="opt7">
+    <div class="option-label">Option 07</div>
+    <div class="option-desc">Constellation — dots + connecting lines</div>
+    <div class="p-container p-constellation"><canvas id="constellationCanvas"></canvas></div>
+    <div class="option-logo">SH<span class="one">1</span>FT</div>
+    <div class="option-sub">Productions</div>
+    <div class="option-note">Dots slowly drift. When two are close enough, a faint line connects them. Like a star map being drawn in real time.</div>
+  </div>
+
+  <!-- OPTION 8: EMBERS -->
+  <div class="option" id="opt8">
+    <div class="option-label">Option 08</div>
+    <div class="option-desc">Embers — warm, glowing, upward</div>
+    <div class="p-container p-ember" id="ember"></div>
+    <div class="option-logo">SH<span class="one">1</span>FT</div>
+    <div class="option-sub">Productions</div>
+    <div class="option-note">Warmer orange-gold particles with a glow that fades as they rise. Like sparks from a fire. More dramatic.</div>
+  </div>
+
+  <script>
+    // Helper to create particles
+    function spawn(containerId, count, opts = {}) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.classList.add('p');
+        p.style.left = Math.random() * 100 + '%';
+        p.style.top = Math.random() * 100 + '%';
+
+        const size = opts.sizeMin
+          ? (opts.sizeMin + Math.random() * (opts.sizeMax - opts.sizeMin))
+          : 2;
+        p.style.width = size + 'px';
+        p.style.height = size + 'px';
+
+        const dur = opts.durMin
+          ? (opts.durMin + Math.random() * (opts.durMax - opts.durMin))
+          : (15 + Math.random() * 25);
+        p.style.animationDuration = dur + 's';
+        p.style.animationDelay = (Math.random() * (opts.delayMax || 20)) + 's';
+
+        el.appendChild(p);
+      }
+    }
+
+    // Option 1: Dense (60 particles, same as current but more)
+    spawn('dense', 60, { sizeMin: 1.5, sizeMax: 2.5, durMin: 15, durMax: 35, delayMax: 15 });
+
+    // Option 2: Varied sizes
+    spawn('varied', 50, { sizeMin: 1, sizeMax: 4, durMin: 18, durMax: 40, delayMax: 20 });
+
+    // Option 3: Fireflies
+    spawn('firefly', 40, { sizeMin: 2, sizeMax: 4, durMin: 8, durMax: 16, delayMax: 12 });
+
+    // Option 4: Snow (falling)
+    spawn('snow', 50, { sizeMin: 1.5, sizeMax: 3, durMin: 12, durMax: 30, delayMax: 15 });
+
+    // Option 5: Gold dust (many tiny fast)
+    spawn('dust', 100, { sizeMin: 0.8, sizeMax: 1.5, durMin: 8, durMax: 18, delayMax: 10 });
+
+    // Option 6: Glow
+    spawn('glow', 40, { sizeMin: 2, sizeMax: 3.5, durMin: 18, durMax: 35, delayMax: 20 });
+
+    // Option 8: Embers
+    spawn('ember', 35, { sizeMin: 1.5, sizeMax: 3.5, durMin: 10, durMax: 22, delayMax: 12 });
+
+    // Option 7: Constellation (canvas-based)
+    (function() {
+      const canvas = document.getElementById('constellationCanvas');
+      const section = canvas.closest('.option');
+      const ctx = canvas.getContext('2d');
+      let dots = [];
+      const DOT_COUNT = 50;
+      const LINE_DIST = 120;
+
+      function resize() {
+        canvas.width = section.offsetWidth;
+        canvas.height = section.offsetHeight;
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      for (let i = 0; i < DOT_COUNT; i++) {
+        dots.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          r: 1 + Math.random() * 1.5
+        });
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Lines
+        for (let i = 0; i < dots.length; i++) {
+          for (let j = i + 1; j < dots.length; j++) {
+            const dx = dots[i].x - dots[j].x;
+            const dy = dots[i].y - dots[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < LINE_DIST) {
+              const alpha = (1 - dist / LINE_DIST) * 0.08;
+              ctx.beginPath();
+              ctx.moveTo(dots[i].x, dots[i].y);
+              ctx.lineTo(dots[j].x, dots[j].y);
+              ctx.strokeStyle = `rgba(201, 185, 154, ${alpha})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Dots
+        dots.forEach(d => {
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(201, 185, 154, 0.15)';
+          ctx.fill();
+
+          d.x += d.vx;
+          d.y += d.vy;
+
+          if (d.x < 0 || d.x > canvas.width) d.vx *= -1;
+          if (d.y < 0 || d.y > canvas.height) d.vy *= -1;
+        });
+
+        requestAnimationFrame(draw);
+      }
+
+      // Only animate when visible
+      const obs = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting) draw();
+      }, { threshold: 0.1 });
+      obs.observe(section);
+    })();
+  </script>
+
+</body>
+</html>

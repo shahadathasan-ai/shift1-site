@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Shuffle tile — options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{--bg:#0b0b0b;--bg-card:#161616;--bg-card-back:#1a1a1a;--text:#e8e4de;--text-muted:#8a8580;--accent:#e8d5a3;--fh:'Space Grotesk',sans-serif;--fb:'Inter',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--fb);padding:48px 44px 120px}
+  h1{font-family:var(--fh);font-weight:600;font-size:1.45rem;letter-spacing:.01em}
+  .intro{color:var(--text-muted);max-width:760px;margin:14px 0 6px;font-size:.9rem;line-height:1.65}
+  .note{color:var(--text-muted);font-size:.8rem;opacity:.65;margin-bottom:20px}
+  h2{font-family:var(--fh);font-weight:500;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:46px 0 24px;border-bottom:1px solid rgba(232,213,163,.14);padding-bottom:10px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:2.6rem 2rem;max-width:1240px}
+  .opt .cap{margin-top:14px;font-size:.78rem;color:var(--text-muted);line-height:1.5}
+  .opt .cap b{display:block;color:var(--text);font-family:var(--fh);font-weight:600;font-size:.84rem;letter-spacing:.01em;margin-bottom:3px}
+
+  /* ---------- card shell (matches the live site) ---------- */
+  .card-container{perspective:1000px;height:400px}
+  .card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,0,.2,1)}
+  .card-container:hover .card{transform:rotateY(180deg)}
+  .card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:8px;overflow:hidden}
+  .card-front{background:var(--bg-card);border:1px solid rgba(255,255,255,.04);display:flex;flex-direction:column;justify-content:flex-end;padding:2rem}
+  .card-back{background:var(--bg-card-back);transform:rotateY(180deg);padding:2rem;display:flex;flex-direction:column;justify-content:center;border:1px solid rgba(232,213,163,.1)}
+  .card-status{position:absolute;top:1.5rem;left:2rem;z-index:5;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500}
+  .status-progress{color:rgba(201,185,154,.7)}
+  .card-category{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem;font-weight:500}
+  .card-title{font-family:var(--fh);font-size:1.5rem;font-weight:600;color:var(--text);margin-bottom:.4rem}
+  .card-subtitle{font-size:.85rem;color:var(--text-muted)}
+  .card-back .card-category{margin-bottom:1rem}
+  .card-back-title{font-family:var(--fh);font-size:1.2rem;font-weight:600;color:var(--text);margin-bottom:1rem}
+  .card-back-text{font-size:.9rem;color:var(--text-muted);line-height:1.7;margin-bottom:1.4rem}
+  .card-back-link{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:500}
+
+  /* ---------- image + text layers ---------- */
+  .tile-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;z-index:0;display:block}
+  .tile-text{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:1.9rem}
+  .tile-shade{position:absolute;inset:0;z-index:2;background:linear-gradient(to top,rgba(8,8,9,.95) 5%,rgba(8,8,9,.55) 30%,transparent 58%)}
+  .bleed .card-status,.panel .card-status{color:#efe7d3;text-shadow:0 1px 8px rgba(0,0,0,.85)}
+  .bleed .card-title,.panel .card-title{color:#fff;text-shadow:0 1px 12px rgba(0,0,0,.6)}
+  .bleed,.panel{padding:0}
+
+  /* ---------- SIZING (image occupies top X%, text on a solid panel) ---------- */
+  .panel .tile-img{height:var(--imgh);inset:0 0 auto 0}
+  .panel .tile-text{background:var(--bg-card);border-top:1px solid rgba(232,213,163,.14);padding:1.5rem 1.9rem 1.9rem}
+  .p62{--imgh:62%}
+  .p50{--imgh:50%}
+  .p35{--imgh:35%}
+  .panel .edge{position:absolute;left:0;right:0;height:64px;top:calc(var(--imgh) - 64px);z-index:2;background:linear-gradient(to bottom,transparent,rgba(11,11,11,.45))}
+
+  /* ---------- STYLIZED (all full-bleed) ---------- */
+  .sty-duo::before{content:'';position:absolute;inset:0;z-index:0;background:linear-gradient(155deg,#221806 0%,#e8d5a3 125%)}
+  .sty-duo .tile-img{z-index:1;mix-blend-mode:luminosity;filter:contrast(1.08) brightness(1.06)}
+  .sty-noir .tile-img{filter:grayscale(1) contrast(1.45) brightness(.82)}
+  .sty-noir .vig{position:absolute;inset:0;z-index:2;background:radial-gradient(ellipse at 50% 42%,transparent 36%,rgba(0,0,0,.8) 100%)}
+  .sty-warm .tile-img{filter:contrast(1.26) brightness(.68) saturate(1.42)}
+  .sty-wash .tile-img{filter:grayscale(.82) contrast(1.12) brightness(.82)}
+  .sty-wash .wash{position:absolute;inset:0;z-index:2;background:linear-gradient(to top,rgba(232,213,163,.32),rgba(11,11,11,.12) 55%,transparent)}
+</style>
+</head>
+<body>
+  <h1>Shuffle tile — picture options</h1>
+  <div class="intro">Using the exterior freight-elevator shot (the lit monolith sits dead-centre, so it survives the portrait crop). Each tile still flips to the logline on hover, exactly like the live card. I can swap in the <em>interior</em> elevator instead, mix any size with any style, or push whichever you pick.</div>
+  <div class="note">Hover any tile to see the flip / back.</div>
+
+  <h2>Reference</h2>
+  <div class="grid">
+    <div class="opt">
+      <div class="card-container"><div class="card">
+        <div class="card-front">
+          <div class="card-status status-progress">In Progress</div>
+          <div class="card-category">Feature Screenplay</div>
+          <div class="card-title">Shuffle</div>
+          <div class="card-subtitle">Horror</div>
+        </div>
+        <div class="card-back">
+          <div class="card-category">Feature Screenplay</div>
+          <div class="card-back-title">Shuffle</div>
+          <div class="card-back-text">A college student pulling an all-nighter in an empty science lab is pricked by an unknown needle. What follows is a spiral between reality and something far stranger.</div>
+          <span class="card-back-link">Read the script &rarr;</span>
+        </div>
+      </div></div>
+      <div class="cap"><b>0 · Current</b><span>the live tile — no image</span></div>
+    </div>
+  </div>
+
+  <h2>Sizing — how much picture</h2>
+  <div class="grid" id="sizing"></div>
+
+  <h2>Stylized — full-bleed treatments</h2>
+  <div class="grid" id="stylized"></div>
+
+<script>
+  const IMG = 'read/frames/plaza.jpg';
+  const back = `
+      <div class="card-back">
+        <div class="card-category">Feature Screenplay</div>
+        <div class="card-back-title">Shuffle</div>
+        <div class="card-back-text">A college student pulling an all-nighter in an empty science lab is pricked by an unknown needle. What follows is a spiral between reality and something far stranger.</div>
+        <span class="card-back-link">Read the script &rarr;</span>
+      </div>`;
+  const text = `
+        <div class="card-status status-progress">In Progress</div>
+        <div class="tile-text">
+          <div class="card-category">Feature Screenplay</div>
+          <div class="card-title">Shuffle</div>
+          <div class="card-subtitle">Horror</div>
+        </div>`;
+
+  // front builders
+  const bleed = (cls, extra='') =>
+    `<div class="card-front bleed ${cls}"><img class="tile-img" src="${IMG}" alt="">${extra}<div class="tile-shade"></div>${text}</div>`;
+  const panel = (cls) =>
+    `<div class="card-front panel ${cls}"><img class="tile-img" src="${IMG}" alt=""><div class="edge"></div>${text}</div>`;
+
+  const opt = (front, n, name, desc) =>
+    `<div class="opt"><div class="card-container"><div class="card">${front}${back}</div></div>`+
+    `<div class="cap"><b>${n} · ${name}</b><span>${desc}</span></div></div>`;
+
+  document.getElementById('sizing').innerHTML = [
+    opt(bleed(''),      '1', 'Full-bleed',  'image fills the whole tile, title over a bottom fade'),
+    opt(panel('p62'),   '2', 'Two-thirds',  'image top ~65%, title on a solid panel below'),
+    opt(panel('p50'),   '3', 'Half',        'image top half, title on the panel below'),
+    opt(panel('p35'),   '4', 'Letterbox strip', 'a cinematic band up top, more text room'),
+  ].join('');
+
+  document.getElementById('stylized').innerHTML = [
+    opt(bleed('sty-duo'),                     '5', 'Amber duotone', 'mono-to-gold, matches the site accent'),
+    opt(bleed('sty-noir', '<div class="vig"></div>'), '6', 'Noir',   'high-contrast black & white + vignette'),
+    opt(bleed('sty-warm'),                    '7', 'Warm cinematic', 'darkened so the lamp glow pops'),
+    opt(bleed('sty-wash', '<div class="wash"></div>'), '8', 'Amber wash', 'desaturated with a gold gradient over it'),
+  ].join('');
+</script>
+</body>
+</html>

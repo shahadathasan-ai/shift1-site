@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shift1 — NYC Midnight landing layouts</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0b0b0b;
+  --bg-card: #141414;
+  --bg-card-hover: #1a1a1a;
+  --text: #e8e4de;
+  --text-muted: #a8a39a;
+  --text-dim: #6a6560;
+  --accent: #e8d5a3;
+  --accent-dim: rgba(201, 185, 154, 0.12);
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-weight: 400; padding: 80px 60px 140px; line-height: 1.7; }
+.wrap { max-width: 1200px; margin: 0 auto; }
+
+.opt { margin-bottom: 140px; }
+.opt-label { font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(201,185,154,0.2); }
+.opt-name { font-family: var(--font-body); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 3rem; }
+
+/* Landing section header used by multiple options */
+.landing-eyebrow {
+  font-family: var(--font-heading); font-size: 0.65rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
+}
+.landing-heading {
+  font-family: var(--font-heading); font-size: 1.8rem; font-weight: 600;
+  color: var(--text); margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.landing-sub {
+  font-size: 0.9rem; color: var(--text-muted); max-width: 620px; margin-bottom: 3rem;
+}
+
+/* ════════════ OPTION A: 2x2 grid of large cards ════════════ */
+.optA-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.optA-card {
+  padding: 2.5rem 2rem; background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.05); border-radius: 4px;
+  cursor: pointer; transition: all 0.3s; position: relative;
+  min-height: 200px; display: flex; flex-direction: column; justify-content: space-between;
+}
+.optA-card:hover {
+  background: var(--bg-card-hover); border-color: rgba(201,185,154,0.2);
+  transform: translateY(-2px);
+}
+.optA-format { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+.optA-title { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+.optA-year { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+.optA-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.05);
+}
+.optA-rounds { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+.optA-arrow { font-size: 1rem; color: var(--text-dim); transition: all 0.3s; }
+.optA-card:hover .optA-arrow { color: var(--accent); transform: translateX(4px); }
+
+/* ════════════ OPTION B: 4-column horizontal row ════════════ */
+.optB-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.optB-card {
+  padding: 2rem 1.5rem; background: var(--bg-card);
+  border: 1px solid rgba(255,255,255,0.04); border-radius: 4px;
+  cursor: pointer; transition: all 0.3s; min-height: 220px;
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.optB-card:hover { background: var(--bg-card-hover); border-color: rgba(201,185,154,0.2); }
+.optB-top { flex: 1; }
+.optB-format { font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.8rem; }
+.optB-title { font-family: var(--font-heading); font-size: 1rem; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 0.5rem; }
+.optB-year { font-size: 0.7rem; color: var(--text-muted); }
+.optB-rounds { font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.05); }
+
+/* ════════════ OPTION C: Full-width rows ════════════ */
+.optC-list { display: flex; flex-direction: column; gap: 0; }
+.optC-row {
+  display: grid; grid-template-columns: 120px 1fr auto;
+  gap: 2rem; align-items: center;
+  padding: 2rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer; transition: all 0.3s;
+}
+.optC-row:last-child { border-bottom: 1px solid rgba(255,255,255,0.05); }
+.optC-row:hover { background: rgba(255,255,255,0.02); padding-left: 2rem; }
+.optC-format { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); }
+.optC-middle {}
+.optC-title { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 600; color: var(--text); margin-bottom: 0.2rem; }
+.optC-year { font-size: 0.75rem; color: var(--text-muted); }
+.optC-right { display: flex; align-items: center; gap: 1.5rem; }
+.optC-rounds { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+.optC-arrow { font-size: 1.1rem; color: var(--text-dim); transition: all 0.3s; }
+.optC-row:hover .optC-arrow { color: var(--accent); transform: translateX(6px); }
+
+/* ════════════ OPTION D: Numbered list, big typography ════════════ */
+.optD-list { display: flex; flex-direction: column; gap: 1.5rem; }
+.optD-row {
+  display: grid; grid-template-columns: 60px 1fr auto;
+  gap: 2rem; align-items: center;
+  padding: 1.25rem 0; cursor: pointer; transition: all 0.3s;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.optD-num { font-family: var(--font-heading); font-size: 2rem; font-weight: 300; color: var(--accent); line-height: 1; }
+.optD-middle {}
+.optD-format { font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.3rem; }
+.optD-title { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 600; color: var(--text); }
+.optD-year { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
+.optD-rounds { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+.optD-row:hover .optD-title { color: var(--accent); }
+
+/* ════════════ OPTION E: Minimal typographic index ════════════ */
+.optE-list { display: flex; flex-direction: column; }
+.optE-row {
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: 2.5rem; align-items: baseline;
+  padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer; transition: all 0.3s;
+}
+.optE-row:last-child { border-bottom: none; }
+.optE-row:hover { padding-left: 1rem; }
+.optE-num { font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.2em; color: var(--text-dim); min-width: 30px; }
+.optE-title {
+  font-family: var(--font-heading); font-size: 1.6rem; font-weight: 600;
+  color: var(--text); letter-spacing: -0.01em;
+}
+.optE-title span { display: block; font-size: 0.7rem; font-weight: 400; color: var(--text-muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.3rem; }
+.optE-meta { font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.1em; color: var(--text-muted); text-align: right; }
+.optE-meta strong { color: var(--text); font-weight: 500; display: block; font-size: 0.85rem; margin-bottom: 0.15rem; letter-spacing: -0.01em; text-transform: none; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<!-- ════ OPTION A: 2x2 grid of large cards ════ -->
+<div class="opt">
+  <div class="opt-label">Option A</div>
+  <div class="opt-name">2×2 grid of large cards — visual, breathable. Most "showcase" feeling.</div>
+
+  <div class="landing-eyebrow">The competitions</div>
+  <div class="landing-heading">Four entries across three challenges</div>
+  <div class="landing-sub">Each NYC Midnight challenge assigns a genre, subject, and character, with 48 hours to eight days to write an original story from scratch. Click a challenge to see the rounds.</div>
+
+  <div class="optA-grid">
+    <div class="optA-card">
+      <div>
+        <div class="optA-format">Scary Story</div>
+        <div class="optA-title">Scary Story Challenge</div>
+        <div class="optA-year">November 2025</div>
+      </div>
+      <div class="optA-meta">
+        <div class="optA-rounds">3 Rounds</div>
+        <div class="optA-arrow">→</div>
+      </div>
+    </div>
+    <div class="optA-card">
+      <div>
+        <div class="optA-format">Short Story</div>
+        <div class="optA-title">Short Story Challenge</div>
+        <div class="optA-year">February 2026</div>
+      </div>
+      <div class="optA-meta">
+        <div class="optA-rounds">2 Rounds</div>
+        <div class="optA-arrow">→</div>
+      </div>
+    </div>
+    <div class="optA-card">
+      <div>
+        <div class="optA-format">Screenplay</div>
+        <div class="optA-title">Screenwriting Challenge</div>
+        <div class="optA-year">February 2026</div>
+      </div>
+      <div class="optA-meta">
+        <div class="optA-rounds">2 Rounds</div>
+        <div class="optA-arrow">→</div>
+      </div>
+    </div>
+    <div class="optA-card">
+      <div>
+        <div class="optA-format">Screenplay</div>
+        <div class="optA-title">Screenwriting Challenge</div>
+        <div class="optA-year">February 2025</div>
+      </div>
+      <div class="optA-meta">
+        <div class="optA-rounds">1 Round</div>
+        <div class="optA-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ OPTION B: 4-column horizontal row ════ -->
+<div class="opt">
+  <div class="opt-label">Option B</div>
+  <div class="opt-name">4-column horizontal row — like Netflix tiles. More compact.</div>
+
+  <div class="landing-eyebrow">The competitions</div>
+  <div class="landing-heading">Four entries across three challenges</div>
+  <div class="landing-sub">Each NYC Midnight challenge assigns a genre, subject, and character, with 48 hours to eight days to write an original story from scratch. Click a challenge to see the rounds.</div>
+
+  <div class="optB-grid">
+    <div class="optB-card">
+      <div class="optB-top">
+        <div class="optB-format">Scary Story</div>
+        <div class="optB-title">Scary Story Challenge</div>
+        <div class="optB-year">November 2025</div>
+      </div>
+      <div class="optB-rounds">3 Rounds</div>
+    </div>
+    <div class="optB-card">
+      <div class="optB-top">
+        <div class="optB-format">Short Story</div>
+        <div class="optB-title">Short Story Challenge</div>
+        <div class="optB-year">February 2026</div>
+      </div>
+      <div class="optB-rounds">2 Rounds</div>
+    </div>
+    <div class="optB-card">
+      <div class="optB-top">
+        <div class="optB-format">Screenplay</div>
+        <div class="optB-title">Screenwriting Challenge</div>
+        <div class="optB-year">February 2026</div>
+      </div>
+      <div class="optB-rounds">2 Rounds</div>
+    </div>
+    <div class="optB-card">
+      <div class="optB-top">
+        <div class="optB-format">Screenplay</div>
+        <div class="optB-title">Screenwriting Challenge</div>
+        <div class="optB-year">February 2025</div>
+      </div>
+      <div class="optB-rounds">1 Round</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ OPTION C: Full-width rows ════ -->
+<div class="opt">
+  <div class="opt-label">Option C</div>
+  <div class="opt-name">Full-width rows — format on left, title middle, rounds right. Cinematic list feel.</div>
+
+  <div class="landing-eyebrow">The competitions</div>
+  <div class="landing-heading">Four entries across three challenges</div>
+  <div class="landing-sub">Each NYC Midnight challenge assigns a genre, subject, and character, with 48 hours to eight days to write an original story from scratch. Click a challenge to see the rounds.</div>
+
+  <div class="optC-list">
+    <div class="optC-row">
+      <div class="optC-format">Scary Story</div>
+      <div class="optC-middle">
+        <div class="optC-title">Scary Story Challenge</div>
+        <div class="optC-year">November 2025</div>
+      </div>
+      <div class="optC-right">
+        <div class="optC-rounds">3 Rounds</div>
+        <div class="optC-arrow">→</div>
+      </div>
+    </div>
+    <div class="optC-row">
+      <div class="optC-format">Short Story</div>
+      <div class="optC-middle">
+        <div class="optC-title">Short Story Challenge</div>
+        <div class="optC-year">February 2026</div>
+      </div>
+      <div class="optC-right">
+        <div class="optC-rounds">2 Rounds</div>
+        <div class="optC-arrow">→</div>
+      </div>
+    </div>
+    <div class="optC-row">
+      <div class="optC-format">Screenplay</div>
+      <div class="optC-middle">
+        <div class="optC-title">Screenwriting Challenge</div>
+        <div class="optC-year">February 2026</div>
+      </div>
+      <div class="optC-right">
+        <div class="optC-rounds">2 Rounds</div>
+        <div class="optC-arrow">→</div>
+      </div>
+    </div>
+    <div class="optC-row">
+      <div class="optC-format">Screenplay</div>
+      <div class="optC-middle">
+        <div class="optC-title">Screenwriting Challenge</div>
+        <div class="optC-year">February 2025</div>
+      </div>
+      <div class="optC-right">
+        <div class="optC-rounds">1 Round</div>
+        <div class="optC-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ OPTION D: Numbered editorial list ════ -->
+<div class="opt">
+  <div class="opt-label">Option D</div>
+  <div class="opt-name">Numbered editorial list — big accent numerals, editorial/magazine feel.</div>
+
+  <div class="landing-eyebrow">The competitions</div>
+  <div class="landing-heading">Four entries across three challenges</div>
+  <div class="landing-sub">Each NYC Midnight challenge assigns a genre, subject, and character, with 48 hours to eight days to write an original story from scratch. Click a challenge to see the rounds.</div>
+
+  <div class="optD-list">
+    <div class="optD-row">
+      <div class="optD-num">01</div>
+      <div class="optD-middle">
+        <div class="optD-format">Scary Story</div>
+        <div class="optD-title">Scary Story Challenge</div>
+        <div class="optD-year">November 2025</div>
+      </div>
+      <div class="optD-rounds">3 Rounds</div>
+    </div>
+    <div class="optD-row">
+      <div class="optD-num">02</div>
+      <div class="optD-middle">
+        <div class="optD-format">Short Story</div>
+        <div class="optD-title">Short Story Challenge</div>
+        <div class="optD-year">February 2026</div>
+      </div>
+      <div class="optD-rounds">2 Rounds</div>
+    </div>
+    <div class="optD-row">
+      <div class="optD-num">03</div>
+      <div class="optD-middle">
+        <div class="optD-format">Screenplay</div>
+        <div class="optD-title">Screenwriting Challenge</div>
+        <div class="optD-year">February 2026</div>
+      </div>
+      <div class="optD-rounds">2 Rounds</div>
+    </div>
+    <div class="optD-row">
+      <div class="optD-num">04</div>
+      <div class="optD-middle">
+        <div class="optD-format">Screenplay</div>
+        <div class="optD-title">Screenwriting Challenge</div>
+        <div class="optD-year">February 2025</div>
+      </div>
+      <div class="optD-rounds">1 Round</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ OPTION E: Minimal typographic index ════ -->
+<div class="opt">
+  <div class="opt-label">Option E</div>
+  <div class="opt-name">Minimal typographic index — title takes centre stage, no boxes, no heavy backgrounds. Most editorial.</div>
+
+  <div class="landing-eyebrow">The competitions</div>
+  <div class="landing-heading">Four entries across three challenges</div>
+  <div class="landing-sub">Each NYC Midnight challenge assigns a genre, subject, and character, with 48 hours to eight days to write an original story from scratch. Click a challenge to see the rounds.</div>
+
+  <div class="optE-list">
+    <div class="optE-row">
+      <div class="optE-num">01</div>
+      <div class="optE-title">Scary Story Challenge<span>Scary Story · November 2025</span></div>
+      <div class="optE-meta"><strong>3 Rounds</strong>48 hours · 400 words</div>
+    </div>
+    <div class="optE-row">
+      <div class="optE-num">02</div>
+      <div class="optE-title">Short Story Challenge<span>Short Story · February 2026</span></div>
+      <div class="optE-meta"><strong>2 Rounds</strong>3–8 days · up to 2,000 words</div>
+    </div>
+    <div class="optE-row">
+      <div class="optE-num">03</div>
+      <div class="optE-title">Screenwriting Challenge<span>Screenplay · February 2026</span></div>
+      <div class="optE-meta"><strong>2 Rounds</strong>3–8 days · 7–10 pages</div>
+    </div>
+    <div class="optE-row">
+      <div class="optE-num">04</div>
+      <div class="optE-title">Screenwriting Challenge<span>Screenplay · February 2025</span></div>
+      <div class="optE-meta"><strong>1 Round</strong>8 days · 12 pages</div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

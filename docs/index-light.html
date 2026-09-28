@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shift1 — Studios</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>Shift1 — Productions (Light)</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after {
@@ -14,13 +13,13 @@
     }
 
     :root {
-      --bg: #0b0b0b;
-      --bg-card: #161616;
-      --bg-card-back: #1a1a1a;
-      --text: #e8e4de;
-      --text-muted: #8a8580;
-      --accent: #e8d5a3;
-      --accent-dim: rgba(201, 185, 154, 0.12);
+      --bg: #f5f1eb;
+      --bg-card: #ffffff;
+      --bg-card-back: #faf8f5;
+      --text: #1a1815;
+      --text-muted: #7a756e;
+      --accent: #8b7355;
+      --accent-dim: rgba(139, 115, 85, 0.1);
       --font-heading: 'Space Grotesk', sans-serif;
       --font-body: 'Inter', sans-serif;
     }
@@ -59,9 +58,9 @@
 
     @keyframes firefly {
       0% { opacity: 0; transform: translate(0, 0); }
-      25% { opacity: 0.4; }
-      50% { opacity: 0.15; transform: translate(30px, -60px); }
-      75% { opacity: 0.32; }
+      25% { opacity: 0.12; }
+      50% { opacity: 0.04; transform: translate(30px, -60px); }
+      75% { opacity: 0.1; }
       100% { opacity: 0; transform: translate(-20px, -120px); }
     }
 
@@ -108,7 +107,7 @@
 
     /* ─── HERO ─── */
     .hero {
-      height: 100dvh;
+      height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -133,16 +132,6 @@
       position: relative;
     }
 
-    .logo-text .tm {
-      font-size: 0.2em;
-      vertical-align: baseline;
-      color: var(--text-muted);
-      opacity: 0.5;
-      margin-left: 0.05em;
-      position: relative;
-      top: -2.7em;
-    }
-
     .hero-sub {
       font-family: var(--font-body);
       font-size: 0.85rem;
@@ -150,11 +139,6 @@
       text-transform: uppercase;
       color: var(--text-muted);
       margin-top: 0.75rem;
-      /* Centred under the mark rather than flush-left. "Productions" was long
-         enough to look balanced sitting left; a shorter word is not, and the
-         tracking puts a trailing space after the last letter either way. */
-      text-align: center;
-      text-indent: 0.35em;
     }
 
     .hero-line {
@@ -162,45 +146,30 @@
       height: 1px;
       background: var(--accent);
       margin-top: 3rem;
-      opacity: 0.5;
+      opacity: 0.4;
     }
 
     .scroll-hint {
       position: absolute;
-      bottom: 8rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--accent);
-      text-decoration: none;
-      opacity: 1;
-      animation: bounce 2s ease-in-out infinite;
-      cursor: pointer;
-      transition: opacity 0.3s;
-    }
-    .scroll-hint:hover { opacity: 0.7; }
-    .scroll-label {
-      font-size: 0.65rem;
+      bottom: 3rem;
+      font-size: 0.7rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-    }
-
-    @keyframes bounce {
-      0%, 100% { opacity: 0.8; transform: translateY(0); }
-      50% { opacity: 1; transform: translateY(8px); }
+      color: var(--text-muted);
+      opacity: 0.3;
+      animation: pulse 2s ease-in-out infinite;
     }
 
     @keyframes pulse {
-      0%, 100% { opacity: 0.2; transform: translateY(0); }
-      50% { opacity: 0.5; transform: translateY(4px); }
+      0%, 100% { opacity: 0.15; transform: translateY(0); }
+      50% { opacity: 0.4; transform: translateY(4px); }
     }
 
     /* ─── SECTIONS ─── */
     section {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 5rem 3rem;
+      padding: 8rem 3rem;
       position: relative;
       z-index: 1;
     }
@@ -230,6 +199,15 @@
       line-height: 1.8;
     }
 
+    /* ─── ABOUT ─── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-right { padding-top: 2rem; }
 
     /* ─── DIVIDER ─── */
     .divider {
@@ -279,18 +257,17 @@
       transform: rotateY(180deg);
     }
 
-    /* No flip on link cards */
     .card-container.no-flip:hover .card {
       transform: none;
     }
 
     .card-container.no-flip .card-front {
-      transition: border-color 0.3s, background 0.3s;
+      transition: border-color 0.3s, box-shadow 0.3s;
     }
 
     .card-container.no-flip:hover .card-front {
-      border-color: rgba(201, 185, 154, 0.15);
-      background: #1a1a1a;
+      border-color: rgba(139, 115, 85, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
     }
 
     .card-front,
@@ -308,27 +285,29 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      padding: 2rem 2rem 1.35rem;   /* title sits slightly lower */
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      transition: border-color 0.3s ease;
+      padding: 2rem;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
     }
 
     .card-container:hover .card-front {
-      border-color: rgba(201, 185, 154, 0.15);
+      border-color: rgba(139, 115, 85, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
     }
 
-    /* Only the unfinished work carries a status; the first three need none. */
     .card-status {
       position: absolute;
       top: 1.5rem;
       left: 2rem;
-      z-index: 5;
       font-size: 0.6rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       font-weight: 500;
-      color: rgba(201, 185, 154, 0.6);
     }
+
+    .status-complete { color: rgba(80, 160, 80, 0.7); }
+    .status-progress { color: rgba(139, 115, 85, 0.6); }
 
     .card-category {
       font-size: 0.65rem;
@@ -352,45 +331,6 @@
       color: var(--text-muted);
     }
 
-    /* ── image tiles (Shuffle / NYC / Icarus) — shared format ── */
-    /* picture up top (--imgh); title on a solid panel below. divider lowered to give the picture more room */
-    .card-front.tile-shuffle, .card-front.tile-nyc, .card-front.tile-ic { padding: 0; --imgh: 62%; }
-    .tile-shuffle .tile-panel, .tile-nyc .tile-panel, .tile-ic .tile-panel {
-      position: absolute; left: 0; right: 0; top: var(--imgh); bottom: 0; z-index: 4;
-      background: var(--bg-card); border-top: 1px solid rgba(232,213,163,0.14);
-      padding: 1.5rem 2rem 1.4rem; display: flex; flex-direction: column; justify-content: flex-end;
-    }
-    .tile-ic .edge {
-      position: absolute; left: 0; right: 0; height: 60px; top: calc(var(--imgh) - 60px); z-index: 2;
-      background: linear-gradient(to bottom, transparent, rgba(11,11,11,0.4));
-    }
-
-    /* Shuffle — poster artwork. The image band's ratio moves with the grid,
-       measured from 1.37 at the narrowest column to 2.59 when it collapses to
-       one. The asset is therefore cut at 2.60 with the artwork composed inside
-       its central 1.37 region, so `cover` always shows at least that region and
-       only ever crops paper. Paper is part of the image rather than a CSS fill,
-       so there is no tone mismatch at the edges. Measured: nothing clipped at
-       any width. */
-    .tile-shuffle .tile-bg {
-      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      background: url('read/frames/shuffle-tile-v2.png') center / cover no-repeat;
-    }
-    /* Icarus — sci-fi frame, centred */
-    .tile-ic .tile-bg {
-      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      background: url('read/frames/icarus.jpg') center/cover no-repeat;
-    }
-    /* NYC — transparent logo webp, recoloured to the site gold, on dark */
-    .tile-nyc .logo-area {
-      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      display: flex; align-items: center; justify-content: center; background: #161616;
-    }
-    .tile-nyc .logo-area img {
-      width: 46%; height: auto;
-      filter: invert(1) sepia(1) saturate(3.6) hue-rotate(4deg) brightness(0.95);
-    }
-
     .card-number {
       position: absolute;
       top: 1.5rem;
@@ -398,7 +338,7 @@
       font-family: var(--font-heading);
       font-size: 4rem;
       font-weight: 700;
-      color: rgba(255, 255, 255, 0.03);
+      color: rgba(0, 0, 0, 0.03);
       line-height: 1;
     }
 
@@ -409,8 +349,9 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      border: 1px solid rgba(201, 185, 154, 0.1);
+      border: 1px solid rgba(139, 115, 85, 0.15);
       border-radius: 8px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
     }
 
     .card-back .card-category { margin-bottom: 1rem; }
@@ -441,19 +382,6 @@
       display: block;
       margin-bottom: 0.3rem;
     }
-
-    .card-back-link {
-      display: inline-block;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      text-decoration: none;
-      transition: opacity 0.3s;
-      border-bottom: 1px solid rgba(201, 185, 154, 0.3);
-      padding-bottom: 2px;
-    }
-    .card-back-link:hover { opacity: 0.7; }
 
     /* ─── CONTACT ─── */
     .contact {
@@ -524,6 +452,7 @@
   <nav>
     <a href="#" class="nav-logo">SH1FT</a>
     <ul class="nav-links">
+      <li><a href="#about">About</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
@@ -533,145 +462,150 @@
   <section class="hero">
     <div class="hero-logo">
       <div class="logo-text">SH<span class="one">1</span>FT</div>
-      <div class="hero-sub">Studios</div>
+      <div class="hero-sub">Productions</div>
     </div>
     <div class="hero-line"></div>
-    <a href="#projects" class="scroll-hint"><span class="scroll-label">Stories</span>&#8595;</a>
+    <div class="scroll-hint">Scroll</div>
   </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about">
+      <div class="about-left">
+        <div class="section-label">About</div>
+        <h2 class="section-title">The ones that<br>stay with you.</h2>
+        <p class="section-text">
+          Stories that hit different after the credits roll. The kind that linger in your head for days and quietly reshape how you see the world. That's what we care about.
+        </p>
+      </div>
+      <div class="about-right">
+        <p class="section-text">
+          Features. Pilots. Animation. Novels. Short stories. We believe the idea chooses the format — never the other way around.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"><div class="divider-line"></div></div>
 
   <!-- PROJECTS -->
   <section id="projects">
     <div class="section-label">Projects</div>
-    <h2 class="section-title">Selected Stories</h2>
-    <p class="section-text">Features, pilots, novels, short stories — the best fit for the idea.</p>
+    <h2 class="section-title">Selected work</h2>
+    <p class="section-text">Hover to explore.</p>
 
     <div class="projects-grid">
 
-      <!-- NYC Midnight -->
-      <div class="card-container reveal" style="--i:0">
-        <div class="card">
-          <a href="nyc-midnight.html" class="card-front tile-nyc">
-            <div class="logo-area"><img src="read/frames/nyc-logo.webp" alt="NYC Midnight" /></div>
-            <div class="tile-panel">
+      <div class="card-container no-flip reveal" style="--i:0">
+        <a href="nyc-midnight.html">
+          <div class="card">
+            <div class="card-front">
+              <div class="card-status status-complete">Complete</div>
+              <div class="card-number">01</div>
               <div class="card-category">Competition</div>
               <div class="card-title">NYC Midnight</div>
-              <div class="card-subtitle">Short story competition</div>
+              <div class="card-subtitle">Timed entries. Assigned constraints. No excuses.</div>
             </div>
-          </a>
-          <a href="nyc-midnight.html" class="card-back">
-            <div class="card-category">NYC Midnight</div>
-            <div class="card-back-title">4 Competitions</div>
-            <div class="card-back-text">
-              Scary Story Challenge — 2025<br>
-              Screenwriting Challenge — 2025<br>
-              Screenwriting Challenge — 2026<br>
-              Short Story Challenge — 2026
-            </div>
-            <span class="card-back-link">View entries &rarr;</span>
-          </a>
-        </div>
+          </div>
+        </a>
       </div>
 
-      <!-- Shuffle -->
       <div class="card-container reveal" style="--i:1">
         <div class="card">
-          <a href="shuffle.html" class="card-front tile-shuffle">
-            <div class="tile-bg"></div>
-            <div class="edge"></div>
-            <div class="tile-panel">
-              <div class="card-category">Short Film</div>
-              <div class="card-title">Shuffle</div>
-              <div class="card-subtitle">Horror</div>
-            </div>
-          </a>
-          <a href="shuffle.html" class="card-back">
-            <div class="card-category">Short Film</div>
-            <div class="card-back-title">Shuffle</div>
+          <div class="card-front">
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-number">02</div>
+            <div class="card-category">Feature Screenplay</div>
+            <div class="card-title">Project Title</div>
+            <div class="card-subtitle">A story about something that matters.</div>
+          </div>
+          <div class="card-back">
+            <div class="card-category">Feature Screenplay</div>
+            <div class="card-back-title">Project Title</div>
             <div class="card-back-text">
-              Some night shifts are quieter than others. For one laboratory worker, the silence is only the beginning. Based on a true story.
+              A brief synopsis goes here. Two or three sentences that capture the premise, the conflict, and what makes this one different.
             </div>
-            <span class="card-back-link">See short video &rarr;</span>
-          </a>
+            <div class="card-back-meta"><span>Format: Feature / 110 pages</span></div>
+          </div>
         </div>
       </div>
 
-      <!-- Icarus -->
       <div class="card-container reveal" style="--i:2">
         <div class="card">
-          <a href="read/icarus.html" class="card-front tile-ic">
-            <div class="tile-bg"></div>
-            <div class="edge"></div>
-            <div class="tile-panel">
-              <div class="card-category">Animated Pilot</div>
-              <div class="card-title">Icarus</div>
-              <div class="card-subtitle">Comedy / Sci-Fi</div>
-            </div>
-          </a>
-          <a href="read/icarus.html" class="card-back">
-            <div class="card-category">Animated Pilot</div>
-            <div class="card-back-title">Icarus</div>
-            <div class="card-back-text">
-              An outcast teenager becomes the unlikely leader of an alien universe on the brink of collapse. She didn't ask for the job — and they didn't ask for her.
-            </div>
-            <span class="card-back-link">Read the script &rarr;</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Lyon Street -->
-      <div class="card-container reveal" style="--i:3">
-        <div class="card">
           <div class="card-front">
-            <div class="card-status">In Progress</div>
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-number">03</div>
             <div class="card-category">Novel</div>
-            <div class="card-title">Lyon Street</div>
-            <div class="card-subtitle">Biopic</div>
+            <div class="card-title">Project Title</div>
+            <div class="card-subtitle">Long-form. No shortcuts.</div>
           </div>
           <div class="card-back">
             <div class="card-category">Novel</div>
-            <div class="card-back-title">Lyon Street</div>
+            <div class="card-back-title">Project Title</div>
             <div class="card-back-text">
-              A teenage girl arrives in a foreign country barely speaking the language. She finds a close community of others like her, and together they make their way in a new world.
+              The book synopsis. Genre, premise, what it's really about underneath.
             </div>
-            <div class="card-back-meta">
-              <span>Format: Novel</span>
+            <div class="card-back-meta"><span>Word count: ~80,000</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container reveal" style="--i:3">
+        <div class="card">
+          <div class="card-front">
+            <div class="card-status status-complete">Complete</div>
+            <div class="card-number">04</div>
+            <div class="card-category">Animated Pilot</div>
+            <div class="card-title">Project Title</div>
+            <div class="card-subtitle">Drawn worlds, real stakes.</div>
+          </div>
+          <div class="card-back">
+            <div class="card-category">Animated Pilot</div>
+            <div class="card-back-title">Project Title</div>
+            <div class="card-back-text">
+              The animated series concept. World, characters, tone.
             </div>
+            <div class="card-back-meta"><span>Format: Pilot / 22 min</span></div>
           </div>
         </div>
       </div>
 
-      <!-- Bombshell -->
-      <div class="card-container no-flip reveal" style="--i:4">
+      <div class="card-container reveal" style="--i:4">
         <div class="card">
           <div class="card-front">
-            <div class="card-status">In Progress</div>
-            <div class="card-category">Feature Screenplay</div>
-            <div class="card-title">Bombshell</div>
-            <div class="card-subtitle">Comedy</div>
+            <div class="card-status status-complete">Complete</div>
+            <div class="card-number">05</div>
+            <div class="card-category">Short Story</div>
+            <div class="card-title">Project Title</div>
+            <div class="card-subtitle">Small frame, big idea.</div>
+          </div>
+          <div class="card-back">
+            <div class="card-category">Short Story</div>
+            <div class="card-back-title">Project Title</div>
+            <div class="card-back-text">
+              A short piece that says more in fewer words. The constraint is the point.
+            </div>
+            <div class="card-back-meta"><span>Format: Short Story</span></div>
           </div>
         </div>
       </div>
 
-      <!-- God has No Family -->
-      <div class="card-container no-flip reveal" style="--i:5">
+      <div class="card-container reveal" style="--i:5">
         <div class="card">
           <div class="card-front">
-            <div class="card-status">In Progress</div>
+            <div class="card-status status-progress">In Progress</div>
+            <div class="card-number">06</div>
             <div class="card-category">Feature Screenplay</div>
-            <div class="card-title">God has No Family</div>
-            <div class="card-subtitle">Thriller / Sci-Fi</div>
+            <div class="card-title">Project Title</div>
+            <div class="card-subtitle">The one that won't let go.</div>
           </div>
-        </div>
-      </div>
-
-      <!-- Nostradamus -->
-      <div class="card-container no-flip reveal" style="--i:6">
-        <div class="card">
-          <div class="card-front">
-            <div class="card-status">In Progress</div>
+          <div class="card-back">
             <div class="card-category">Feature Screenplay</div>
-            <div class="card-title">Nostradamus</div>
-            <div class="card-subtitle">Romantic Comedy</div>
+            <div class="card-back-title">Project Title</div>
+            <div class="card-back-text">
+              Another feature. Different genre, different world, same standard.
+            </div>
+            <div class="card-back-meta"><span>Format: Feature / 95 pages</span></div>
           </div>
         </div>
       </div>
@@ -684,27 +618,23 @@
   <!-- CONTACT -->
   <section id="contact" class="contact">
     <div class="section-label">Get in touch</div>
-    <a href="mailto:stories@shift1.co" class="contact-email">stories@shift1.co</a>
+    <h2 class="section-title">Let's talk.</h2>
+    <a href="mailto:hello@shift1.co" class="contact-email">hello@shift1.co</a>
   </section>
 
-  <!-- FOOTER -->
   <footer>
-    &copy; 2026 Shift1&trade; Studios. All rights reserved.
+    &copy; 2026 Shift1 Productions. All rights reserved.
   </footer>
 
   <script>
-    // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('visible');
       });
     }, { threshold: 0.15 });
     reveals.forEach(el => observer.observe(el));
 
-    // Background particles (fireflies)
     const container = document.getElementById('particles');
     for (let i = 0; i < 40; i++) {
       const p = document.createElement('div');
@@ -715,12 +645,10 @@
       p.style.width = size + 'px';
       p.style.height = size + 'px';
       p.style.animationDuration = (8 + Math.random() * 8) + 's';
-      p.style.animationDelay = (Math.random() * 1) + 's';
+      p.style.animationDelay = (Math.random() * 12) + 's';
       container.appendChild(p);
     }
   </script>
 
-<script data-goatcounter="https://shift1.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>

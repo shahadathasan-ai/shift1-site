@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shift1 — readability + rounds options</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0b0b0b;
+  --bg-card: #161616;
+  --bg-card-2: #1c1c1c;
+  --text: #e8e4de;
+  --text-muted: #8a8580;       /* CURRENT */
+  --text-muted-new: #a8a39a;   /* PROPOSED — lighter */
+  --text-dim: #555049;
+  --accent: #e8d5a3;
+  --accent-dim: rgba(201, 185, 154, 0.12);
+  --green: #7bc97b;
+  --amber: #d4a04e;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-weight: 300; padding: 60px 60px 120px; line-height: 1.7; }
+
+.wrap { max-width: 1100px; margin: 0 auto; }
+
+.section { margin-bottom: 120px; }
+.section-label {
+  font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid rgba(201,185,154,0.2);
+}
+.section-name { font-family: var(--font-body); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2.5rem; }
+.sub-label { font-family: var(--font-heading); font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin: 2.5rem 0 1rem; }
+
+/* ═════════════════════════════════════════════════════════════ */
+/* PART 1: READABILITY DEMOS                                     */
+/* ═════════════════════════════════════════════════════════════ */
+
+.read-block { padding: 2rem; border-radius: 4px; margin-bottom: 1.5rem; }
+
+/* CURRENT state */
+.read-current { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.04); }
+.read-current .rc-title { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+.read-current .rc-meta { font-size: 0.7rem; color: #8a8580; margin-bottom: 1rem; font-weight: 300; }
+.read-current .rc-body { font-size: 0.85rem; font-weight: 300; color: #8a8580; line-height: 1.7; max-width: 680px; }
+.read-current .rc-body em { font-style: italic; color: #e8e4de; }
+
+/* QUICK WINS applied */
+.read-new { background: var(--bg-card); border: 1px solid rgba(255,255,255,0.04); }
+.read-new .rn-title { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+.read-new .rn-meta { font-size: 0.75rem; color: #a8a39a; margin-bottom: 1rem; font-weight: 400; }
+.read-new .rn-body { font-size: 0.9rem; font-weight: 400; color: #c4bfb6; line-height: 1.8; max-width: 680px; }
+.read-new .rn-body em { font-style: italic; color: #e8e4de; }
+
+/* LIGHT READER variant */
+.read-light { background: #f6f2ea; color: #1a1815; border: 1px solid rgba(26,24,21,0.1); }
+.read-light .rl-title { font-family: var(--font-heading); font-size: 1.3rem; font-weight: 600; color: #1a1815; margin-bottom: 0.5rem; }
+.read-light .rl-meta { font-size: 0.75rem; color: #6a6560; margin-bottom: 1rem; font-weight: 400; }
+.read-light .rl-body { font-size: 0.95rem; font-weight: 400; color: #3a3530; line-height: 1.85; max-width: 680px; }
+.read-light .rl-body em { font-style: italic; color: #c17f4e; }
+
+/* ═════════════════════════════════════════════════════════════ */
+/* PART 2: ROUND DISPLAY OPTIONS                                 */
+/* ═════════════════════════════════════════════════════════════ */
+
+.comp-header {
+  padding: 2rem 0 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 2rem;
+}
+.comp-title { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 600; }
+.comp-sub { font-size: 0.75rem; color: #a8a39a; letter-spacing: 0.05em; margin-top: 0.3rem; }
+
+/* ─── OPTION A: Ranking-led cards ─── */
+.optA-round {
+  display: grid; grid-template-columns: 140px 1fr auto; gap: 2rem;
+  padding: 1.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); align-items: start;
+}
+.optA-rank {
+  font-family: var(--font-heading); font-weight: 300; line-height: 0.9;
+}
+.optA-rank-num { font-size: 3.2rem; color: var(--accent); }
+.optA-rank-of { font-size: 0.65rem; color: #a8a39a; letter-spacing: 0.15em; text-transform: uppercase; margin-top: 0.4rem; }
+.optA-content { min-width: 0; }
+.optA-round-label { font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.3rem; }
+.optA-title { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+.optA-prompts { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
+.optA-prompt {
+  font-size: 0.65rem; font-weight: 400; color: #a8a39a;
+  background: rgba(255,255,255,0.03); padding: 0.2rem 0.55rem; border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.optA-prompt strong { color: var(--text); font-weight: 500; }
+.optA-logline { font-size: 0.82rem; font-style: italic; color: #a8a39a; line-height: 1.7; max-width: 480px; }
+.optA-badge {
+  font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em;
+  text-transform: uppercase; padding: 0.4rem 0.8rem; border-radius: 3px;
+  align-self: flex-start;
+}
+.optA-badge.adv { background: rgba(123,201,123,0.12); color: var(--green); border: 1px solid rgba(123,201,123,0.25); }
+.optA-badge.pending { background: rgba(212,160,78,0.1); color: var(--amber); border: 1px solid rgba(212,160,78,0.25); }
+
+/* ─── OPTION B: Compact scoreboard row ─── */
+.optB-row {
+  display: grid; grid-template-columns: 90px 1fr 220px 140px 120px;
+  gap: 1.5rem; align-items: center;
+  padding: 1.1rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.optB-round-label { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+.optB-title { font-family: var(--font-heading); font-size: 1rem; font-weight: 600; color: var(--text); }
+.optB-prompts { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.optB-prompt { font-size: 0.6rem; color: #a8a39a; padding: 0.15rem 0.4rem; background: rgba(255,255,255,0.03); border-radius: 2px; }
+.optB-place {
+  font-family: var(--font-heading); font-size: 0.75rem; color: var(--text); font-weight: 500;
+}
+.optB-place span { color: #a8a39a; font-weight: 300; font-size: 0.65rem; margin-left: 0.3rem; }
+.optB-status {
+  font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.15em;
+  text-transform: uppercase; padding: 0.3rem 0.6rem; border-radius: 3px; text-align: center;
+}
+.optB-status.adv { background: rgba(123,201,123,0.12); color: var(--green); }
+.optB-status.pending { background: rgba(212,160,78,0.12); color: var(--amber); }
+
+/* ─── OPTION C: Medal strip (summary at top) + existing detail below ─── */
+.optC-medals {
+  display: flex; gap: 1rem; padding: 1.25rem; background: var(--bg-card-2);
+  border: 1px solid rgba(255,255,255,0.04); border-radius: 4px;
+  margin-bottom: 2rem; overflow-x: auto;
+}
+.optC-medal {
+  flex: 0 0 auto; min-width: 170px; padding: 1rem 1.25rem;
+  border-left: 2px solid var(--accent); background: rgba(255,255,255,0.02);
+  border-radius: 0 3px 3px 0;
+}
+.optC-medal-place { font-family: var(--font-heading); font-size: 1.8rem; font-weight: 300; color: var(--accent); line-height: 1; }
+.optC-medal-of { font-size: 0.6rem; color: #a8a39a; letter-spacing: 0.1em; text-transform: uppercase; }
+.optC-medal-title { font-family: var(--font-heading); font-size: 0.85rem; font-weight: 600; color: var(--text); margin-top: 0.6rem; }
+.optC-medal-round { font-size: 0.65rem; color: #a8a39a; margin-top: 0.2rem; }
+.optC-medal.pending { border-left-color: var(--amber); }
+.optC-medal.pending .optC-medal-place { color: var(--amber); font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; padding-top: 0.4rem; }
+
+/* ─── OPTION D: Story-first cards with big names, small placement pill ─── */
+.optD-row {
+  padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.optD-head { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 0.6rem; flex-wrap: wrap; }
+.optD-label { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+.optD-title { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 600; color: var(--text); }
+.optD-place-pill {
+  font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em;
+  text-transform: uppercase; padding: 0.3rem 0.7rem; border-radius: 20px;
+  background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(201,185,154,0.25);
+}
+.optD-place-pill.pending { background: rgba(212,160,78,0.1); color: var(--amber); border-color: rgba(212,160,78,0.25); }
+.optD-meta { display: flex; gap: 1.2rem; margin-bottom: 0.6rem; font-size: 0.7rem; color: #a8a39a; flex-wrap: wrap; }
+.optD-meta strong { color: var(--text); font-weight: 500; }
+.optD-logline { font-size: 0.85rem; font-style: italic; color: #a8a39a; line-height: 1.7; max-width: 700px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<!-- ═════════════════════════════════════════════ -->
+<!-- PART 1: READABILITY                          -->
+<!-- ═════════════════════════════════════════════ -->
+
+<div class="section">
+  <div class="section-label">Part 1 — Readability</div>
+  <div class="section-name">Three treatments compared: current site, proposed quick wins, and a light reader variant for long-form content.</div>
+
+  <div class="sub-label">Current state — on shift1.co today</div>
+  <div class="read-block read-current">
+    <div class="rc-title">Don't Answer</div>
+    <div class="rc-meta">Scary · A Silhouette  ·  Action · Concealing  ·  Character · A Stepsister</div>
+    <div class="rc-body">
+      Cut off at a coastal outpost, a soldier records strange disturbances in the dark. What hunts him is older than the war; he left it once, but it never left him. Below that, a body of text at the same muted colour and light weight. <em>Notice how the italicised accents pop but the body text recedes.</em> When you read this for thirty seconds straight your eyes work harder than they need to. It's fine for short labels but it's tiring for long-form reading.
+    </div>
+  </div>
+
+  <div class="sub-label">Quick wins applied — body weight 400, lighter muted text, tighter line-height</div>
+  <div class="read-block read-new">
+    <div class="rn-title">Don't Answer</div>
+    <div class="rn-meta">Scary · A Silhouette  ·  Action · Concealing  ·  Character · A Stepsister</div>
+    <div class="rn-body">
+      Cut off at a coastal outpost, a soldier records strange disturbances in the dark. What hunts him is older than the war; he left it once, but it never left him. Below that, a body of text at the same muted colour and light weight. <em>Notice how the italicised accents pop but the body text recedes.</em> When you read this for thirty seconds straight your eyes work harder than they need to. It's fine for short labels but it's tiring for long-form reading.
+    </div>
+  </div>
+
+  <div class="sub-label">Light reader variant — for the PDF viewer / long-form reading only</div>
+  <div class="read-block read-light">
+    <div class="rl-title">Don't Answer</div>
+    <div class="rl-meta">Scary · A Silhouette  ·  Action · Concealing  ·  Character · A Stepsister</div>
+    <div class="rl-body">
+      Cut off at a coastal outpost, a soldier records strange disturbances in the dark. What hunts him is older than the war; he left it once, but it never left him. Below that, a body of text at the same muted colour and light weight. <em>Notice how the italicised accents pop but the body text recedes.</em> When you read this for thirty seconds straight your eyes work harder than they need to. It's fine for short labels but it's tiring for long-form reading.
+    </div>
+  </div>
+</div>
+
+<!-- ═════════════════════════════════════════════ -->
+<!-- PART 2: ROUND DISPLAY OPTIONS                -->
+<!-- ═════════════════════════════════════════════ -->
+
+<div class="section">
+  <div class="section-label">Part 2 — Round display with names + placements</div>
+  <div class="section-name">Four ways to surface story names, placements, and round details. All using real Scary Story 2025 data.</div>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- OPTION A: Ranking-led big-number cards      -->
+  <!-- ─────────────────────────────────────────── -->
+  <div class="sub-label">Option A — Ranking-led. Big placement, story name, prompts, logline.</div>
+  <div class="comp-header">
+    <div class="comp-title">Scary Story Challenge <span style="color:#a8a39a;font-weight:300;">· 2025</span></div>
+    <div class="comp-sub">3,663 writers · 90 groups · top 10 advance per round · 48 hours · 400 words</div>
+  </div>
+
+  <div class="optA-round">
+    <div class="optA-rank">
+      <div class="optA-rank-num">3</div>
+      <div class="optA-rank-of">3rd of 41</div>
+    </div>
+    <div class="optA-content">
+      <div class="optA-round-label">Round 1 — November 2025</div>
+      <div class="optA-title">Don't Answer.</div>
+      <div class="optA-prompts">
+        <span class="optA-prompt"><strong>Scare:</strong> A Silhouette</span>
+        <span class="optA-prompt"><strong>Action:</strong> Concealing</span>
+        <span class="optA-prompt"><strong>Character:</strong> A Stepsister</span>
+      </div>
+      <div class="optA-logline">Cut off at a coastal outpost, a soldier records strange disturbances in the dark. What hunts him is older than the war; he left it once, but it never left him.</div>
+    </div>
+    <div class="optA-badge adv">Advanced</div>
+  </div>
+
+  <div class="optA-round">
+    <div class="optA-rank">
+      <div class="optA-rank-num">5</div>
+      <div class="optA-rank-of">5th of 39</div>
+    </div>
+    <div class="optA-content">
+      <div class="optA-round-label">Round 2 — January 2026</div>
+      <div class="optA-title">Oops</div>
+      <div class="optA-prompts">
+        <span class="optA-prompt"><strong>Scare:</strong> New Year's Eve</span>
+        <span class="optA-prompt"><strong>Action:</strong> Roughhousing</span>
+        <span class="optA-prompt"><strong>Character:</strong> A Clutz</span>
+      </div>
+      <div class="optA-logline">Alone in an empty station on New Year's Eve, an FBI investigator reviews two unsolved murders that were never meant to be connected.</div>
+    </div>
+    <div class="optA-badge adv">Advanced</div>
+  </div>
+
+  <div class="optA-round">
+    <div class="optA-rank">
+      <div class="optA-rank-num" style="color: var(--amber); font-size: 1.3rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; line-height: 1.4;">Pending</div>
+      <div class="optA-rank-of" style="opacity: 0.8;">top 115 of 3,663</div>
+    </div>
+    <div class="optA-content">
+      <div class="optA-round-label">Final — March 2026</div>
+      <div class="optA-title">Confession 114</div>
+      <div class="optA-prompts">
+        <span class="optA-prompt"><strong>Scare:</strong> A Wrong Turn</span>
+        <span class="optA-prompt"><strong>Action:</strong> Sifting</span>
+        <span class="optA-prompt"><strong>Character:</strong> An Exhausted Person</span>
+      </div>
+      <div class="optA-logline">Story kept quiet until the verdict comes back.</div>
+    </div>
+    <div class="optA-badge pending">Awaiting</div>
+  </div>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- OPTION B: Compact scoreboard table          -->
+  <!-- ─────────────────────────────────────────── -->
+  <div class="sub-label" style="margin-top: 5rem;">Option B — Scoreboard row. Dense, scannable, all info in one line.</div>
+  <div class="comp-header">
+    <div class="comp-title">Scary Story Challenge <span style="color:#a8a39a;font-weight:300;">· 2025</span></div>
+    <div class="comp-sub">3,663 writers · 90 groups · top 10 advance per round · 48 hours · 400 words</div>
+  </div>
+
+  <div class="optB-row">
+    <div class="optB-round-label">Round 1</div>
+    <div class="optB-title">Don't Answer.</div>
+    <div class="optB-prompts">
+      <span class="optB-prompt">A Silhouette</span>
+      <span class="optB-prompt">Concealing</span>
+      <span class="optB-prompt">Stepsister</span>
+    </div>
+    <div class="optB-place">3rd <span>of 41</span></div>
+    <div class="optB-status adv">Advanced</div>
+  </div>
+
+  <div class="optB-row">
+    <div class="optB-round-label">Round 2</div>
+    <div class="optB-title">Oops</div>
+    <div class="optB-prompts">
+      <span class="optB-prompt">NYE</span>
+      <span class="optB-prompt">Roughhousing</span>
+      <span class="optB-prompt">Clutz</span>
+    </div>
+    <div class="optB-place">5th <span>of 39</span></div>
+    <div class="optB-status adv">Advanced</div>
+  </div>
+
+  <div class="optB-row">
+    <div class="optB-round-label">Final</div>
+    <div class="optB-title">Confession 114</div>
+    <div class="optB-prompts">
+      <span class="optB-prompt">Wrong Turn</span>
+      <span class="optB-prompt">Sifting</span>
+      <span class="optB-prompt">Exhausted</span>
+    </div>
+    <div class="optB-place">—</div>
+    <div class="optB-status pending">Awaiting</div>
+  </div>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- OPTION C: Medal strip summary + existing    -->
+  <!-- ─────────────────────────────────────────── -->
+  <div class="sub-label" style="margin-top: 5rem;">Option C — Medal strip at top, original detailed rounds below (like a "summary bar")</div>
+  <div class="comp-header">
+    <div class="comp-title">Scary Story Challenge <span style="color:#a8a39a;font-weight:300;">· 2025</span></div>
+    <div class="comp-sub">3,663 writers · 90 groups · top 10 advance per round · 48 hours · 400 words</div>
+  </div>
+
+  <div class="optC-medals">
+    <div class="optC-medal">
+      <div class="optC-medal-place">3<span style="font-size:1rem;vertical-align:super;">rd</span></div>
+      <div class="optC-medal-of">of 41 · Advanced</div>
+      <div class="optC-medal-title">Don't Answer.</div>
+      <div class="optC-medal-round">Round 1</div>
+    </div>
+    <div class="optC-medal">
+      <div class="optC-medal-place">5<span style="font-size:1rem;vertical-align:super;">th</span></div>
+      <div class="optC-medal-of">of 39 · Advanced</div>
+      <div class="optC-medal-title">Oops</div>
+      <div class="optC-medal-round">Round 2</div>
+    </div>
+    <div class="optC-medal pending">
+      <div class="optC-medal-place">Awaiting</div>
+      <div class="optC-medal-of">top 115 of 3,663</div>
+      <div class="optC-medal-title">Confession 114</div>
+      <div class="optC-medal-round">Final</div>
+    </div>
+  </div>
+  <div style="font-size: 0.75rem; color: #a8a39a; text-align: center; font-style: italic;">The full round detail with loglines and prompts continues below this strip (like the current layout).</div>
+
+  <!-- ─────────────────────────────────────────── -->
+  <!-- OPTION D: Title-first with placement pill   -->
+  <!-- ─────────────────────────────────────────── -->
+  <div class="sub-label" style="margin-top: 5rem;">Option D — Title leads, placement sits beside it as a small pill. Most like current layout with subtle additions.</div>
+  <div class="comp-header">
+    <div class="comp-title">Scary Story Challenge <span style="color:#a8a39a;font-weight:300;">· 2025</span></div>
+    <div class="comp-sub">3,663 writers · 90 groups · top 10 advance per round · 48 hours · 400 words</div>
+  </div>
+
+  <div class="optD-row">
+    <div class="optD-head">
+      <span class="optD-label">Round 1</span>
+      <span class="optD-title">Don't Answer.</span>
+      <span class="optD-place-pill">3rd of 41 · Advanced</span>
+    </div>
+    <div class="optD-meta">
+      <span><strong>Scare:</strong> A Silhouette</span>
+      <span><strong>Action:</strong> Concealing</span>
+      <span><strong>Character:</strong> A Stepsister</span>
+    </div>
+    <div class="optD-logline">Cut off at a coastal outpost, a soldier records strange disturbances in the dark. What hunts him is older than the war; he left it once, but it never left him.</div>
+  </div>
+
+  <div class="optD-row">
+    <div class="optD-head">
+      <span class="optD-label">Round 2</span>
+      <span class="optD-title">Oops</span>
+      <span class="optD-place-pill">5th of 39 · Advanced</span>
+    </div>
+    <div class="optD-meta">
+      <span><strong>Scare:</strong> New Year's Eve</span>
+      <span><strong>Action:</strong> Roughhousing</span>
+      <span><strong>Character:</strong> A Clutz</span>
+    </div>
+    <div class="optD-logline">Alone in an empty station on New Year's Eve, an FBI investigator reviews two unsolved murders that were never meant to be connected.</div>
+  </div>
+
+  <div class="optD-row">
+    <div class="optD-head">
+      <span class="optD-label">Final</span>
+      <span class="optD-title">Confession 114</span>
+      <span class="optD-place-pill pending">Top 115 of 3,663 · Awaiting</span>
+    </div>
+    <div class="optD-meta">
+      <span><strong>Scare:</strong> A Wrong Turn</span>
+      <span><strong>Action:</strong> Sifting</span>
+      <span><strong>Character:</strong> An Exhausted Person</span>
+    </div>
+    <div class="optD-logline">Story kept quiet until the verdict comes back.</div>
+  </div>
+
+</div>
+
+</div>
+</body>
+</html>

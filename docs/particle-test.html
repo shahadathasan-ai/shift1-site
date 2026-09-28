@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Particle Brightness Test</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #0b0b0b;
+      --text: #e8e4de;
+      --text-muted: #8a8580;
+      --accent: #e8d5a3;
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-body); }
+
+    .selector {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: center; gap: 0.5rem;
+      padding: 1rem; background: rgba(11,11,11,0.9); border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .selector button {
+      font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.1em;
+      padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04); color: var(--text-muted); transition: all 0.2s;
+    }
+    .selector button:hover { background: rgba(255,255,255,0.08); color: var(--text); }
+    .selector button.active { background: rgba(232,213,163,0.15); color: var(--accent); border-color: rgba(232,213,163,0.3); }
+
+    .particles {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0; overflow: hidden;
+    }
+    .particle {
+      position: absolute; background: var(--accent); border-radius: 50%; opacity: 0;
+      animation: firefly ease-in-out infinite;
+    }
+
+    .hero {
+      height: 100dvh; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; position: relative; z-index: 1;
+    }
+    .logo-text {
+      font-family: var(--font-heading); font-size: clamp(4rem, 10vw, 8rem);
+      font-weight: 700; letter-spacing: 0.08em; color: var(--text); line-height: 1;
+    }
+    .logo-text .one { color: var(--accent); }
+    .hero-sub {
+      font-family: var(--font-body); font-size: 0.85rem; letter-spacing: 0.35em;
+      text-transform: uppercase; color: var(--text-muted); margin-top: 0.75rem;
+    }
+    .hero-line { width: 40px; height: 1px; background: var(--accent); margin-top: 3rem; opacity: 0.5; }
+    .hero-logo { margin-bottom: 2rem; }
+    .level-label {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      font-family: var(--font-heading); font-size: 0.7rem; letter-spacing: 0.15em;
+      color: var(--text-muted); z-index: 100;
+    }
+  </style>
+</head>
+<body>
+
+<div class="selector">
+  <button onclick="setLevel(1)" id="btn1">1 — Current</button>
+  <button onclick="setLevel(2)" id="btn2">2 — Subtle</button>
+  <button onclick="setLevel(3)" id="btn3">3 — Medium</button>
+  <button onclick="setLevel(4)" id="btn4">4 — Bright</button>
+  <button onclick="setLevel(5)" id="btn5">5 — Very Bright</button>
+</div>
+
+<div class="particles" id="particles"></div>
+
+<section class="hero">
+  <div class="hero-logo">
+    <div class="logo-text">SH<span class="one">1</span>FT</div>
+    <div class="hero-sub">Productions</div>
+  </div>
+  <div class="hero-line"></div>
+</section>
+
+<div class="level-label" id="levelLabel"></div>
+
+<script>
+const levels = {
+  1: { // Current
+    peakOpacity: 0.25,
+    midOpacity: 0.08,
+    count: 40,
+    maxSize: 4,
+    glow: false,
+  },
+  2: { // Subtle bump, fast start
+    peakOpacity: 0.4,
+    midOpacity: 0.15,
+    count: 40,
+    maxSize: 4,
+    glow: false,
+    maxDelay: 2,
+  },
+  3: { // Medium
+    peakOpacity: 0.55,
+    midOpacity: 0.2,
+    count: 50,
+    maxSize: 4.5,
+    glow: true,
+    glowSize: '4px',
+  },
+  4: { // Bright
+    peakOpacity: 0.7,
+    midOpacity: 0.3,
+    count: 55,
+    maxSize: 5,
+    glow: true,
+    glowSize: '6px',
+  },
+  5: { // Very bright
+    peakOpacity: 0.85,
+    midOpacity: 0.4,
+    count: 60,
+    maxSize: 5.5,
+    glow: true,
+    glowSize: '10px',
+  },
+};
+
+const labels = {
+  1: 'Current — peak 0.25, mid 0.08',
+  2: 'Subtle — peak 0.40, mid 0.15',
+  3: 'Medium — peak 0.55, mid 0.20, glow 4px',
+  4: 'Bright — peak 0.70, mid 0.30, glow 6px',
+  5: 'Very Bright — peak 0.85, mid 0.40, glow 10px',
+};
+
+function setLevel(n) {
+  const L = levels[n];
+  const container = document.getElementById('particles');
+  container.innerHTML = '';
+
+  // Remove old keyframes
+  const oldStyle = document.getElementById('fireflyStyle');
+  if (oldStyle) oldStyle.remove();
+
+  // Create new keyframes
+  const style = document.createElement('style');
+  style.id = 'fireflyStyle';
+  style.textContent = `
+    @keyframes firefly {
+      0% { opacity: 0; transform: translate(0, 0); }
+      25% { opacity: ${L.peakOpacity}; }
+      50% { opacity: ${L.midOpacity}; transform: translate(30px, -60px); }
+      75% { opacity: ${L.peakOpacity * 0.8}; }
+      100% { opacity: 0; transform: translate(-20px, -120px); }
+    }
+  `;
+  document.head.appendChild(style);
+
+  for (let i = 0; i < L.count; i++) {
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    const size = 2 + Math.random() * (L.maxSize - 2);
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.animationDuration = (8 + Math.random() * 8) + 's';
+    p.style.animationDelay = (Math.random() * (L.maxDelay || 12)) + 's';
+    if (L.glow) {
+      p.style.boxShadow = `0 0 ${L.glowSize} rgba(232, 213, 163, ${L.peakOpacity * 0.5})`;
+    }
+    container.appendChild(p);
+  }
+
+  // Update buttons
+  document.querySelectorAll('.selector button').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn' + n).classList.add('active');
+  document.getElementById('levelLabel').textContent = labels[n];
+}
+
+setLevel(1);
+</script>
+</body>
+</html>

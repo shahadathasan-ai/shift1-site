@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Shuffle tile — divider heights</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{--bg:#0b0b0b;--bg-card:#161616;--bg-card-back:#1a1a1a;--text:#e8e4de;--text-muted:#8a8580;--accent:#e8d5a3;--fh:'Space Grotesk',sans-serif;--fb:'Inter',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--fb);padding:48px 44px 120px}
+  h1{font-family:var(--fh);font-weight:600;font-size:1.45rem}
+  .intro{color:var(--text-muted);max-width:820px;margin:14px 0 6px;font-size:.9rem;line-height:1.65}
+  .note{color:var(--text-muted);font-size:.8rem;opacity:.65;margin-bottom:22px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:2.6rem 2rem;max-width:1280px}
+  .opt .cap{margin-top:14px;font-size:.78rem;color:var(--text-muted);line-height:1.5}
+  .opt .cap b{display:block;color:var(--text);font-family:var(--fh);font-weight:600;font-size:.84rem;margin-bottom:3px}
+
+  .card-container{perspective:1000px;height:400px}
+  .card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,0,.2,1)}
+  .card-container:hover .card{transform:rotateY(180deg)}
+  .card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:8px;overflow:hidden}
+  .card-front{background:var(--bg-card);border:1px solid rgba(255,255,255,.04);padding:0}
+  .card-back{background:var(--bg-card-back);transform:rotateY(180deg);padding:2rem;display:flex;flex-direction:column;justify-content:center;border:1px solid rgba(232,213,163,.1)}
+  .card-status{position:absolute;top:1.4rem;left:1.8rem;z-index:5;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:rgba(123,201,123,.9);text-shadow:0 1px 8px rgba(0,0,0,.85)}
+  .card-category{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:.6rem;font-weight:500}
+  .card-title{font-family:var(--fh);font-size:1.5rem;font-weight:600;color:var(--text);margin-bottom:.35rem}
+  .card-subtitle{font-size:.85rem;color:var(--text-muted)}
+  .card-back-title{font-family:var(--fh);font-size:1.2rem;font-weight:600;color:var(--text);margin:0 0 1rem}
+  .card-back-text{font-size:.9rem;color:var(--text-muted);line-height:1.7;margin-bottom:1.4rem}
+  .card-back-link{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:500}
+
+  .tile-bg{position:absolute;left:0;right:0;top:0;height:var(--imgh);z-index:0;background:url('read/frames/plaza.jpg') no-repeat;background-size:auto 118%;background-position:center 0%}
+  .edge{position:absolute;left:0;right:0;height:60px;top:calc(var(--imgh) - 60px);z-index:2;background:linear-gradient(to bottom,transparent,rgba(11,11,11,.4))}
+  /* panel: text pinned to the bottom, with a guaranteed buffer under the line via padding-top */
+  .tile-panel{position:absolute;left:0;right:0;top:var(--imgh);bottom:0;z-index:4;background:var(--bg-card);
+    border-top:1px solid rgba(232,213,163,.14);padding:1.5rem 2rem 1.4rem;display:flex;flex-direction:column;justify-content:flex-end}
+</style>
+</head>
+<body>
+  <h1>Shuffle tile — divider heights</h1>
+  <div class="intro">Same tile, the horizontal line at five heights. There's always a gap between the line and the "Feature Screenplay" text (the panel has a top buffer). Lower % = more picture / less panel. Hover to flip.</div>
+  <div class="note">read/frames/plaza.jpg · natural</div>
+  <div class="grid" id="g"></div>
+
+<script>
+  const back = `<div class="card-back"><div class="card-category">Feature Screenplay</div><div class="card-back-title">Shuffle</div><div class="card-back-text">A college student pulling an all-nighter in an empty science lab is pricked by an unknown needle. What follows is a spiral between reality and something far stranger.</div><span class="card-back-link">Read the script &rarr;</span></div>`;
+  const front = (h) => `<div class="card-front" style="--imgh:${h}%"><div class="tile-bg"></div><div class="edge"></div><div class="card-status">Complete</div><div class="tile-panel"><div class="card-category">Feature Screenplay</div><div class="card-title">Shuffle</div><div class="card-subtitle">Horror</div></div></div>`;
+  const tile = (h,n) => `<div class="opt"><div class="card-container"><div class="card">${front(h)}${back}</div></div><div class="cap"><b>${n} · line at ${h}%</b><span>${h<62?'more panel, big buffer':h>68?'more picture, tighter':'balanced'}</span></div></div>`;
+
+  document.getElementById('g').innerHTML = [tile(58,'A'),tile(62,'B'),tile(66,'C'),tile(70,'D'),tile(74,'E')].join('');
+</script>
+</body>
+</html>

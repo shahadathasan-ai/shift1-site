@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shift1 Studios — Logo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#0b0b0b;--card:#161616;--text:#e8e4de;--muted:#8a8580;--accent:#e8d5a3}
+  body{background:var(--bg);color:var(--text);font-family:Inter,sans-serif;font-weight:300;
+       line-height:1.6;padding:4rem 2rem 6rem;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1080px;margin:0 auto}
+  .eyebrow{font-size:0.7rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+  h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(1.8rem,4vw,2.6rem);
+     letter-spacing:0.02em;line-height:1.1;margin-bottom:1.2rem}
+  .lede{max-width:62ch;color:var(--muted);margin-bottom:3.5rem}
+  .lede strong{color:var(--text);font-weight:400}
+  .item{margin-bottom:3rem;border-top:1px solid rgba(255,255,255,0.07);padding-top:2rem}
+  .item h2{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1.05rem;
+           letter-spacing:0.01em;margin-bottom:0.3rem}
+  .item p{color:var(--muted);font-size:0.88rem;max-width:64ch;margin-bottom:1.4rem}
+  .file{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:0.76rem;
+        color:var(--accent);letter-spacing:0.02em}
+  .frame{background:var(--card);border:1px solid rgba(255,255,255,0.06);border-radius:5px;
+         padding:2.2rem;display:grid;place-items:center}
+  .frame.checker{background:#161616;
+    background-image:linear-gradient(45deg,#1d1d1d 25%,transparent 25%),
+                     linear-gradient(-45deg,#1d1d1d 25%,transparent 25%),
+                     linear-gradient(45deg,transparent 75%,#1d1d1d 75%),
+                     linear-gradient(-45deg,transparent 75%,#1d1d1d 75%);
+    background-size:18px 18px;background-position:0 0,0 9px,9px -9px,-9px 0}
+  .frame.cream{background:#f4f1ea;border-color:rgba(0,0,0,0.08)}
+  .frame img{max-width:100%;display:block}
+  .frame img.avatar{width:220px;border-radius:50%}
+  .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem}
+  .specs{border:1px solid rgba(232,213,163,0.14);border-radius:4px;padding:1.4rem 1.6rem;
+         margin-top:3rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem}
+  .specs dt{font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:600;
+            color:var(--accent);margin-bottom:0.15rem}
+  .specs dd{font-size:0.82rem;color:var(--muted);line-height:1.45}
+  @media(max-width:640px){body{padding:2.5rem 1.2rem 4rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Shift1</div>
+  <h1>Shift 1 Studios</h1>
+  <p class="lede">The same mark as <strong>Shift1 Productions</strong> — Space Grotesk 700, the
+  <strong>I</strong> replaced by a gold <strong>1</strong> — with the descriptor swapped. The only
+  thing that needed a decision: <strong>STUDIOS</strong> is seven characters against
+  <strong>PRODUCTIONS</strong>’ eleven, so the tracking is opened from 0.30em to about 0.87em to keep
+  the second line spanning the wordmark exactly as before. Nothing else moves.</p>
+
+  <div class="item">
+    <h2>Primary lockup</h2>
+    <p>Stacked, as the Productions logo. Transparent PNG — drops onto any surface.</p>
+    <div class="frame checker"><img src="shift1studios-lockup-transparent.png" alt="Shift1 Studios stacked lockup"></div>
+    <p class="file" style="margin-top:0.8rem">shift1studios-lockup-transparent.png · 2910 × 1658</p>
+  </div>
+
+  <div class="item">
+    <h2>On the brand surfaces</h2>
+    <p>Near-black and cream. On cream the gold goes deeper (#c9a94e) — the site accent is ~1.05:1 on
+    a light ground and would disappear.</p>
+    <div class="pair">
+      <div class="frame"><img src="shift1studios-lockup-dark.png" alt="On near-black"></div>
+      <div class="frame cream"><img src="shift1studios-lockup-light.png" alt="On cream"></div>
+    </div>
+    <p class="file" style="margin-top:0.8rem">shift1studios-lockup-dark.png · shift1studios-lockup-light.png</p>
+  </div>
+
+  <div class="item">
+    <h2>Horizontal lockup</h2>
+    <p>For site headers, letterheads and anywhere the stack is too tall. A hairline rule in the
+    accent separates mark from descriptor.</p>
+    <div class="frame checker"><img src="shift1studios-horizontal-transparent.png" alt="Horizontal lockup"></div>
+    <div class="frame" style="margin-top:1rem"><img src="shift1studios-horizontal-dark.png" alt="Horizontal on black"></div>
+    <p class="file" style="margin-top:0.8rem">shift1studios-horizontal-transparent.png · shift1studios-horizontal-dark.png · 3400 × 780</p>
+  </div>
+
+  <div class="item">
+    <h2>Social avatar</h2>
+    <p>1024px square, same geometry as the Productions A2 icon. Worth repeating the finding from
+    that round: at feed size the descriptor is gone and the wordmark is small — for an actual
+    avatar the two-line or numeral-only marks win.</p>
+    <div class="pair">
+      <div class="frame"><img src="shift1studios-ig-1024.png" alt="Square avatar" style="width:320px"></div>
+      <div class="frame"><img class="avatar" src="shift1studios-ig-1024.png" alt="Circle crop"></div>
+    </div>
+    <p class="file" style="margin-top:0.8rem">shift1studios-ig-1024.png · 1024 × 1024</p>
+  </div>
+
+  <div class="item">
+    <h2>Wordmark alone</h2>
+    <p>Unchanged from Productions — same file, included so the set is complete.</p>
+    <div class="frame checker"><img src="shift1studios-wordmark-transparent.png" alt="SH1FT wordmark"></div>
+    <p class="file" style="margin-top:0.8rem">shift1studios-wordmark-transparent.png · 2181 × 1040</p>
+  </div>
+
+  <dl class="specs">
+    <div><dt>Wordmark</dt><dd>Space Grotesk 700, tracking 0.04em</dd></div>
+    <div><dt>Descriptor</dt><dd>Inter 400, tracking ≈0.87em, 55% opacity, 0.315em of the wordmark</dd></div>
+    <div><dt>Colour</dt><dd>#e8e4de on #0b0b0b · accent #e8d5a3 (dark) / #c9a94e (light)</dd></div>
+    <div><dt>Clearspace</dt><dd>0.3em of the wordmark on all sides — baked into the transparent files</dd></div>
+    <div><dt>Re-render</dt><dd>source-stacked.html / source-horizontal.html, driven by URL params</dd></div>
+  </dl>
+</div>
+</body>
+</html>

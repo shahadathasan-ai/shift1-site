@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Shift1 — sleek current layout</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0b0b0b;
+  --bg-card: #161616;
+  --text: #e8e4de;
+  --text-muted: #a8a39a;   /* lightened */
+  --text-dim: #6a6560;
+  --accent: #e8d5a3;
+  --green: #7bc97b;
+  --amber: #d4a04e;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-weight: 400; padding: 60px 60px 120px; line-height: 1.7; }
+.wrap { max-width: 780px; margin: 0 auto; }
+
+.variant { margin-bottom: 100px; }
+.variant-label { font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(201,185,154,0.2); }
+.variant-name { font-family: var(--font-body); font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2.5rem; font-weight: 400; }
+
+/* ══════════════════════════════════════════════ */
+/* VARIANT 1: Current, tightened (weight 400, lighter muted, cleaner spacing) */
+/* ══════════════════════════════════════════════ */
+.v1-round { padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.v1-round:last-child { border-bottom: none; }
+.v1-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.8rem; }
+.v1-label { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); }
+.v1-result { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); }
+.v1-result.pending { color: var(--amber); }
+.v1-title { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 600; color: var(--text); margin-bottom: 0.8rem; letter-spacing: -0.01em; }
+.v1-constraints { display: flex; gap: 1.5rem; margin-bottom: 0.9rem; flex-wrap: wrap; }
+.v1-constraint { font-size: 0.72rem; color: var(--text-muted); font-weight: 400; }
+.v1-constraint strong { color: var(--text); font-weight: 500; }
+.v1-logline { font-size: 0.88rem; font-style: italic; color: var(--text-muted); line-height: 1.75; margin-bottom: 0.9rem; max-width: 620px; font-weight: 400; }
+.v1-link { display: inline-block; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(201,185,154,0.3); padding-bottom: 2px; }
+
+/* ══════════════════════════════════════════════ */
+/* VARIANT 2: Placement tucked next to "Advanced" — one line */
+/* ══════════════════════════════════════════════ */
+.v2-round { padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.v2-round:last-child { border-bottom: none; }
+.v2-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.8rem; }
+.v2-label { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); }
+.v2-result { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); }
+.v2-result span { color: var(--text-muted); font-weight: 400; margin-left: 0.4rem; }
+.v2-result.pending { color: var(--amber); }
+.v2-title { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 600; color: var(--text); margin-bottom: 0.8rem; }
+.v2-constraints { display: flex; gap: 1.5rem; margin-bottom: 0.9rem; flex-wrap: wrap; }
+.v2-constraint { font-size: 0.72rem; color: var(--text-muted); }
+.v2-constraint strong { color: var(--text); font-weight: 500; }
+.v2-logline { font-size: 0.88rem; font-style: italic; color: var(--text-muted); line-height: 1.75; margin-bottom: 0.9rem; max-width: 620px; }
+.v2-link { display: inline-block; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(201,185,154,0.3); padding-bottom: 2px; }
+
+/* ══════════════════════════════════════════════ */
+/* VARIANT 3: Placement as tiny meta under title (quietest) */
+/* ══════════════════════════════════════════════ */
+.v3-round { padding: 2rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.v3-round:last-child { border-bottom: none; }
+.v3-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.8rem; }
+.v3-label { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); }
+.v3-result { font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green); }
+.v3-result.pending { color: var(--amber); }
+.v3-title { font-family: var(--font-heading); font-size: 1.4rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+.v3-meta { font-family: var(--font-heading); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 0.9rem; }
+.v3-constraints { display: flex; gap: 1.5rem; margin-bottom: 0.9rem; flex-wrap: wrap; }
+.v3-constraint { font-size: 0.72rem; color: var(--text-muted); }
+.v3-constraint strong { color: var(--text); font-weight: 500; }
+.v3-logline { font-size: 0.88rem; font-style: italic; color: var(--text-muted); line-height: 1.75; margin-bottom: 0.9rem; max-width: 620px; }
+.v3-link { display: inline-block; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(201,185,154,0.3); padding-bottom: 2px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<!-- ═════ VARIANT 1: Clean up only, no placement added ═════ -->
+<div class="variant">
+  <div class="variant-label">Variant 1</div>
+  <div class="variant-name">Current layout, tightened. Weight 400, lighter muted text, cleaner spacing. No placement info added yet — this is pure readability.</div>
+
+  <div class="v1-round">
+    <div class="v1-head">
+      <div class="v1-label">Round 1</div>
+      <div class="v1-result">Advanced</div>
+    </div>
+    <div class="v1-title">Don't Answer.</div>
+    <div class="v1-constraints">
+      <div class="v1-constraint"><strong>Scare:</strong> A Silhouette</div>
+      <div class="v1-constraint"><strong>Action:</strong> Concealing</div>
+      <div class="v1-constraint"><strong>Character:</strong> A Stepsister</div>
+    </div>
+    <div class="v1-logline">Cut off at a coastal outpost, a soldier records strange disturbances in the dark. What hunts him is older than the war; he left it once, but it never left him.</div>
+    <a href="#" class="v1-link">Read the story →</a>
+  </div>
+
+  <div class="v1-round">
+    <div class="v1-head">
+      <div class="v1-label">Round 2</div>
+      <div class="v1-result">Advanced</div>
+    </div>
+    <div class="v1-title">Oops</div>
+    <div class="v1-constraints">
+      <div class="v1-constraint"><strong>Scare:</strong> New Year's Eve</div>
+      <div class="v1-constraint"><strong>Action:</strong> Roughhousing</div>
+      <div class="v1-constraint"><strong>Character:</strong> A Clutz</div>
+    </div>
+    <div class="v1-logline">Alone in an empty station on New Year's Eve, an FBI investigator reviews two unsolved murders that were never meant to be connected.</div>
+    <a href="#" class="v1-link">Read the story →</a>
+  </div>
+
+  <div class="v1-round">
+    <div class="v1-head">
+      <div class="v1-label">Final</div>
+      <div class="v1-result pending">Awaiting</div>
+    </div>
+    <div class="v1-title">Confession 114</div>
+    <div class="v1-constraints">
+      <div class="v1-constraint"><strong>Scare:</strong> A Wrong Turn</div>
+      <div class="v1-constraint"><strong>Action:</strong> Sifting</div>
+      <div class="v1-constraint"><strong>Character:</strong> An Exhausted Person</div>
+    </div>
+    <div class="v1-logline">Story kept quiet until the verdict comes back.</div>
+    <a href="#" class="v1-link">Read the story →</a>
+  </div>
+</div>
+
+<!-- ═════ VARIANT 2: Placement appended to "Advanced" top-right ═════ -->
+<div class="variant">
+  <div class="variant-label">Variant 2</div>
+  <div class="variant-name">Same sleek layout, with placement added subtly next to the "Advanced" badge. No new lines, no new space taken.</div>
+
+  <div class="v2-round">
+    <div class="v2-head">
+      <div class="v2-label">Round 1</div>
+      <div class="v2-result">Advanced <span>3rd of 41</span></div>
+    </div>
+    <div class="v2-title">Don't Answer.</div>
+    <div class="v2-constraints">
+      <div class="v2-constraint"><strong>Scare:</strong> A Silhouette</div>
+      <div class="v2-constraint"><strong>Action:</strong> Concealing</div>
+      <div class="v2-constraint"><strong>Character:</strong> A Stepsister</div>
+    </div>
+    <div class="v2-logline">Cut off at a coastal outpost, a soldier records strange disturbances in the dark. What hunts him is older than the war; he left it once, but it never left him.</div>
+    <a href="#" class="v2-link">Read the story →</a>
+  </div>
+
+  <div class="v2-round">
+    <div class="v2-head">
+      <div class="v2-label">Round 2</div>
+      <div class="v2-result">Advanced <span>5th of 39</span></div>
+    </div>
+    <div class="v2-title">Oops</div>
+    <div class="v2-constraints">
+      <div class="v2-constraint"><strong>Scare:</strong> New Year's Eve</div>
+      <div class="v2-constraint"><strong>Action:</strong> Roughhousing</div>
+      <div class="v2-constraint"><strong>Character:</strong> A Clutz</div>
+    </div>
+    <div class="v2-logline">Alone in an empty station on New Year's Eve, an FBI investigator reviews two unsolved murders that were never meant to be connected.</div>
+    <a href="#" class="v2-link">Read the story →</a>
+  </div>
+
+  <div class="v2-round">
+    <div class="v2-head">
+      <div class="v2-label">Final</div>
+      <div class="v2-result pending">Awaiting <span>top 115 of 3,663</span></div>
+    </div>
+    <div class="v2-title">Confession 114</div>
+    <div class="v2-constraints">
+      <div class="v2-constraint"><strong>Scare:</strong> A Wrong Turn</div>
+      <div class="v2-constraint"><strong>Action:</strong> Sifting</div>
+      <div class="v2-constraint"><strong>Character:</strong> An Exhausted Person</div>
+    </div>
+    <div class="v2-logline">Story kept quiet until the verdict comes back.</div>
+    <a href="#" class="v2-link">Read the story →</a>
+  </div>
+</div>
+
+<!-- ═════ VARIANT 3: Placement as tiny meta under the title ═════ -->
+<div class="variant">
+  <div class="variant-label">Variant 3</div>
+  <div class="variant-name">Sleek layout with placement as a tiny meta line directly under the story title. Quiet but discoverable.</div>
+
+  <div class="v3-round">
+    <div class="v3-head">
+      <div class="v3-label">Round 1</div>
+      <div class="v3-result">Advanced</div>
+    </div>
+    <div class="v3-title">Don't Answer.</div>
+    <div class="v3-meta">3rd of 41 · Group 22</div>
+    <div class="v3-constraints">
+      <div class="v3-constraint"><strong>Scare:</strong> A Silhouette</div>
+      <div class="v3-constraint"><strong>Action:</strong> Concealing</div>
+      <div class="v3-constraint"><strong>Character:</strong> A Stepsister</div>
+    </div>
+    <div class="v3-logline">Cut off at a coastal outpost, a soldier records strange disturbances in the dark. What hunts him is older than the war; he left it once, but it never left him.</div>
+    <a href="#" class="v3-link">Read the story →</a>
+  </div>
+
+  <div class="v3-round">
+    <div class="v3-head">
+      <div class="v3-label">Round 2</div>
+      <div class="v3-result">Advanced</div>
+    </div>
+    <div class="v3-title">Oops</div>
+    <div class="v3-meta">5th of 39 · Group 6</div>
+    <div class="v3-constraints">
+      <div class="v3-constraint"><strong>Scare:</strong> New Year's Eve</div>
+      <div class="v3-constraint"><strong>Action:</strong> Roughhousing</div>
+      <div class="v3-constraint"><strong>Character:</strong> A Clutz</div>
+    </div>
+    <div class="v3-logline">Alone in an empty station on New Year's Eve, an FBI investigator reviews two unsolved murders that were never meant to be connected.</div>
+    <a href="#" class="v3-link">Read the story →</a>
+  </div>
+
+  <div class="v3-round">
+    <div class="v3-head">
+      <div class="v3-label">Final</div>
+      <div class="v3-result pending">Awaiting</div>
+    </div>
+    <div class="v3-title">Confession 114</div>
+    <div class="v3-meta">Top 115 of 3,663</div>
+    <div class="v3-constraints">
+      <div class="v3-constraint"><strong>Scare:</strong> A Wrong Turn</div>
+      <div class="v3-constraint"><strong>Action:</strong> Sifting</div>
+      <div class="v3-constraint"><strong>Character:</strong> An Exhausted Person</div>
+    </div>
+    <div class="v3-logline">Story kept quiet until the verdict comes back.</div>
+    <a href="#" class="v3-link">Read the story →</a>
+  </div>
+</div>
+
+</div>
+
+</body>
+</html>

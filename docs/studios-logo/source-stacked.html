@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html,body{background:transparent}
+  body{display:grid;place-items:center;min-height:100vh}
+
+  /* Everything inside the lockup is in em, so one font-size scales it. */
+  .lockup{
+    font-family:'Space Grotesk',sans-serif;font-weight:700;line-height:1;
+    display:flex;flex-direction:column;align-items:center;
+    color:#e8e4de;
+  }
+  .lockup .word{font-size:1em;letter-spacing:0.04em;white-space:nowrap}
+  .lockup .one{color:#e8d5a3}
+  .lockup .sub{
+    font-family:'Inter',sans-serif;font-weight:400;
+    font-size:0.315em;               /* == 0.052/0.165 of the wordmark */
+    margin-top:0.5em;                /* in sub-em, as the original */
+    opacity:0.55;white-space:nowrap;
+  }
+
+  /* surfaces */
+  .plate{display:grid;place-items:center}
+  .plate.dark{background:#0b0b0b}
+  .plate.light{background:#f4f1ea}
+  .plate.light .lockup{color:#1a1a1a}
+  .plate.light .one{color:#c9a94e}   /* accent goes deeper on cream for contrast */
+  .plate.light .sub{opacity:0.5}
+</style>
+</head>
+<body>
+<div id="mount"></div>
+<script>
+const P = new URLSearchParams(location.search);
+const W = +P.get('w'), H = +P.get('h');
+const SIZE = +P.get('size');          // wordmark font-size in px
+const SURFACE = P.get('surface');     // dark | light | none
+const SUBTEXT = P.get('sub') || '';
+
+const plate = document.createElement('div');
+plate.className = 'plate' + (SURFACE === 'none' ? '' : ' ' + SURFACE);
+plate.style.width = W + 'px';
+plate.style.height = H + 'px';
+
+plate.innerHTML =
+  '<div class="lockup" style="font-size:' + SIZE + 'px">' +
+    '<span class="word">SH<span class="one">1</span>FT</span>' +
+    (SUBTEXT ? '<span class="sub">' + SUBTEXT + '</span>' : '') +
+  '</div>';
+
+document.getElementById('mount').appendChild(plate);
+
+/* Optical fit: track the subtitle out until it spans the wordmark.
+   PRODUCTIONS (11 chars) happened to land there at 0.3em; STUDIOS (7)
+   needs more air or the lockup reads bottom-light. */
+document.fonts.ready.then(function () {
+  const word = plate.querySelector('.word');
+  const sub  = plate.querySelector('.sub');
+  if (!sub) { document.title = 'ready'; return; }
+  const target = word.getBoundingClientRect().width;
+  let ls = 0.3;
+  for (let i = 0; i < 40; i++) {
+    sub.style.letterSpacing = ls + 'em';
+    // trailing letter-space sits after the last glyph; discount it
+    const w = sub.getBoundingClientRect().width - ls * parseFloat(getComputedStyle(sub).fontSize);
+    if (Math.abs(w - target) < 0.5) break;
+    ls += (target - w) / (SUBTEXT.length * parseFloat(getComputedStyle(sub).fontSize));
+  }
+  // re-centre against the discarded trailing space
+  sub.style.marginRight = '-' + ls + 'em';
+  document.title = 'ready';
+});
+</script>
+</body>
+</html>
+<script>
+/* measure mode: writes the lockup bbox into #dims for a --dump-dom pass */
+document.fonts.ready.then(function () {
+  setTimeout(function () {
+    const l = document.querySelector('.lockup').getBoundingClientRect();
+    const d = document.createElement('div');
+    d.id = 'dims';
+    d.textContent = Math.ceil(l.width) + 'x' + Math.ceil(l.height);
+    document.body.appendChild(d);
+  }, 300);
+});
+</script>

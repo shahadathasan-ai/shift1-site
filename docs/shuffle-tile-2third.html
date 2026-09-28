@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Shuffle tile — 2/3, shifted</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root{--bg:#0b0b0b;--bg-card:#161616;--bg-card-back:#1a1a1a;--text:#e8e4de;--text-muted:#8a8580;--accent:#e8d5a3;--fh:'Space Grotesk',sans-serif;--fb:'Inter',sans-serif}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--fb);padding:48px 44px 120px}
+  h1{font-family:var(--fh);font-weight:600;font-size:1.45rem}
+  .intro{color:var(--text-muted);max-width:760px;margin:14px 0 6px;font-size:.9rem;line-height:1.65}
+  .note{color:var(--text-muted);font-size:.8rem;opacity:.65;margin-bottom:20px}
+  h2{font-family:var(--fh);font-weight:500;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin:46px 0 24px;border-bottom:1px solid rgba(232,213,163,.14);padding-bottom:10px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:2.6rem 2rem;max-width:1240px}
+  .opt .cap{margin-top:14px;font-size:.78rem;color:var(--text-muted);line-height:1.5}
+  .opt .cap b{display:block;color:var(--text);font-family:var(--fh);font-weight:600;font-size:.84rem;margin-bottom:3px}
+
+  .card-container{perspective:1000px;height:400px}
+  .card{width:100%;height:100%;position:relative;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.4,0,.2,1)}
+  .card-container:hover .card{transform:rotateY(180deg)}
+  .card-front,.card-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:8px;overflow:hidden}
+  .card-front{background:var(--bg-card);border:1px solid rgba(255,255,255,.04)}
+  .card-back{background:var(--bg-card-back);transform:rotateY(180deg);padding:2rem;display:flex;flex-direction:column;justify-content:center;border:1px solid rgba(232,213,163,.1)}
+  .card-status{position:absolute;top:1.4rem;left:1.8rem;z-index:5;font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;color:#efe7d3;text-shadow:0 1px 8px rgba(0,0,0,.85)}
+  .card-category{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);margin-bottom:.7rem;font-weight:500}
+  .card-title{font-family:var(--fh);font-size:1.5rem;font-weight:600;color:var(--text);margin-bottom:.4rem}
+  .card-subtitle{font-size:.85rem;color:var(--text-muted)}
+  .card-back-title{font-family:var(--fh);font-size:1.2rem;font-weight:600;color:var(--text);margin:0 0 1rem}
+  .card-back .card-category{margin-bottom:1rem}
+  .card-back-text{font-size:.9rem;color:var(--text-muted);line-height:1.7;margin-bottom:1.4rem}
+  .card-back-link{font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:500}
+
+  /* 2/3 layout: picture top (--imgh), solid text panel below */
+  .card-front{--imgh:62%}
+  .tile-bg{position:absolute;left:0;right:0;top:0;height:var(--imgh);z-index:0;
+    background-image:url('read/frames/plaza.jpg');background-repeat:no-repeat;
+    background-size:auto var(--z,115%);background-position:center var(--py,50%)}
+  .tile-panel{position:absolute;left:0;right:0;bottom:0;z-index:4;background:var(--bg-card);
+    border-top:1px solid rgba(232,213,163,.14);padding:1.5rem 1.9rem 1.9rem}
+  .card-title{text-shadow:none}
+  .edge{position:absolute;left:0;right:0;height:60px;top:calc(var(--imgh) - 60px);z-index:2;background:linear-gradient(to bottom,transparent,rgba(11,11,11,.4))}
+
+  /* colour treatments (over the picture region only) */
+  .ov{position:absolute;left:0;right:0;top:0;height:var(--imgh);z-index:2;pointer-events:none}
+  .sty-duo::before{content:'';position:absolute;left:0;right:0;top:0;height:var(--imgh);z-index:0;background:linear-gradient(155deg,#221806 0%,#e8d5a3 130%)}
+  .sty-duo .tile-bg{z-index:1;mix-blend-mode:luminosity;filter:contrast(1.08) brightness(1.06)}
+  .sty-noir .tile-bg{filter:grayscale(1) contrast(1.45) brightness(.82)}
+  .sty-noir .vig{background:radial-gradient(ellipse at 50% 44%,transparent 34%,rgba(0,0,0,.82) 100%)}
+  .sty-warm .tile-bg{filter:contrast(1.26) brightness(.66) saturate(1.42)}
+  .sty-wash .tile-bg{filter:grayscale(.82) contrast(1.12) brightness(.82)}
+  .sty-wash .wash{background:linear-gradient(to top,rgba(232,213,163,.34),rgba(11,11,11,.1) 60%,transparent)}
+</style>
+</head>
+<body>
+  <h1>Shuffle tile — 2/3, picture shifted down</h1>
+  <div class="intro">All tiles are the 2/3 layout (picture up top, title on a solid panel below). The picture is zoomed a touch so it can move vertically. First row: pick how far <em>down</em> the picture sits. Second row: that framing in each colour treatment. Hover to flip.</div>
+  <div class="note">read/frames/plaza.jpg · exterior elevator</div>
+
+  <h2>Vertical position — how far down</h2>
+  <div class="grid" id="pos"></div>
+
+  <h2>Colour options — 2/3, shifted down</h2>
+  <div class="grid" id="col"></div>
+
+<script>
+  const back = `<div class="card-back"><div class="card-category">Feature Screenplay</div><div class="card-back-title">Shuffle</div><div class="card-back-text">A college student pulling an all-nighter in an empty science lab is pricked by an unknown needle. What follows is a spiral between reality and something far stranger.</div><span class="card-back-link">Read the script &rarr;</span></div>`;
+  const panel = `<div class="tile-panel"><div class="card-category">Feature Screenplay</div><div class="card-title">Shuffle</div><div class="card-subtitle">Horror</div></div>`;
+
+  // front: py = vertical position (lower % = picture sits lower / more sky on top), styleCls + optional overlay
+  const front = (py, style='', ov='') =>
+    `<div class="card-front ${style}" style="--py:${py}%"><div class="tile-bg"></div><div class="edge"></div>${ov}<div class="card-status">In Progress</div>${panel}</div>`;
+  const tile = (f, n, name, desc) =>
+    `<div class="opt"><div class="card-container"><div class="card">${f}${back}</div></div><div class="cap"><b>${n} · ${name}</b><span>${desc}</span></div></div>`;
+
+  document.getElementById('pos').innerHTML = [
+    tile(front(50), 'A', 'Centred',       'py 50% — the default middle crop'),
+    tile(front(38), 'B', 'Down a little', 'py 38% — a bit more sky above the lamp'),
+    tile(front(26), 'C', 'Down more',     'py 26% — elevator sits lower in the frame'),
+    tile(front(15), 'D', 'Down most',     'py 15% — most headroom'),
+  ].join('');
+
+  // colour row uses the "down a little" framing (py 38); easy to change once you pick a position
+  const PY = 38;
+  document.getElementById('col').innerHTML = [
+    tile(front(PY),                                            '1', 'Natural',        'untouched colour'),
+    tile(front(PY,'sty-duo'),                                  '2', 'Amber duotone',  'mono-to-gold, on-brand'),
+    tile(front(PY,'sty-noir','<div class="ov vig"></div>'),    '3', 'Noir',           'high-contrast B&W + vignette'),
+    tile(front(PY,'sty-warm'),                                 '4', 'Warm cinematic', 'darkened; lamp glow pops'),
+    tile(front(PY,'sty-wash','<div class="ov wash"></div>'),   '5', 'Amber wash',     'desaturated + gold gradient'),
+  ].join('');
+</script>
+</body>
+</html>

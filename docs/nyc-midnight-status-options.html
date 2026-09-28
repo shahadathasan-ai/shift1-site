@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>NYC Midnight status options — Shift1</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0b0b0b;
+  --bg-card: #161616;
+  --text: #e8e4de;
+  --text-muted: #8a8580;
+  --text-dim: #555049;
+  --accent: #e8d5a3;
+  --accent-dim: rgba(201, 185, 154, 0.12);
+  --green: #7bc97b;
+  --green-dim: rgba(123, 201, 123, 0.12);
+  --amber: #d4a04e;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-weight: 300; padding: 60px 60px 100px; line-height: 1.6; }
+
+.section { max-width: 1100px; margin: 0 auto 100px; }
+.section-label {
+  font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid rgba(201,185,154,0.2);
+}
+.section-name {
+  font-family: var(--font-body); font-size: 0.85rem; color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+/* ═══════════════════════════════════════════════ */
+/* OPTION 1: Horizontal progress bars per competition */
+/* ═══════════════════════════════════════════════ */
+.opt1 { display: flex; flex-direction: column; gap: 1.5rem; }
+.opt1-row { display: grid; grid-template-columns: 240px 1fr auto; gap: 2rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.opt1-title { font-family: var(--font-heading); font-size: 0.85rem; font-weight: 500; color: var(--text); }
+.opt1-title-sub { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem; letter-spacing: 0.05em; }
+
+.opt1-track { display: flex; gap: 0.5rem; align-items: center; }
+.opt1-round {
+  flex: 1; height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,0.04); position: relative;
+}
+.opt1-round.advanced { background: var(--green); }
+.opt1-round.waiting { background: var(--amber); animation: pulse 2s ease-in-out infinite; }
+.opt1-round.current { background: var(--accent); }
+.opt1-round.did-not {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.12);
+}
+.opt1-round-label {
+  position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.15em;
+  color: var(--text-muted); text-transform: uppercase; white-space: nowrap;
+}
+
+.opt1-status {
+  font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em;
+  text-transform: uppercase; padding: 0.4rem 0.9rem; border-radius: 3px;
+  min-width: 120px; text-align: center;
+}
+.opt1-status.advanced { background: var(--green-dim); color: var(--green); }
+.opt1-status.waiting { background: rgba(212,160,78,0.12); color: var(--amber); }
+.opt1-status.coming { background: var(--accent-dim); color: var(--accent); }
+.opt1-status.done { background: rgba(255,255,255,0.04); color: var(--text-muted); }
+
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* ═══════════════════════════════════════════════ */
+/* OPTION 2: "Currently in the arena" banner — active only */
+/* ═══════════════════════════════════════════════ */
+.opt2-banner {
+  border: 1px solid rgba(201,185,154,0.25);
+  background: rgba(201,185,154,0.03);
+  padding: 1.5rem 2rem;
+  border-radius: 4px;
+}
+.opt2-banner-label {
+  font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem;
+}
+.opt2-active-row {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem;
+}
+.opt2-active {
+  padding-right: 2rem; border-right: 1px solid rgba(255,255,255,0.06);
+}
+.opt2-active:last-child { border-right: none; padding-right: 0; }
+.opt2-active-comp {
+  font-family: var(--font-heading); font-size: 0.65rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem;
+}
+.opt2-active-title {
+  font-family: var(--font-heading); font-size: 1.1rem; font-weight: 600;
+  color: var(--text); margin-bottom: 0.3rem;
+}
+.opt2-active-status {
+  font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.75rem;
+}
+.opt2-active-status strong { color: var(--accent); font-weight: 400; }
+.opt2-dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  margin-right: 0.5rem;
+}
+.opt2-dot.green { background: var(--green); box-shadow: 0 0 10px var(--green); }
+.opt2-dot.amber { background: var(--amber); box-shadow: 0 0 10px var(--amber); animation: pulse 2s ease-in-out infinite; }
+.opt2-dot.gold { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+
+/* ═══════════════════════════════════════════════ */
+/* OPTION 3: Compact stats bar with metrics */
+/* ═══════════════════════════════════════════════ */
+.opt3 {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 4px; overflow: hidden;
+}
+.opt3-stat { background: var(--bg); padding: 1.25rem 1.5rem; }
+.opt3-num {
+  font-family: var(--font-heading); font-size: 2.2rem; font-weight: 300;
+  color: var(--text); line-height: 1; margin-bottom: 0.25rem;
+}
+.opt3-num-split { font-size: 1.3rem; color: var(--text-muted); font-weight: 300; }
+.opt3-label {
+  font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--text-muted); margin-top: 0.4rem;
+}
+.opt3-sub {
+  font-size: 0.7rem; color: var(--text-dim); margin-top: 0.25rem;
+}
+
+/* ═══════════════════════════════════════════════ */
+/* OPTION 4: Scoreboard — stats bar + horizontal timeline */
+/* ═══════════════════════════════════════════════ */
+.opt4 {
+  background: var(--bg-card); border-radius: 4px; padding: 2rem;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+.opt4-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.5rem; padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.opt4-header-label {
+  font-family: var(--font-heading); font-size: 0.55rem; letter-spacing: 0.3em;
+  text-transform: uppercase; color: var(--accent);
+}
+.opt4-header-stats {
+  display: flex; gap: 2.5rem; align-items: baseline;
+}
+.opt4-header-stat {
+  font-family: var(--font-heading); font-size: 1rem; color: var(--text);
+}
+.opt4-header-stat span { color: var(--text-muted); font-size: 0.7rem; margin-left: 0.3rem; }
+
+.opt4-timeline { display: flex; flex-direction: column; gap: 1rem; }
+.opt4-row {
+  display: grid; grid-template-columns: 220px 1fr auto; gap: 1.5rem;
+  align-items: center; padding: 0.75rem 0;
+}
+.opt4-comp {
+  font-family: var(--font-heading); font-size: 0.75rem; font-weight: 500;
+  color: var(--text-muted); letter-spacing: 0.05em;
+}
+.opt4-comp strong { color: var(--text); font-weight: 600; display: block; margin-bottom: 0.15rem; }
+
+.opt4-rounds { display: flex; gap: 0.75rem; }
+.opt4-chip {
+  padding: 0.35rem 0.75rem; border-radius: 3px;
+  font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.1em;
+  text-transform: uppercase; white-space: nowrap;
+}
+.opt4-chip.advanced { background: var(--green-dim); color: var(--green); border: 1px solid rgba(123,201,123,0.2); }
+.opt4-chip.waiting { background: rgba(212,160,78,0.1); color: var(--amber); border: 1px solid rgba(212,160,78,0.25); }
+.opt4-chip.current { background: var(--accent-dim); color: var(--accent); border: 1px solid rgba(201,185,154,0.3); }
+.opt4-chip.did-not { background: rgba(255,255,255,0.02); color: var(--text-dim); border: 1px solid rgba(255,255,255,0.06); }
+.opt4-chip.empty { opacity: 0.3; }
+.opt4-next {
+  font-family: var(--font-heading); font-size: 0.6rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--text-muted); text-align: right;
+}
+.opt4-next strong { color: var(--amber); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<!-- ═══ OPTION 1: Progress bars per competition ═══ -->
+<div class="section">
+  <div class="section-label">Option 1</div>
+  <div class="section-name">Progress bars per competition — minimal, visual, scannable. Currently waiting states pulse gently.</div>
+
+  <div class="opt1">
+
+    <div class="opt1-row">
+      <div>
+        <div class="opt1-title">Scary Story Challenge</div>
+        <div class="opt1-title-sub">2025</div>
+      </div>
+      <div class="opt1-track">
+        <div class="opt1-round advanced"><span class="opt1-round-label">R1</span></div>
+        <div class="opt1-round advanced"><span class="opt1-round-label">R2</span></div>
+        <div class="opt1-round waiting"><span class="opt1-round-label">Final</span></div>
+      </div>
+      <div class="opt1-status waiting">Awaiting Final</div>
+    </div>
+
+    <div class="opt1-row">
+      <div>
+        <div class="opt1-title">Short Story Challenge</div>
+        <div class="opt1-title-sub">2026</div>
+      </div>
+      <div class="opt1-track">
+        <div class="opt1-round advanced"><span class="opt1-round-label">R1</span></div>
+        <div class="opt1-round waiting"><span class="opt1-round-label">R2</span></div>
+        <div class="opt1-round"><span class="opt1-round-label">R3</span></div>
+      </div>
+      <div class="opt1-status waiting">Awaiting R2</div>
+    </div>
+
+    <div class="opt1-row">
+      <div>
+        <div class="opt1-title">Screenwriting Challenge</div>
+        <div class="opt1-title-sub">2026</div>
+      </div>
+      <div class="opt1-track">
+        <div class="opt1-round advanced"><span class="opt1-round-label">R1</span></div>
+        <div class="opt1-round current"><span class="opt1-round-label">R2</span></div>
+        <div class="opt1-round"><span class="opt1-round-label">R3</span></div>
+      </div>
+      <div class="opt1-status coming">R2 Incoming</div>
+    </div>
+
+    <div class="opt1-row">
+      <div>
+        <div class="opt1-title">Screenwriting Challenge</div>
+        <div class="opt1-title-sub">2025</div>
+      </div>
+      <div class="opt1-track">
+        <div class="opt1-round did-not"><span class="opt1-round-label">R1</span></div>
+        <div class="opt1-round did-not"><span class="opt1-round-label">R2</span></div>
+        <div class="opt1-round did-not"><span class="opt1-round-label">R3</span></div>
+      </div>
+      <div class="opt1-status done">Did Not Advance</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ OPTION 2: Currently in the arena banner ═══ -->
+<div class="section">
+  <div class="section-label">Option 2</div>
+  <div class="section-name">Active-only banner — shows only live competitions. Historic ones live in the split view below.</div>
+
+  <div class="opt2-banner">
+    <div class="opt2-banner-label">Currently in the arena</div>
+    <div class="opt2-active-row">
+      <div class="opt2-active">
+        <div class="opt2-active-comp">Scary Story 2025</div>
+        <div class="opt2-active-title">Confession 114</div>
+        <div class="opt2-active-status"><span class="opt2-dot amber"></span>Awaiting Final result</div>
+      </div>
+      <div class="opt2-active">
+        <div class="opt2-active-comp">Short Story 2026</div>
+        <div class="opt2-active-title">Bad Human</div>
+        <div class="opt2-active-status"><span class="opt2-dot amber"></span>Awaiting Round 2 result</div>
+      </div>
+      <div class="opt2-active">
+        <div class="opt2-active-comp">Screenwriting 2026</div>
+        <div class="opt2-active-title">Round 2</div>
+        <div class="opt2-active-status"><span class="opt2-dot gold"></span>Prompts incoming</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ OPTION 3: Stats bar ═══ -->
+<div class="section">
+  <div class="section-label">Option 3</div>
+  <div class="section-name">Minimal stats bar — big numbers, high-level view. Works as a strip at the top of the page.</div>
+
+  <div class="opt3">
+    <div class="opt3-stat">
+      <div class="opt3-num">3</div>
+      <div class="opt3-label">Active</div>
+      <div class="opt3-sub">Competitions in play</div>
+    </div>
+    <div class="opt3-stat">
+      <div class="opt3-num">4<span class="opt3-num-split">/6</span></div>
+      <div class="opt3-label">Advanced</div>
+      <div class="opt3-sub">Rounds advanced in 2026</div>
+    </div>
+    <div class="opt3-stat">
+      <div class="opt3-num">2</div>
+      <div class="opt3-label">Awaiting</div>
+      <div class="opt3-sub">Results pending</div>
+    </div>
+    <div class="opt3-stat">
+      <div class="opt3-num">1</div>
+      <div class="opt3-label">Next</div>
+      <div class="opt3-sub">Round incoming</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ OPTION 4: Scoreboard — stats + timeline ═══ -->
+<div class="section">
+  <div class="section-label">Option 4</div>
+  <div class="section-name">Scoreboard — combines high-level stats with a round-by-round chip timeline. Most complete view.</div>
+
+  <div class="opt4">
+    <div class="opt4-header">
+      <div class="opt4-header-label">2026 Season</div>
+      <div class="opt4-header-stats">
+        <div class="opt4-header-stat">3<span>Active</span></div>
+        <div class="opt4-header-stat">4<span>Advanced</span></div>
+        <div class="opt4-header-stat">2<span>Pending</span></div>
+      </div>
+    </div>
+
+    <div class="opt4-timeline">
+      <div class="opt4-row">
+        <div class="opt4-comp">Scary Story Challenge <strong>2025</strong></div>
+        <div class="opt4-rounds">
+          <div class="opt4-chip advanced">R1 · Advanced</div>
+          <div class="opt4-chip advanced">R2 · Advanced</div>
+          <div class="opt4-chip waiting">Final · Pending</div>
+        </div>
+        <div class="opt4-next"><strong>Awaiting</strong></div>
+      </div>
+
+      <div class="opt4-row">
+        <div class="opt4-comp">Short Story Challenge <strong>2026</strong></div>
+        <div class="opt4-rounds">
+          <div class="opt4-chip advanced">R1 · Advanced</div>
+          <div class="opt4-chip waiting">R2 · Pending</div>
+          <div class="opt4-chip empty">R3</div>
+        </div>
+        <div class="opt4-next"><strong>Awaiting</strong></div>
+      </div>
+
+      <div class="opt4-row">
+        <div class="opt4-comp">Screenwriting Challenge <strong>2026</strong></div>
+        <div class="opt4-rounds">
+          <div class="opt4-chip advanced">R1 · Advanced</div>
+          <div class="opt4-chip current">R2 · Incoming</div>
+          <div class="opt4-chip empty">R3</div>
+        </div>
+        <div class="opt4-next"><strong>Next round</strong></div>
+      </div>
+
+      <div class="opt4-row">
+        <div class="opt4-comp">Screenwriting Challenge <strong>2025</strong></div>
+        <div class="opt4-rounds">
+          <div class="opt4-chip did-not">R1 · Did not advance</div>
+        </div>
+        <div class="opt4-next">Complete</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -27,7 +27,7 @@ A creative production company. Portfolio site for original writing across format
 ### index.html (main page)
 - Hero: Full-screen logo + "Productions" subtitle + "Stories" scroll hint with bouncing arrow
 - Projects section: "Selected Stories" heading, "Features, pilots, novels, short stories — the best fit for the idea."
-- 7 project cards: NYC Midnight (flip, links to nyc-midnight.html), Icarus (flip), Shuffle (flip — card back links to read/shuffle.html, the gated script), Lion Street (flip), Bombshell (no-flip), God has No Family (no-flip), Nostradamus (no-flip)
+- 7 project cards: NYC Midnight (flip, links to nyc-midnight.html), Icarus (flip), Shuffle (flip — card back links to read/shuffle.html, the gated script), Lyon Street (flip), Bombshell (no-flip), God has No Family (no-flip), Nostradamus (no-flip)
 - Contact: stories@shift1.co
 - Footer: copyright with TM
 
@@ -91,7 +91,7 @@ Master spreadsheet of all story concepts. Last column has comments from Rose (RG
 |-------|-------|--------|--------|
 | **Icarus** | Comedy / Sci-Fi | Animated Series | In Progress |
 | **Shuffle** | Horror | Feature | In Progress |
-| **Lion Street** | Biopic | Novel | In Progress |
+| **Lyon Street** | Biopic | Novel | In Progress |
 
 ### On the website (title + genre only, no synopsis shown)
 | Title | Genre | Format |
@@ -124,7 +124,7 @@ Master spreadsheet of all story concepts. Last column has comments from Rose (RG
 - **Shuffle:** "Use your actual story, needle pokes him and then an entity materializes and starts following him"
 - **God has No Family:** "Like this one, what if it's a son he didn't know about? He kills his family but doesn't feel the power he should, then he finds out he actually has a bastard out there somewhere. In the process of seeking him out to kill him, he has a change of heart?"
 - **Nostradamus:** "If you leaned into the nihilism of this, could be very interesting"
-- **Lion Street:** "I want to know more!"
+- **Lyon Street:** "I want to know more!"
 
 ## Writing Craft Profile
 
