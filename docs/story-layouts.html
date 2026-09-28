@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Stories — 10 layouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b0b; --panel:#111; --text:#e8e4de; --dim:#8b8680;
+    --gold:#e8d5a3; --line:#1e1e1e; --line2:#2a2a2a;
+    --fh:'Space Grotesk',sans-serif; --fb:'Inter',sans-serif; --fm:'Space Mono',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
+  html,body{height:100%;overflow:hidden}
+  body{background:var(--bg);color:var(--text);font-family:var(--fb);-webkit-font-smoothing:antialiased}
+
+  /* ── chrome ───────────────────────────────────────────── */
+  header{
+    height:72px;flex:0 0 72px;display:flex;align-items:center;gap:18px;
+    padding:0 26px;border-bottom:1px solid var(--line);
+  }
+  .brand{font-family:var(--fm);font-size:11px;letter-spacing:.3em;color:var(--dim);white-space:nowrap}
+  .tabs{display:flex;flex-wrap:nowrap;border:1px solid var(--line2);border-radius:4px;overflow:hidden}
+  .tabs button{padding:7px 11px;font-size:11px;letter-spacing:.04em;color:var(--dim);transition:.15s;white-space:nowrap}
+  .tabs button+button{border-left:1px solid var(--line)}
+  .tabs button:hover{color:var(--text)}
+  .tabs button.on{background:var(--gold);color:#0b0b0b;font-weight:500}
+  #note{font-size:12px;color:var(--dim);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #replay{border:1px solid var(--line2);border-radius:4px;padding:7px 14px;font-size:12px;color:var(--dim)}
+  #replay:hover{color:var(--gold);border-color:var(--gold)}
+
+  /* ── stage ────────────────────────────────────────────── */
+  #stage{position:absolute;inset:72px 0 0 0;overflow:hidden}
+  .wrap{position:absolute;inset:0;transform-origin:50% 50%}
+
+  .t{
+    position:absolute;opacity:0;
+    transform:rotate(var(--rot,0deg)) translate(var(--dx,0px),var(--dy,0px)) scale(var(--ds,1)) rotateY(var(--ry0,0deg)) rotate(var(--dr,0deg));
+    transition:opacity .7s ease, transform .9s cubic-bezier(.16,.84,.34,1);
+    will-change:transform,opacity;
+  }
+  .t.in{opacity:1;transform:rotate(var(--rot,0deg)) translate(0,0) scale(1) rotateY(var(--ry,0deg)) rotate(0deg)}
+  .resetting .t{transition:none!important}
+
+  .tin{
+    width:100%;height:100%;background:var(--panel);border:1px solid var(--line2);
+    border-radius:3px;overflow:hidden;display:flex;flex-direction:column;
+    transition:border-color .3s, box-shadow .3s;
+  }
+  .t:hover{z-index:99!important}
+  .t:hover .tin{border-color:var(--gold);box-shadow:0 14px 44px rgba(0,0,0,.75)}
+
+  .art{position:relative;height:var(--arth,62%);flex:0 0 var(--arth,62%);background:#161616;overflow:hidden}
+  .art img{width:100%;height:100%;object-fit:cover;display:block}
+  .art.logo{display:flex;align-items:center;justify-content:center}
+  .art.logo img{width:58%;height:auto;object-fit:contain;
+    filter:invert(1) sepia(1) saturate(3.6) hue-rotate(4deg) brightness(.95)}
+  /* no artwork yet — a marked plate, never a stand-in image */
+  .art.none{
+    background:
+      repeating-linear-gradient(135deg,#141414 0 9px,#181818 9px 18px);
+  }
+  .art.none::after{
+    content:'NO ARTWORK YET';position:absolute;top:8px;right:9px;
+    font-family:var(--fm);font-size:6.5px;letter-spacing:.16em;color:#3c3a37;
+  }
+  .cap{flex:1;padding:9px 10px 8px;display:flex;flex-direction:column;
+       justify-content:var(--capj,center);min-height:0}
+  .cap .k{font-family:var(--fm);letter-spacing:.18em;color:var(--gold);opacity:.85;
+          white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cap .tt{font-family:var(--fh);font-weight:600;letter-spacing:-.01em;line-height:1.1;margin-top:3px;
+           white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cap .g{color:var(--dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  /* ── the idle movement, one flavour per layout ─────────── */
+  @keyframes bob   {0%,100%{transform:translateY(0)}   50%{transform:translateY(-7px)}}
+  @keyframes sway  {0%,100%{transform:translateX(-9px)}50%{transform:translateX(9px)}}
+  @keyframes breathe{0%,100%{transform:scale(1)}       50%{transform:scale(1.028)}}
+  @keyframes wobble{0%,100%{transform:rotate(-1.1deg)} 50%{transform:rotate(1.1deg)}}
+  @keyframes tilt  {0%,100%{transform:translateY(0) rotate(-.5deg)}50%{transform:translateY(-6px) rotate(.5deg)}}
+  @keyframes spin  {to{transform:rotate(360deg)}}
+  @keyframes spinb {to{transform:rotate(-360deg)}}
+  @keyframes glide {0%,100%{transform:translateX(-3.2%)}50%{transform:translateX(3.2%)}}
+  @keyframes pulse {0%,100%{transform:translate(0,0)}  50%{transform:translate(4px,-4px)}}
+
+  .lay-grid  .tin{animation:bob 6.5s ease-in-out infinite;animation-delay:calc(var(--i)*-.55s)}
+  .lay-wave  .tin{animation:bob 4.8s ease-in-out infinite;animation-delay:calc(var(--i)*-.4s)}
+  .lay-cascade .tin{animation:pulse 7s ease-in-out infinite;animation-delay:calc(var(--i)*-.6s)}
+  .lay-arc   .tin{animation:breathe 6s ease-in-out infinite;animation-delay:calc(var(--i)*-.5s)}
+  .lay-ring  .wrap{animation:spin 70s linear infinite}
+  .lay-ring  .tin {animation:spinb 70s linear infinite}
+  .lay-flow  .wrap{animation:glide 16s ease-in-out infinite}
+  .lay-scatter .tin{animation:wobble 5.5s ease-in-out infinite;animation-delay:calc(var(--i)*-.45s)}
+  .lay-deck  .tin{animation:tilt 6.5s ease-in-out infinite;animation-delay:calc(var(--i)*-.5s)}
+  .lay-zip   .tin{animation:bob 5.2s ease-in-out infinite;
+                  animation-delay:calc(var(--i)*-1.3s)}
+  .lay-strip .wrap{animation:sway 13s ease-in-out infinite}
+
+  /* the two layouts that need depth */
+  .lay-flow #inner{perspective:1400px}
+  /* sprocket rails for the strip */
+  .rail{position:absolute;left:-6%;right:-6%;height:16px;display:none;z-index:0;
+        background:repeating-linear-gradient(90deg,transparent 0 13px,#1d1d1d 13px 26px)}
+  #band{position:absolute;left:-6%;right:-6%;display:none;background:#0f0f0f;
+        border-top:1px solid var(--line);border-bottom:1px solid var(--line);z-index:0}
+  .lay-strip .rail{display:block}
+  .lay-strip #drift{animation:sway 13s ease-in-out infinite}
+
+  @media (max-width:820px){ .tabs button{padding:6px 7px;font-size:10px} #note{display:none} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">SHIFT1 · STORIES</div>
+  <div class="tabs" id="tabs"></div>
+  <div id="note"></div>
+  <button id="replay">Replay</button>
+</header>
+
+<div id="stage">
+  <div class="wrap" id="drift">
+    <div id="band"></div>
+    <div class="rail"></div>
+    <div class="rail"></div>
+  </div>
+  <div class="wrap" id="inner"></div>
+</div>
+
+<script>
+/* ── the seven stories.  Art matches the live site exactly:
+      Icarus  = read/frames/icarus.jpg
+      Shuffle = read/frames/shuffle-tile-v2.png
+      NYC     = read/frames/nyc-logo.webp, gold-recoloured on dark (as on index.html)
+      The other four have no artwork, so they say so. ─────────── */
+const F = 'read/frames/';
+const STORIES = [
+  { t:'NYC Midnight',      k:'Competition',    g:'Short story competition', img:F+'nyc-logo.webp',       logo:true },
+  { t:'Shuffle',           k:'Short Film',     g:'Horror',                  img:F+'shuffle-tile-v2.png' },
+  { t:'Icarus',            k:'Animated Pilot', g:'Comedy / Sci-Fi',         img:F+'icarus.jpg' },
+  { t:'Lion Street',       k:'Novel',          g:'Biopic',                  img:null },
+  { t:'Bombshell',         k:'Short Film',     g:'Comedy',                  img:null },
+  { t:'God has No Family', k:'Feature',        g:'Thriller / Sci-Fi',       img:null },
+  { t:'Nostradamus',       k:'Feature',        g:'Romantic Comedy',         img:null },
+];
+const N = STORIES.length;
+const rad = d => d*Math.PI/180;
+
+/* ── ten layouts.  Each one gets the stage size and returns the tile size
+      plus, for every story, where it sits and where it flies in from. ── */
+const LAYOUTS = [
+  {
+    id:'grid', name:'01 · Grid', cls:'lay-grid',
+    note:'Four over three, even gutters, tiles lift on a stagger · they breathe on the spot',
+    fn(W,H){
+      const g=26, tw=Math.min((W-5*g)/4, (H-3*g)/2.6), th=tw*1.3;
+      const rows=[[0,1,2,3],[4,5,6]], ys=[H/2-th/2-g/2, H/2+th/2+g/2], out=[];
+      rows.forEach((row,r)=>{
+        const total=row.length*tw+(row.length-1)*g, x0=(W-total)/2;
+        row.forEach((i,c)=>out[i]={x:x0+c*(tw+g)+tw/2, y:ys[r], dy:44, ds:.94, delay:i*70});
+      });
+      return {tw,th,items:out};
+    }
+  },
+  {
+    id:'wave', name:'02 · Wave', cls:'lay-wave',
+    note:'One row of seven riding a sine curve · each tile bobs out of phase with its neighbours',
+    fn(W,H){
+      const g=20, tw=Math.min((W-8*g)/N, (H-44)/2.24), th=tw*1.3, amp=Math.min(190,(H-th)/2-16);
+      const total=N*tw+(N-1)*g, x0=(W-total)/2, out=[];
+      for(let i=0;i<N;i++) out[i]={
+        x:x0+i*(tw+g)+tw/2, y:H/2+Math.sin(i/(N-1)*Math.PI*2)*amp,
+        dy:70, ds:.9, delay:i*85
+      };
+      return {tw,th,items:out};
+    }
+  },
+  {
+    id:'cascade', name:'03 · Cascade', cls:'lay-cascade',
+    note:'A staircase from top-left to bottom-right · they slide in along the same diagonal',
+    fn(W,H){
+      const pad=28, tw=Math.min(W/7.2, (H-2*pad)/2.9), th=tw*1.3;
+      const sx=(W-2*pad-tw)/(N-1), sy=(H-2*pad-th)/(N-1), out=[];
+      for(let i=0;i<N;i++) out[i]={
+        x:pad+i*sx+tw/2, y:pad+i*sy+th/2, rot:-2,
+        dx:-70, dy:-70, ds:.9, delay:i*75, z:i
+      };
+      return {tw,th,items:out,capW:sx-8};
+    }
+  },
+  {
+    id:'arc', name:'04 · Arc', cls:'lay-arc',
+    note:'Laid on a wide arc and tipped to follow it · they fan open from the centre',
+    fn(W,H){
+      const tw=Math.min(W/7.6, H/4.1), th=tw*1.3, R=Math.max(760,W*0.62), spread=34;
+      /* drop the circle centre so the arc's own middle lands on the frame's middle */
+      const cx=W/2, cy=H/2+R-R*(1-Math.cos(rad(spread)))/2, out=[];
+      for(let i=0;i<N;i++){
+        const a=-spread+i*(spread*2)/(N-1), x=cx+R*Math.sin(rad(a)), y=cy-R*Math.cos(rad(a));
+        out[i]={x,y,rot:a,dx:(cx-x)*.75,dy:(H/2-y)*.75,ds:.6,dr:-a,delay:Math.abs(i-3)*90};
+      }
+      return {tw,th,items:out};
+    }
+  },
+  {
+    id:'ring', name:'05 · Ring', cls:'lay-ring',
+    note:'Seven around a circle — a prime number, so it never looks like a grid · the ring turns forever',
+    fn(W,H){
+      const tw=Math.min(W/9, H/5.75), th=tw*1.3;   /* 5.75 keeps the corners clear of the next card */
+      const R=Math.min(W/2-tw/2-40, H/2-th/2-24), cx=W/2, cy=H/2, out=[];
+      for(let i=0;i<N;i++){
+        const a=rad(i*360/N-90);
+        out[i]={x:cx+R*Math.cos(a), y:cy+R*Math.sin(a), ds:.25, dr:-150, delay:i*80};
+      }
+      return {tw,th,items:out};
+    }
+  },
+  {
+    id:'flow', name:'06 · Coverflow', cls:'lay-flow',
+    note:'A record crate — the middle one faces you, the rest turn away · the whole rack drifts',
+    fn(W,H){
+      const tw=Math.min((W-60)/6.35, (H-60)/1.36), th=tw*1.36, mid=(N-1)/2, pitch=tw*0.92, out=[];
+      for(let i=0;i<N;i++){
+        const d=i-mid;
+        out[i]={
+          x:W/2+d*pitch, y:H/2, ry:d*-34, ds:.82,
+          dx:d*180, dr:0, delay:Math.abs(d)*90, z:10-Math.abs(d)
+        };
+      }
+      /* slot order, not story order — the front of the rack is the work with art */
+      return {tw,th,items:out,order:[5,3,0,2,1,4,6],capW:pitch-12};
+    }
+  },
+  {
+    id:'scatter', name:'07 · Scatter', cls:'lay-scatter',
+    note:'Pinned up like a corkboard, nothing squared off · they drop in and keep wobbling',
+    fn(W,H){
+      /* hand-placed so nothing collides and the whitespace stays even-ish */
+      const P=[[.115,.28],[.335,.19],[.565,.31],[.79,.21],[.875,.63],[.60,.76],[.245,.72]];
+      const R=[-7,5,-3.5,8,-5.5,3,-8];
+      const tw=Math.min(W/7.6, H/4.3), th=tw*1.3, out=[];
+      for(let i=0;i<N;i++) out[i]={
+        x:P[i][0]*W, y:P[i][1]*H, rot:R[i],
+        dy:-(H*0.5+120), ds:.85, dr:R[i]*-2, delay:i*90, z:i
+      };
+      return {tw,th,items:out,ease:'cubic-bezier(.2,1.5,.4,1)'};
+    }
+  },
+  {
+    id:'deck', name:'08 · Deck', cls:'lay-deck',
+    note:'A hand of cards fanned in the middle · dealt out one at a time from a single point',
+    fn(W,H){
+      /* spacing is set from the longest title: every card must show its own name in full */
+      const sp=0.86, tw=Math.min((W-40)/(6*sp+1.414), (H-70)/1.34), th=tw*1.34, mid=(N-1)/2, out=[];
+      for(let i=0;i<N;i++){
+        const d=i-mid;
+        out[i]={
+          x:W/2+d*(tw*sp), y:H/2+Math.abs(d)*11, rot:d*7,
+          dx:-d*(tw*sp), dy:-Math.abs(d)*11, ds:.7, dr:-d*7,
+          delay:i*115, z:i
+        };
+      }
+      /* reversed, so the card lying fully on top is the first story, not the last */
+      return {tw,th,items:out,order:[6,5,4,3,2,1,0],capW:tw*sp-10};
+    }
+  },
+  {
+    id:'zip', name:'09 · Zip', cls:'lay-zip',
+    note:'Teeth of a zip — four hang from the top, three rise from the floor · they close on entry',
+    fn(W,H){
+      const g=16, tw=(W-8*g)/N, th=H*0.56, pad=8;
+      const total=N*tw+(N-1)*g, x0=(W-total)/2, out=[];
+      for(let i=0;i<N;i++){
+        const top = i%2===0;                       /* 0,2,4,6 hang · 1,3,5 rise */
+        out[i]={
+          x:x0+i*(tw+g)+tw/2,
+          y: top ? th/2+pad : H-th/2-pad,
+          dy:(top?-1:1)*(th+60), ds:1, delay:i*70
+        };
+      }
+      return {tw,th,items:out,arth:'46%',capj:'flex-start'};
+    }
+  },
+  {
+    id:'strip', name:'10 · Strip', cls:'lay-strip',
+    note:'A length of film with sprocket rails · slides in from the right, then rocks gently',
+    fn(W,H){
+      const g=13, tw=Math.min((W-8*g)/N, (H-70)/1.36), th=tw*1.36, out=[];
+      const total=N*tw+(N-1)*g, x0=(W-total)/2;
+      for(let i=0;i<N;i++) out[i]={x:x0+i*(tw+g)+tw/2, y:H/2, rot:0, dx:W*0.85, ds:1, delay:i*55};
+      return {tw,th,items:out, band:[H/2-th/2-22, th+44]};
+    }
+  },
+];
+
+/* ── render ──────────────────────────────────────────────── */
+const stage = document.getElementById('stage');
+const inner = document.getElementById('inner');
+let current = 0;
+
+function art(s){
+  if(!s.img)   return '<div class="art none"></div>';
+  if(s.logo)   return `<div class="art logo"><img src="${s.img}" alt="${s.t}"></div>`;
+  return `<div class="art"><img src="${s.img}" alt="${s.t}"></div>`;
+}
+
+function build(){
+  const L = LAYOUTS[current];
+  const W = stage.clientWidth, H = stage.clientHeight;
+  const {tw, th, items, ease, order, band, capW, arth, capj} = L.fn(W, H);
+
+  stage.className = L.cls;
+  document.getElementById('note').textContent = L.note;
+  inner.style.transition = 'none';
+  /* type scales with the tile so nothing is ever cramped or oversized */
+  const k = tw/200;
+  const rail = document.querySelectorAll('.rail');
+  rail[0].style.top = (band ? band[0]-16 : 0)+'px';
+  rail[1].style.top = (band ? band[0]+band[1] : 0)+'px';
+  const bandEl = document.getElementById('band');
+  bandEl.style.display = band ? 'block' : 'none';
+  if(band){ bandEl.style.top = band[0]+'px'; bandEl.style.height = band[1]+'px'; }
+
+  inner.innerHTML = items.map((p,i)=>{
+    const s = STORIES[order ? order[i] : i];
+    return `<div class="t" style="
+      left:${(p.x-tw/2).toFixed(1)}px; top:${(p.y-th/2).toFixed(1)}px;
+      width:${tw.toFixed(1)}px; height:${th.toFixed(1)}px; z-index:${p.z ?? i};
+      ${arth ? '--arth:'+arth+';' : ''}${capj ? '--capj:'+capj+';' : ''}
+      --i:${i}; --rot:${p.rot||0}deg; --ry:${p.ry||0}deg; --ry0:${p.ry||0}deg;
+      --dx:${p.dx||0}px; --dy:${p.dy||0}px; --ds:${p.ds??1}; --dr:${p.dr||0}deg;
+      transition-delay:${p.delay||0}ms;">
+      <div class="tin">
+        ${art(s)}
+        <div class="cap"${capW ? ` style="max-width:${Math.max(96,capW).toFixed(0)}px"` : ''}>
+          <div class="k"  style="font-size:${(7.6*k).toFixed(1)}px">${s.k}</div>
+          <div class="tt" style="font-size:${(15.5*k).toFixed(1)}px">${s.t}</div>
+          <div class="g"  style="font-size:${(9.6*k).toFixed(1)}px">${s.g}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  if(ease) inner.querySelectorAll('.t').forEach(t=>t.style.transitionTimingFunction = 'ease, '+ease);
+}
+
+function play(){
+  const nodes = inner.querySelectorAll('.t');
+  stage.classList.add('resetting');
+  nodes.forEach(n=>n.classList.remove('in'));
+  void inner.offsetWidth;
+  stage.classList.remove('resetting');
+  void inner.offsetWidth;
+  /* a timeout, not requestAnimationFrame — rAF can be starved and the
+     reveal then never fires */
+  setTimeout(()=>nodes.forEach(n=>n.classList.add('in')), 30);
+}
+
+function show(i){
+  current = i;
+  document.querySelectorAll('#tabs button').forEach((b,j)=>b.classList.toggle('on', j===i));
+  build();
+  play();
+  if(location.hash !== '#'+LAYOUTS[i].id) history.replaceState(null,'','#'+LAYOUTS[i].id);
+}
+
+document.getElementById('tabs').innerHTML =
+  LAYOUTS.map((l,i)=>`<button data-i="${i}">${l.name}</button>`).join('');
+document.getElementById('tabs').onclick = e=>{
+  const b = e.target.closest('button'); if(b) show(+b.dataset.i);
+};
+document.getElementById('replay').onclick = play;
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight') show((current+1)%LAYOUTS.length);
+  if(e.key==='ArrowLeft')  show((current+LAYOUTS.length-1)%LAYOUTS.length);
+});
+let rt; addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>{build();play();},180); });
+
+const want = LAYOUTS.findIndex(l=>l.id===location.hash.replace('#',''));
+show(want<0 ? 0 : want);
+</script>
+</body>
+</html>
