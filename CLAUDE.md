@@ -24,32 +24,31 @@ A creative production company. Portfolio site for original writing across format
 
 ## Site Structure
 
-### index.html (main page) — rebuilt Sep 2026
-**One screen, no scrolling.** The hero, the "Selected Stories" heading, the
-strapline, the contact section and the footer were all removed; the page opens
-straight on the work.
+### index.html (main page)
+- Hero: Full-screen logo + "Studios" subtitle + "Stories" scroll hint with bouncing arrow
+- **Stories section (rebuilt Sep 2026)** — its own screen, reached by scrolling or
+  the hero's Stories link. One heading, the single word **Stories**, set in the old
+  PROJECTS label style. The "Selected Stories" title and the strapline are gone.
+  - **6 cards, exact 3×2.** `grid-template-columns:repeat(3,1fr)` +
+    `grid-template-rows:repeat(2,1fr)` inside a flex column section with
+    `min-height:100vh`, so the cards size to the viewport rather than a fixed
+    400px. Section padding and all card type use `clamp(..,vh,..)` so fronts and
+    backs never overflow on a short window (checked 1920×1080 → 1280×720).
+  - **Every card flips** — the `no-flip` variant is gone. Shuffle, Icarus and Lyon
+    Street carry their synopses; Bombshell, God has No Family and Nostradamus show
+    *"Synopsis to come"* because no copy exists for them yet.
+  - Cards are **static HTML**, not built by script, so the titles are in the page
+    source for crawlers and link previews.
+  - One shared `.tile` class with `.tile-bg img` replaces the old per-project
+    background-image rules.
+- Contact: stories@shift1.co — unchanged
+- Footer: copyright with TM — unchanged
 
-- Nav only: SH1FT wordmark · Stories · Contact (Contact is now a `mailto:` link,
-  since there is no longer a section to scroll to)
-- One heading, the single word **Stories**, set in the old PROJECTS label style
-  (small, letterspaced, gold)
-- **6 cards, exact 3×2.** `grid-template-columns:repeat(3,1fr)` and
-  `grid-template-rows:repeat(2,1fr)` inside a flex column, so the cards size
-  themselves to the viewport instead of a fixed 400px height. Card type uses
-  `clamp(..,vh,..)` so fronts and backs never overflow on a short window
-  (checked 1920×1080 → 1280×720).
-- **Every card flips** — the `no-flip` variant is gone. Shuffle, Icarus and Lyon
-  Street carry their synopses; Bombshell, God has No Family and Nostradamus show
-  *"Synopsis to come"* because no copy exists for them yet.
-- All six now have real artwork in `read/frames/`.
-- Fireflies and GoatCounter carried over unchanged.
+**NYC Midnight is no longer a card.** `nyc-midnight.html` is still live but nothing
+on the homepage links to it.
 
-**Dropped, and worth knowing:** NYC Midnight is no longer a card, so
-`nyc-midnight.html` is live but unlinked from the homepage. The hero wordmark
-("SH1FT / Studios") and the © / TM footer line are gone too.
-
-`stories-grid.html` is the design mockup this was shipped from; earlier
-explorations (`stories-strip.html`, `stories-contact.html`, `stories-slide.html`,
+`stories-grid.html` is the mockup this shipped from; earlier explorations
+(`stories-strip.html`, `stories-contact.html`, `stories-slide.html`,
 `portfolio-lab.html`, `stories-directions.html`) are kept for reference.
 
 ### nyc-midnight.html
