@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Shift1 — Stories (contact sheet)</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --bg:#0b0b0b; --card:#161616; --card-back:#1a1a1a;
+    --text:#e8e4de; --dim:#8a8580; --accent:#e8d5a3; --accent-dim:rgba(201,185,154,.12);
+    --fh:'Space Grotesk',sans-serif; --fb:'Inter',sans-serif; --fm:'Space Mono',monospace;
+    /* the film rebate: a hairline of colour, not a slab of brown */
+    --rebate:#1d1409; --perf:#0c0904;
+  }
+  html{ scroll-behavior:smooth; scroll-snap-type:y mandatory }
+  body{ background:var(--bg); color:var(--text); font-family:var(--fb); font-weight:300;
+    line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden }
+
+  /* fireflies */
+  .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .particle{position:absolute;background:var(--accent);border-radius:50%;opacity:0;
+    animation:firefly ease-in-out infinite}
+  @keyframes firefly{0%{opacity:0;transform:translate(0,0)}25%{opacity:.4}
+    50%{opacity:.15;transform:translate(30px,-60px)}75%{opacity:.32}
+    100%{opacity:0;transform:translate(-20px,-120px)}}
+
+  nav{position:fixed;top:0;width:100%;padding:1.5rem 3rem;display:flex;
+    justify-content:space-between;align-items:center;z-index:100;
+    background:linear-gradient(to bottom,var(--bg) 60%,transparent)}
+  .nav-logo{font-family:var(--fh);font-size:1rem;font-weight:600;letter-spacing:.15em;
+    color:var(--text);text-decoration:none}
+  .nav-links{display:flex;gap:2.5rem;list-style:none}
+  .nav-links a{font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--dim);text-decoration:none;transition:color .3s}
+  .nav-links a:hover{color:var(--text)}
+
+  .hero{height:100dvh;display:flex;flex-direction:column;justify-content:center;
+    align-items:center;position:relative;z-index:1;scroll-snap-align:start}
+  .logo-text{font-family:var(--fh);font-size:clamp(4rem,10vw,8rem);font-weight:700;
+    letter-spacing:.08em;line-height:1}
+  .logo-text .one{color:var(--accent)}
+  .hero-sub{font-size:.85rem;letter-spacing:.35em;text-transform:uppercase;color:var(--dim);
+    margin-top:.75rem;text-align:center;text-indent:.35em}
+  .hero-line{width:40px;height:1px;background:var(--accent);margin-top:3rem;opacity:.5}
+  .scroll-hint{position:absolute;bottom:8rem;display:flex;flex-direction:column;align-items:center;
+    gap:.4rem;color:var(--accent);text-decoration:none;animation:bounce 2s ease-in-out infinite}
+  .scroll-label{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase}
+  @keyframes bounce{0%,100%{opacity:.8;transform:translateY(0)}50%{opacity:1;transform:translateY(8px)}}
+
+  /* ─── the sheet ─────────────────────────────────────── */
+  #stories{height:100dvh;position:relative;z-index:1;scroll-snap-align:start;
+    display:flex;flex-direction:column;justify-content:center;gap:var(--sgap,22px);
+    padding:0 var(--side,34px);overflow:hidden}
+
+  .strip{background:var(--rebate);border-radius:2px;padding:var(--spad,7px)}
+  /* the sprocket run — a thin line of tiny holes, nothing more */
+  .perf{height:var(--perfh,6px);
+    background:repeating-linear-gradient(90deg,transparent 0 9px,var(--perf) 9px 15px)}
+  .row{display:flex;gap:var(--gap,14px);padding:var(--spad,7px) 0}
+
+  .cf{flex:0 0 auto;position:relative;perspective:1600px;cursor:pointer;
+    opacity:0;transform:translateY(12px);
+    transition:opacity .55s ease,transform .65s cubic-bezier(.16,.84,.34,1)}
+  .cf.in{opacity:1;transform:none}
+
+  .flip{position:relative;width:100%;height:100%;transform-style:preserve-3d;
+    transition:transform .72s cubic-bezier(.4,.1,.2,1)}
+  .cf.can:hover .flip, .cf.can.on .flip{transform:rotateY(180deg)}
+
+  .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+    background:var(--card);overflow:hidden;display:flex;flex-direction:column;
+    text-decoration:none;color:inherit}
+  .back{transform:rotateY(180deg);background:var(--card-back);padding:18px 20px;justify-content:center}
+
+  .shot{position:relative;flex:0 0 auto;height:var(--artH);background:#141414;overflow:hidden}
+  .shot img{width:100%;height:100%;object-fit:cover;display:block}
+  .shot .none{position:absolute;inset:0;
+    background:repeating-linear-gradient(135deg,#141414 0 10px,#181818 10px 20px)}
+  .shot .none::after{content:'NO ARTWORK YET';position:absolute;top:9px;right:11px;
+    font-family:var(--fm);font-size:7.5px;letter-spacing:.16em;color:#3c3a37}
+
+  /* the frame's own caption, set in the rebate below it */
+  .lbl{flex:1;display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:0 2px;font-family:var(--fm);font-size:9.5px;letter-spacing:.13em;
+    text-transform:uppercase;color:#b9a888}
+  .lbl b{font-weight:400;color:var(--text);font-family:var(--fh);letter-spacing:.02em;
+    font-size:12.5px;text-transform:none;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .lbl span{flex:0 0 auto}
+  .cf:hover .lbl b{color:var(--accent)}
+
+  .back-title{font-family:var(--fh);font-size:1.05rem;font-weight:600}
+  .back-text{font-size:.8rem;line-height:1.6;color:var(--dim);margin-top:.55rem}
+  .back-link{font-size:.72rem;letter-spacing:.08em;color:var(--accent);margin-top:.9rem}
+
+  /* the editor's chinagraph mark — one thin ring, only on the frame you're on */
+  .ring{position:absolute;inset:-5px;border:1.5px solid #c9392b;border-radius:9px;
+    opacity:0;transform:rotate(-.5deg);pointer-events:none;transition:opacity .18s;z-index:3}
+  .cf:hover .ring{opacity:.9}
+
+  @media (max-width:900px){
+    nav{padding:1.2rem 1.4rem}
+    #stories{gap:14px}
+    .lbl b{font-size:11px}
+    .lbl{font-size:8px;letter-spacing:.1em}
+  }
+</style>
+</head>
+<body>
+
+  <div class="particles" id="particles"></div>
+
+  <nav>
+    <a href="#" class="nav-logo">SH1FT</a>
+    <ul class="nav-links">
+      <li><a href="#stories">Stories</a></li>
+      <li><a href="#stories">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <div class="logo-text">SH<span class="one">1</span>FT</div>
+      <div class="hero-sub">Studios</div>
+    </div>
+    <div class="hero-line"></div>
+    <a href="#stories" class="scroll-hint"><span class="scroll-label">Stories</span>&#8595;</a>
+  </section>
+
+  <section id="stories"></section>
+
+<script>
+const F = 'read/frames/';
+/* Six stories — NYC Midnight dropped, as agreed.  Every one has artwork now. */
+const S = [
+  { t:'Shuffle', k:'Short Film', g:'Horror', img:F+'shuffle-tile.jpg', href:'shuffle.html',
+    back:'Some night shifts are quieter than others. For one laboratory worker, the silence is only the beginning. Based on a true story.',
+    link:'See short video &rarr;' },
+  { t:'Icarus', k:'Animated Pilot', g:'Comedy / Sci-Fi', img:F+'icarus.jpg', href:'read/icarus.html',
+    back:"An outcast teenager becomes the unlikely leader of an alien universe on the brink of collapse. She didn't ask for the job — and they didn't ask for her.",
+    link:'Read the script &rarr;' },
+  { t:'Lyon Street', k:'Novel', g:'Biopic', img:F+'lyon-street.jpg',
+    back:'A teenage girl arrives in a foreign country barely speaking the language. She finds a close community of others like her, and together they make their way in a new world.' },
+  { t:'Bombshell', k:'Feature Screenplay', g:'Comedy', img:F+'bombshell.jpg' },
+  { t:'God has No Family', k:'Feature Screenplay', g:'Thriller / Sci-Fi', img:F+'god-has-no-family.jpg' },
+  { t:'Nostradamus', k:'Feature Screenplay', g:'Romantic Comedy', img:F+'nostradamus.jpg' },
+];
+const pad2 = n => String(n).padStart(2,'0');
+const sect = document.getElementById('stories');
+
+function shot(s){
+  return s.img ? `<img src="${s.img}" alt="${s.t}" draggable="false">` : '<div class="none"></div>';
+}
+
+function layout(){
+  /* clientWidth, not innerWidth — innerWidth counts the scrollbar */
+  const W = document.documentElement.clientWidth,
+        H = document.documentElement.clientHeight;
+  const narrow = W < 900;
+  const side = narrow ? 14 : 34, gap = narrow ? 9 : 14, spad = narrow ? 5 : 7,
+        perfh = narrow ? 5 : 6, sgap = narrow ? 10 : 22;
+  const cols   = narrow ? 2 : 3;
+  const strips = narrow ? 3 : 2;
+
+  const tw = (W - 2*side - (cols-1)*gap) / cols;
+  const lbl = narrow ? 22 : 26;
+  /* every strip has to fit the window, so the picture is capped by height too */
+  const maxArt = (H - (strips-1)*sgap - strips*(2*perfh + 2*spad + lbl) - 40) / strips;
+  const artH = Math.round(Math.min(tw/(16/9), maxArt));
+  const th = artH + lbl;
+
+  sect.style.setProperty('--side', side+'px');
+  sect.style.setProperty('--gap',  gap+'px');
+  sect.style.setProperty('--spad', spad+'px');
+  sect.style.setProperty('--perfh',perfh+'px');
+  sect.style.setProperty('--sgap', sgap+'px');
+
+  const rows = narrow ? [[0,1],[2,3],[4,5]] : [[0,1,2],[3,4,5]];
+  sect.innerHTML = rows.map(ids=>`
+    <div class="strip">
+      <div class="perf"></div>
+      <div class="row">
+        ${ids.map(i=>{
+          const s = S[i], can = !!s.back && !narrow;
+          const tag = s.href ? 'a' : 'div', href = s.href ? ` href="${s.href}"` : '';
+          return `<article class="cf${can?' can':''}" data-i="${i}"
+            style="width:${tw}px;height:${th}px;--artH:${artH}px;transition-delay:${i*70}ms">
+            <div class="flip">
+              <${tag}${href} class="face front">
+                <div class="shot">${shot(s)}</div>
+                <div class="lbl"><b>${s.t}</b><span>${pad2(i+1)}A${narrow ? '' : ' · ' + s.g}</span></div>
+              </${tag}>
+              ${can ? `<${tag}${href} class="face back">
+                <div class="back-title">${s.t}</div>
+                <div class="back-text">${s.back}</div>
+                ${s.link ? `<div class="back-link">${s.link}</div>` : ''}
+              </${tag}>` : ''}
+            </div>
+            <div class="ring"></div>
+          </article>`;
+        }).join('')}
+      </div>
+      <div class="perf"></div>
+    </div>`).join('');
+}
+layout();
+let rt; addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>{ layout(); if(threaded) show(); },180); });
+
+/* ── the frames come up one after another on arrival ── */
+let threaded = false;
+function show(){ sect.querySelectorAll('.cf').forEach(f=>f.classList.add('in')); }
+function thread(){ if(threaded) return; threaded = true;
+  /* a timeout, not requestAnimationFrame — rAF can be starved and then the
+     reveal never fires */
+  setTimeout(show, 40);
+}
+new IntersectionObserver(es=>{ es.forEach(e=>{ if(e.isIntersecting) thread(); }); },
+  { threshold:.25 }).observe(sect);
+addEventListener('scroll', ()=>{
+  if(sect.getBoundingClientRect().top < innerHeight*0.75) thread();
+}, { passive:true });
+
+/* tap to turn a frame over where there is no hover */
+if(matchMedia('(hover:none)').matches){
+  sect.addEventListener('click', e=>{
+    const f = e.target.closest('.cf.can');
+    if(f){ e.preventDefault(); f.classList.toggle('on'); }
+  });
+}
+
+/* fireflies */
+const pc = document.getElementById('particles');
+for(let i=0;i<40;i++){
+  const p=document.createElement('div'); p.className='particle';
+  p.style.left=Math.random()*100+'%'; p.style.top=Math.random()*100+'%';
+  const z=2+Math.random()*2; p.style.width=z+'px'; p.style.height=z+'px';
+  p.style.animationDuration=(8+Math.random()*8)+'s';
+  p.style.animationDelay=(Math.random()*1)+'s';
+  pc.appendChild(p);
+}
+</script>
+</body>
+</html>
