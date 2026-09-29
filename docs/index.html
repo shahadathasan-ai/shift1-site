@@ -248,7 +248,7 @@
     /* ─── PROJECTS ─── */
     /* the stories sit on a screen of their own — you arrive by scrolling
        or by the Stories link, and the six fill it without scrolling again */
-    #projects {
+    #stories {
       min-height: 100vh; max-width: 1500px;
       display: flex; flex-direction: column; justify-content: center;
       /* scales down on a short window, so the cards keep usable height */
@@ -525,7 +525,7 @@
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
-      #projects { min-height: 0; padding: 5rem 1.4rem 3rem; }
+      #stories { min-height: 0; padding: 5rem 1.4rem 3rem; }
       .projects-grid { grid-template-columns: 1fr; grid-template-rows: none;
         max-height: none; margin-top: 1.4rem; }
       .card-container { height: 360px; }
@@ -551,7 +551,7 @@
   <nav>
     <a href="#" class="nav-logo">SH1FT</a>
     <ul class="nav-links">
-      <li><a href="#projects">Projects</a></li>
+      <li><a href="#stories">Stories</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
@@ -563,11 +563,11 @@
       <div class="hero-sub">Studios</div>
     </div>
     <div class="hero-line"></div>
-    <a href="#projects" class="scroll-hint"><span class="scroll-label">Stories</span>&#8595;</a>
+    <a href="#stories" class="scroll-hint"><span class="scroll-label">Stories</span>&#8595;</a>
   </section>
 
   <!-- PROJECTS -->
-  <section id="projects">
+  <section id="stories">
     <div class="section-label">Stories</div>
 
     <div class="projects-grid">

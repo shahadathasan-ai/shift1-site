@@ -26,6 +26,8 @@ A creative production company. Portfolio site for original writing across format
 
 ### index.html (main page)
 - Hero: Full-screen logo + "Studios" subtitle + "Stories" scroll hint with bouncing arrow
+- Nav reads **SH1FT · Stories · Contact** — the section id is `#stories`, not `#projects`.
+  `shuffle.html` and `nyc-midnight.html` link back to `index.html#stories`.
 - **Stories section (rebuilt Sep 2026)** — its own screen, reached by scrolling or
   the hero's Stories link. One heading, the single word **Stories**, set in the old
   PROJECTS label style. The "Selected Stories" title and the strapline are gone.
