@@ -430,6 +430,11 @@
       border-radius: 8px;
     }
 
+    /* `.card-container a { display:block }` outranks `.card-back { display:flex }`,
+       so a back that is a link lost its centring entirely.  Shuffle is the only
+       one, which is why it alone looked different. */
+    .card-container a.card-back { display: flex; }
+
     .card-back .card-category { margin-bottom: clamp(.4rem, 1vh, 1rem); }
 
     .card-back-title {
@@ -446,6 +451,8 @@
       line-height: 1.58;
       margin-bottom: clamp(.7rem, 1.6vh, 1.5rem);
     }
+
+    .card-back-text:last-child { margin-bottom: 0; }
 
     /* an honest gap where no copy has been written yet */
     .card-back-todo { color: #57534e; font-style: italic; }
@@ -464,6 +471,7 @@
 
     .card-back-link {
       display: inline-block;
+      align-self: flex-start;   /* or the underline runs the card's full width */
       font-size: 0.7rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -648,7 +656,7 @@
           <div class="card-back">
             <div class="card-category">Feature Screenplay</div>
             <div class="card-back-title">Bombshell</div>
-            <div class="card-back-text card-back-todo">Synopsis to come.</div>
+            <div class="card-back-text">A destination wedding, a perfect sunset, and one piece of news that reaches every phone at the same moment. There is suddenly no reason left to be polite.</div>
           </div>
         </div>
       </div>
@@ -668,7 +676,7 @@
           <div class="card-back">
             <div class="card-category">Feature Screenplay</div>
             <div class="card-back-title">God has No Family</div>
-            <div class="card-back-text card-back-todo">Synopsis to come.</div>
+            <div class="card-back-text">A man who has reached the top of everything sits alone with the arithmetic of how he got there. Far below him, one light is still on.</div>
           </div>
         </div>
       </div>
@@ -688,7 +696,7 @@
           <div class="card-back">
             <div class="card-category">Feature Screenplay</div>
             <div class="card-back-title">Nostradamus</div>
-            <div class="card-back-text card-back-todo">Synopsis to come.</div>
+            <div class="card-back-text">A man in a cabin in the woods, a film crew on the lawn, and several million people waiting on what he says next. Falling for someone was not in the forecast.</div>
           </div>
         </div>
       </div>
