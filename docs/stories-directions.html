@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Shift1 — Stories, four directions</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
+  :root{
+    --bg:#0b0b0b; --card:#161616; --text:#e8e4de; --dim:#8a8580;
+    --gold:#e8d5a3; --line:#1e1e1e; --line2:#2a2a2a;
+    --fh:'Space Grotesk',sans-serif; --fb:'Inter',sans-serif; --fm:'Space Mono',monospace;
+  }
+  html,body{height:100%;overflow:hidden}
+  body{background:var(--bg);color:var(--text);font-family:var(--fb);font-weight:300;
+    -webkit-font-smoothing:antialiased}
+
+  /* fireflies — the site's own, behind everything */
+  .particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+  .particle{position:absolute;background:var(--gold);border-radius:50%;opacity:0;
+    animation:firefly ease-in-out infinite}
+  @keyframes firefly{0%{opacity:0;transform:translate(0,0)}25%{opacity:.4}
+    50%{opacity:.15;transform:translate(30px,-60px)}75%{opacity:.32}
+    100%{opacity:0;transform:translate(-20px,-120px)}}
+
+  header{height:72px;display:flex;align-items:center;gap:18px;padding:0 26px;
+    border-bottom:1px solid var(--line);position:relative;z-index:5}
+  .brand{font-family:var(--fm);font-size:11px;letter-spacing:.3em;color:var(--dim);white-space:nowrap}
+  .tabs{display:flex;border:1px solid var(--line2);border-radius:4px;overflow:hidden}
+  .tabs button{padding:7px 14px;font-size:11.5px;letter-spacing:.04em;color:var(--dim);
+    transition:.15s;white-space:nowrap}
+  .tabs button+button{border-left:1px solid var(--line)}
+  .tabs button:hover{color:var(--text)}
+  .tabs button.on{background:var(--gold);color:#0b0b0b;font-weight:500}
+  #note{font-size:12px;color:var(--dim);flex:1;min-width:0;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  #replay{border:1px solid var(--line2);border-radius:4px;padding:7px 14px;font-size:12px;color:var(--dim)}
+  #replay:hover{color:var(--gold);border-color:var(--gold)}
+
+  #stage{position:absolute;inset:72px 0 0 0;z-index:1}
+  .view{position:absolute;inset:0;display:none;padding:30px 34px}
+  .view.on{display:block}
+
+  /* shared "no artwork" plate */
+  .none{background:repeating-linear-gradient(135deg,#141414 0 10px,#181818 10px 20px);
+    position:relative}
+  .none::after{content:'NO ARTWORK YET';position:absolute;top:8px;right:10px;
+    font-family:var(--fm);font-size:7px;letter-spacing:.16em;color:#3c3a37}
+
+  /* ════════ A · THE SLATE ══════════════════════════════════ */
+  #vA{display:none}#vA.on{display:flex;flex-direction:column}
+  .slate{flex:1;display:flex;flex-direction:column;border:1px solid #242424;border-radius:3px;
+    background:#0e0e0e;overflow:hidden}
+  /* the clapper stick, hinged at the left */
+  .stick{height:52px;flex:0 0 52px;transform-origin:2% 100%;transform:rotate(-13deg);
+    transition:transform .5s cubic-bezier(.3,1.6,.5,1);
+    background:repeating-linear-gradient(115deg,#e8e4de 0 34px,#141414 34px 68px);
+    border-bottom:2px solid #000}
+  .slate.shut .stick{transform:rotate(0deg)}
+  .body{flex:1;display:grid;grid-template-columns:1.15fr .85fr;min-height:0}
+  .sheet{padding:20px 24px;display:flex;flex-direction:column;min-height:0}
+  .shead{display:flex;gap:26px;font-family:var(--fm);font-size:9.5px;letter-spacing:.18em;
+    color:var(--dim);border-bottom:1px solid #222;padding-bottom:12px}
+  .shead b{color:var(--text);font-weight:400}
+  .rows{flex:1;display:flex;flex-direction:column;justify-content:center;gap:2px}
+  .srow{display:grid;grid-template-columns:34px 1fr 152px 124px;align-items:baseline;
+    gap:12px;padding:9px 8px;border-radius:2px;cursor:pointer;
+    opacity:0;transform:translateY(10px);
+    transition:opacity .5s ease,transform .6s cubic-bezier(.16,.84,.34,1),background .2s}
+  .srow.in{opacity:1;transform:none}
+  .srow:hover,.srow.sel{background:#181818}
+  .srow .n{font-family:var(--fm);font-size:11px;color:var(--gold);opacity:.8}
+  .srow .t{font-family:var(--fh);font-size:clamp(15px,1.5vw,22px);font-weight:600;letter-spacing:-.01em}
+  .srow .f,.srow .g{font-family:var(--fm);font-size:9.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .srow.sel .t{color:var(--gold)}
+  .board{border-left:1px solid #222;padding:20px 24px;display:flex;flex-direction:column;min-height:0}
+  .bimg{flex:1;border:1px solid #232323;border-radius:2px;overflow:hidden;background:#141414;min-height:0}
+  .bimg img{width:100%;height:100%;object-fit:cover;display:block}
+  .bimg .none{width:100%;height:100%}
+  .bmeta{font-family:var(--fm);font-size:9.5px;letter-spacing:.16em;color:var(--dim);
+    margin-top:12px;display:flex;justify-content:space-between}
+  .bmeta b{color:var(--gold);font-weight:400}
+
+  /* ════════ B · SPLIT-FLAP ═════════════════════════════════ */
+  #vB{display:none}#vB.on{display:flex;flex-direction:column;justify-content:center}
+  .fboard{border:1px solid #242424;border-radius:3px;background:#0d0d0d;padding:22px 26px}
+  .fhead{display:flex;justify-content:space-between;font-family:var(--fm);font-size:9.5px;
+    letter-spacing:.22em;color:var(--dim);padding-bottom:14px;border-bottom:1px solid #1e1e1e}
+  .frow{display:flex;align-items:center;gap:14px;padding:7px 0;cursor:pointer}
+  .frow .n{font-family:var(--fm);font-size:11px;color:var(--gold);opacity:.75;width:22px}
+  .cells{display:flex;gap:2px}
+  .cell{width:clamp(15px,1.45vw,25px);height:clamp(22px,2.1vw,36px);background:#161616;
+    border-radius:2px;position:relative;font-family:var(--fm);font-weight:700;
+    font-size:clamp(11px,1.05vw,17px);color:var(--text);display:grid;place-items:center;
+    overflow:hidden}
+  /* the hairline where a real flap splits */
+  .cell::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:#0b0b0b;opacity:.85}
+  .cell.sp{background:transparent}
+  .frow .tail{margin-left:auto;font-family:var(--fm);font-size:9.5px;letter-spacing:.16em;
+    color:var(--dim);text-transform:uppercase}
+  .frow:hover .cell{color:var(--gold)}
+
+  /* ════════ C · CONTACT SHEET ══════════════════════════════ */
+  #vC{display:none}#vC.on{display:flex;flex-direction:column;justify-content:center;gap:26px}
+  .strip{background:#2a1e0d;border-radius:2px;padding:0;position:relative}
+  .perf{height:15px;background:repeating-linear-gradient(90deg,#2a1e0d 0 12px,#120c05 12px 24px)}
+  .cells2{display:flex;gap:9px;padding:9px}
+  .cframe{flex:1;cursor:pointer;position:relative;opacity:0;transform:scale(.97);
+    transition:opacity .5s ease,transform .55s cubic-bezier(.16,.84,.34,1)}
+  .cframe.in{opacity:1;transform:none}
+  .cframe .shot{aspect-ratio:16/9;background:#141414;overflow:hidden;position:relative}
+  .cframe .shot img{width:100%;height:100%;object-fit:cover;display:block}
+  .cframe .lbl{display:flex;justify-content:space-between;align-items:baseline;
+    padding:5px 2px 3px;font-family:var(--fm);font-size:9px;letter-spacing:.12em;
+    text-transform:uppercase;color:#d8c9a6}
+  .cframe .lbl b{font-weight:400;color:#f0e6cf}
+  /* the editor's chinagraph ring on the chosen frame */
+  .ring{position:absolute;inset:-6px -6px 26px -6px;border:2px solid #d8392b;border-radius:10px;
+    opacity:0;transform:rotate(-.6deg);pointer-events:none;transition:opacity .2s}
+  .cframe.sel .ring{opacity:.92}
+  .cframe.sel .lbl b{color:#fff}
+
+  /* ════════ D · CURRENT (two-row strip) ════════════════════ */
+  #vD{display:none}#vD.on{display:flex;flex-direction:column;justify-content:center;gap:24px}
+  .reel{position:relative}
+  .rband{position:absolute;left:-6%;right:-6%;top:0;bottom:0;background:#0f0f0f;
+    border-top:1px solid #1e1e1e;border-bottom:1px solid #1e1e1e}
+  .rrail{position:absolute;left:-6%;right:-6%;height:14px;
+    background:repeating-linear-gradient(90deg,transparent 0 12px,#1d1d1d 12px 24px)}
+  .rrow{position:relative;display:flex;gap:12px;justify-content:center;padding:18px 0}
+  .dcard{flex:0 0 auto;background:var(--card);border:1px solid #232323;border-radius:3px;
+    overflow:hidden;opacity:0;transform:translateY(14px);
+    transition:opacity .5s ease,transform .6s cubic-bezier(.16,.84,.34,1)}
+  .dcard.in{opacity:1;transform:none}
+  .dcard .shot{aspect-ratio:16/9;background:#141414;overflow:hidden;position:relative}
+  .dcard .shot img{width:100%;height:100%;object-fit:cover;display:block}
+  .dcard .cap{padding:10px 12px}
+  .dcard .k{font-family:var(--fh);font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--gold);opacity:.85}
+  .dcard .t{font-family:var(--fh);font-size:15px;font-weight:600;margin-top:3px}
+  .dcard .g{font-size:11px;color:var(--dim);margin-top:1px}
+
+  .logoimg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#161616}
+  .logoimg img{width:auto;height:auto;max-width:52%;max-height:76%;object-fit:contain;
+    filter:invert(1) sepia(1) saturate(3.6) hue-rotate(4deg) brightness(.95)}
+
+  @media (max-width:1000px){ .tabs button{padding:6px 8px;font-size:10px} #note{display:none} }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<header>
+  <div class="brand">SHIFT1 · STORIES</div>
+  <div class="tabs" id="tabs"></div>
+  <div id="note"></div>
+  <button id="replay">Replay</button>
+</header>
+
+<div id="stage">
+  <div class="view" id="vA">
+    <div class="slate" id="slate">
+      <div class="stick"></div>
+      <div class="body">
+        <div class="sheet">
+          <div class="shead">
+            <span>PROD <b>SHIFT1 STUDIOS</b></span>
+            <span>ROLL <b>01</b></span>
+            <span>DATE <b>2026</b></span>
+            <span>SLATE <b>07</b></span>
+          </div>
+          <div class="rows" id="slateRows"></div>
+        </div>
+        <div class="board">
+          <div class="bimg" id="boardImg"></div>
+          <div class="bmeta"><span id="bLeft">SCENE 01</span><span id="bRight"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="view" id="vB">
+    <div class="fboard">
+      <div class="fhead"><span>SHIFT1 · STUDIOS</span><span id="fclock">DEPARTURES</span></div>
+      <div id="flapRows"></div>
+    </div>
+  </div>
+
+  <div class="view" id="vC"></div>
+
+  <div class="view" id="vD"></div>
+</div>
+
+<script>
+const F = 'read/frames/';
+const S = [
+  { t:'NYC Midnight',      k:'Competition',       g:'Short Story',    img:F+'nyc-logo.webp', logo:true },
+  { t:'Shuffle',           k:'Short Film',        g:'Horror',         img:F+'shuffle-tile-v2.png' },
+  { t:'Icarus',            k:'Animated Pilot',    g:'Comedy / Sci-Fi',img:F+'icarus.jpg' },
+  { t:'Lyon Street',       k:'Novel',             g:'Biopic',         img:F+'lyon-street.jpg' },
+  { t:'Bombshell',         k:'Feature Screenplay',g:'Comedy',         img:null },
+  { t:'God has No Family', k:'Feature Screenplay',g:'Thriller',       img:F+'god-has-no-family.jpg' },
+  { t:'Nostradamus',       k:'Feature Screenplay',g:'Rom-Com',        img:null },
+];
+const pad2 = n => String(n).padStart(2,'0');
+function shot(s){
+  if(!s.img)  return '<div class="none" style="width:100%;height:100%"></div>';
+  if(s.logo)  return `<div class="logoimg"><img src="${s.img}" alt="${s.t}"></div>`;
+  return `<img src="${s.img}" alt="${s.t}">`;
+}
+
+/* ── A · the slate ─────────────────────────────────────────── */
+const slate = document.getElementById('slate'), rowsEl = document.getElementById('slateRows');
+rowsEl.innerHTML = S.map((s,i)=>`
+  <div class="srow" data-i="${i}" style="transition-delay:${140+i*55}ms">
+    <div class="n">${pad2(i+1)}</div>
+    <div class="t">${s.t}</div>
+    <div class="f">${s.k}</div>
+    <div class="g">${s.g}</div>
+  </div>`).join('');
+function slatePick(i){
+  rowsEl.querySelectorAll('.srow').forEach((r,j)=>r.classList.toggle('sel', j===i));
+  document.getElementById('boardImg').innerHTML = shot(S[i]);
+  document.getElementById('bLeft').textContent  = 'SCENE ' + pad2(i+1);
+  document.getElementById('bRight').innerHTML   = '<b>' + S[i].k.toUpperCase() + '</b>';
+}
+rowsEl.addEventListener('mouseover', e=>{ const r=e.target.closest('.srow'); if(r) slatePick(+r.dataset.i); });
+rowsEl.addEventListener('click',     e=>{ const r=e.target.closest('.srow'); if(r){ slate.classList.remove('shut'); setTimeout(()=>slate.classList.add('shut'),20);} });
+slatePick(0);
+
+/* ── B · split-flap ────────────────────────────────────────── */
+const CH = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+const flapRows = document.getElementById('flapRows');
+const LEN = Math.max(...S.map(s=>s.t.length));
+flapRows.innerHTML = S.map((s,i)=>{
+  const txt = s.t.toUpperCase().padEnd(LEN,' ');
+  const cells = [...txt].map(c=>`<div class="cell${c===' '?' sp':''}" data-c="${c}"></div>`).join('');
+  return `<div class="frow" data-i="${i}"><div class="n">${pad2(i+1)}</div>
+    <div class="cells">${cells}</div><div class="tail">${s.k} · ${s.g}</div></div>`;
+}).join('');
+let flapTimers = [];
+function flapRow(row, delay){
+  [...row.querySelectorAll('.cell')].forEach((cell,ci)=>{
+    const target = cell.dataset.c;
+    if(target === ' '){ cell.textContent=''; return; }
+    let n = 0, spins = 6 + ci;
+    const t = setTimeout(()=>{
+      const iv = setInterval(()=>{
+        if(n++ >= spins){ clearInterval(iv); cell.textContent = target; return; }
+        cell.textContent = CH[Math.floor(Math.random()*CH.length)];
+      }, 42);
+      flapTimers.push(()=>clearInterval(iv));
+    }, delay + ci*26);
+    flapTimers.push(()=>clearTimeout(t));
+  });
+}
+function flapAll(){
+  flapTimers.forEach(f=>f()); flapTimers = [];
+  [...flapRows.querySelectorAll('.frow')].forEach((r,i)=>flapRow(r, 60 + i*130));
+}
+flapRows.addEventListener('mouseenter', e=>{
+  const r = e.target.closest && e.target.closest('.frow'); if(r) flapRow(r, 0);
+}, true);
+
+/* ── C · contact sheet ─────────────────────────────────────── */
+document.getElementById('vC').innerHTML = [[0,1,2,3],[4,5,6]].map(ids=>`
+  <div class="strip">
+    <div class="perf"></div>
+    <div class="cells2">
+      ${ids.map(i=>`
+        <div class="cframe" data-i="${i}" style="transition-delay:${i*70}ms">
+          <div class="shot">${shot(S[i])}</div>
+          <div class="lbl"><b>${S[i].t}</b><span>${pad2(i+1)}A</span></div>
+          <div class="ring"></div>
+        </div>`).join('')}
+      ${ids.length===3 ? '<div style="flex:1"></div>' : ''}
+    </div>
+    <div class="perf"></div>
+  </div>`).join('');
+document.getElementById('vC').addEventListener('mouseover', e=>{
+  const f = e.target.closest('.cframe'); if(!f) return;
+  document.querySelectorAll('.cframe').forEach(x=>x.classList.toggle('sel', x===f));
+});
+document.querySelector('.cframe').classList.add('sel');
+
+/* ── D · the current two-row strip, for comparison ─────────── */
+function buildD(){
+  const W = document.documentElement.clientWidth, H = document.documentElement.clientHeight - 72;
+  const g = 12, tw = Math.min((W - 130)/4, (H - 190)/2/1.02);
+  document.getElementById('vD').innerHTML = [[0,1,2,3],[4,5,6]].map(ids=>`
+    <div class="reel"><div class="rband"></div>
+      <div class="rrail" style="top:0"></div>
+      <div class="rrail" style="bottom:0"></div>
+      <div class="rrow">
+        ${ids.map(i=>`<div class="dcard" data-i="${i}" style="width:${tw}px;transition-delay:${i*60}ms">
+          <div class="shot">${shot(S[i])}</div>
+          <div class="cap"><div class="k">${S[i].k}</div>
+            <div class="t">${S[i].t}</div><div class="g">${S[i].g}</div></div>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+buildD();
+
+/* ── tabs, and the motion each one runs ───────────────────── */
+const VIEWS = [
+  { id:'A', name:'A · Slate',         note:'A clapperboard — every title is a row on the slate · hover to load the board, click to clap' },
+  { id:'B', name:'B · Split-flap',    note:'A departures board · the letters shift into place, which is the brand name made literal' },
+  { id:'C', name:'C · Contact sheet', note:'A 35mm contact sheet · the chosen frame is ringed in red chinagraph, the way an editor marks a print' },
+  { id:'D', name:'D · Current strip', note:'What you have now — two reels of four and three, for comparison' },
+];
+let cur = 0;
+document.getElementById('tabs').innerHTML =
+  VIEWS.map((v,i)=>`<button data-i="${i}">${v.name}</button>`).join('');
+
+function play(){
+  const v = VIEWS[cur].id;
+  if(v==='A'){
+    slate.classList.remove('shut');
+    rowsEl.querySelectorAll('.srow').forEach(r=>r.classList.remove('in'));
+    /* a timeout, not requestAnimationFrame — rAF can be starved and then
+       the reveal never fires at all */
+    setTimeout(()=>{ slate.classList.add('shut');
+      rowsEl.querySelectorAll('.srow').forEach(r=>r.classList.add('in')); }, 40);
+  }
+  if(v==='B') flapAll();
+  if(v==='C'){
+    const f = document.querySelectorAll('#vC .cframe');
+    f.forEach(x=>x.classList.remove('in'));
+    setTimeout(()=>f.forEach(x=>x.classList.add('in')), 40);
+  }
+  if(v==='D'){
+    buildD();
+    const d = document.querySelectorAll('#vD .dcard');
+    setTimeout(()=>d.forEach(x=>x.classList.add('in')), 40);
+  }
+}
+function show(i){
+  cur = i;
+  VIEWS.forEach((v,j)=>document.getElementById('v'+v.id).classList.toggle('on', j===i));
+  document.querySelectorAll('#tabs button').forEach((b,j)=>b.classList.toggle('on', j===i));
+  document.getElementById('note').textContent = VIEWS[i].note;
+  if(location.hash !== '#'+VIEWS[i].id.toLowerCase())
+    history.replaceState(null,'','#'+VIEWS[i].id.toLowerCase());
+  play();
+}
+document.getElementById('tabs').onclick = e=>{ const b=e.target.closest('button'); if(b) show(+b.dataset.i); };
+document.getElementById('replay').onclick = play;
+addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight') show((cur+1)%VIEWS.length);
+  if(e.key==='ArrowLeft')  show((cur+VIEWS.length-1)%VIEWS.length);
+});
+let rt; addEventListener('resize', ()=>{ clearTimeout(rt); rt=setTimeout(()=>{ if(VIEWS[cur].id==='D') play(); },180); });
+
+const want = VIEWS.findIndex(v=>v.id.toLowerCase()===location.hash.replace('#',''));
+show(want<0?0:want);
+
+/* fireflies */
+const pc = document.getElementById('particles');
+for(let i=0;i<40;i++){
+  const p=document.createElement('div'); p.className='particle';
+  p.style.left=Math.random()*100+'%'; p.style.top=Math.random()*100+'%';
+  const z=2+Math.random()*2; p.style.width=z+'px'; p.style.height=z+'px';
+  p.style.animationDuration=(8+Math.random()*8)+'s';
+  p.style.animationDelay=(Math.random()*1)+'s';
+  pc.appendChild(p);
+}
+</script>
+</body>
+</html>
