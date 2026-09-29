@@ -24,12 +24,33 @@ A creative production company. Portfolio site for original writing across format
 
 ## Site Structure
 
-### index.html (main page)
-- Hero: Full-screen logo + "Productions" subtitle + "Stories" scroll hint with bouncing arrow
-- Projects section: "Selected Stories" heading, "Features, pilots, novels, short stories — the best fit for the idea."
-- 7 project cards: NYC Midnight (flip, links to nyc-midnight.html), Icarus (flip), Shuffle (flip — card back links to read/shuffle.html, the gated script), Lyon Street (flip), Bombshell (no-flip), God has No Family (no-flip), Nostradamus (no-flip)
-- Contact: stories@shift1.co
-- Footer: copyright with TM
+### index.html (main page) — rebuilt Sep 2026
+**One screen, no scrolling.** The hero, the "Selected Stories" heading, the
+strapline, the contact section and the footer were all removed; the page opens
+straight on the work.
+
+- Nav only: SH1FT wordmark · Stories · Contact (Contact is now a `mailto:` link,
+  since there is no longer a section to scroll to)
+- One heading, the single word **Stories**, set in the old PROJECTS label style
+  (small, letterspaced, gold)
+- **6 cards, exact 3×2.** `grid-template-columns:repeat(3,1fr)` and
+  `grid-template-rows:repeat(2,1fr)` inside a flex column, so the cards size
+  themselves to the viewport instead of a fixed 400px height. Card type uses
+  `clamp(..,vh,..)` so fronts and backs never overflow on a short window
+  (checked 1920×1080 → 1280×720).
+- **Every card flips** — the `no-flip` variant is gone. Shuffle, Icarus and Lyon
+  Street carry their synopses; Bombshell, God has No Family and Nostradamus show
+  *"Synopsis to come"* because no copy exists for them yet.
+- All six now have real artwork in `read/frames/`.
+- Fireflies and GoatCounter carried over unchanged.
+
+**Dropped, and worth knowing:** NYC Midnight is no longer a card, so
+`nyc-midnight.html` is live but unlinked from the homepage. The hero wordmark
+("SH1FT / Studios") and the © / TM footer line are gone too.
+
+`stories-grid.html` is the design mockup this was shipped from; earlier
+explorations (`stories-strip.html`, `stories-contact.html`, `stories-slide.html`,
+`portfolio-lab.html`, `stories-directions.html`) are kept for reference.
 
 ### nyc-midnight.html
 - NYC Midnight competition entries page

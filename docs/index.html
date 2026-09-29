@@ -7,718 +7,207 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    /* palette, type and card system lifted from index.html unchanged */
+    :root{
+      --bg:#0b0b0b; --bg-card:#161616; --bg-card-back:#1a1a1a;
+      --text:#e8e4de; --text-muted:#8a8580;
+      --accent:#e8d5a3; --accent-dim:rgba(201,185,154,.12);
+      --font-heading:'Space Grotesk',sans-serif; --font-body:'Inter',sans-serif;
+    }
+    html,body{ height:100%; overflow:hidden; }
+    body{ background:var(--bg); color:var(--text); font-family:var(--font-body);
+      font-weight:300; line-height:1.6; -webkit-font-smoothing:antialiased; }
+
+    /* ─── fireflies, as on the live site ─── */
+    .particles{ position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+    .particle{ position:absolute; background:var(--accent); border-radius:50%; opacity:0;
+      animation:firefly ease-in-out infinite; }
+    @keyframes firefly{
+      0%{opacity:0;transform:translate(0,0)} 25%{opacity:.4}
+      50%{opacity:.15;transform:translate(30px,-60px)} 75%{opacity:.32}
+      100%{opacity:0;transform:translate(-20px,-120px)}
     }
 
-    :root {
-      --bg: #0b0b0b;
-      --bg-card: #161616;
-      --bg-card-back: #1a1a1a;
-      --text: #e8e4de;
-      --text-muted: #8a8580;
-      --accent: #e8d5a3;
-      --accent-dim: rgba(201, 185, 154, 0.12);
-      --font-heading: 'Space Grotesk', sans-serif;
-      --font-body: 'Inter', sans-serif;
+    nav{ position:fixed; top:0; width:100%; padding:1.5rem 3rem; display:flex;
+      justify-content:space-between; align-items:center; z-index:100;
+      background:linear-gradient(to bottom,var(--bg) 60%,transparent); }
+    .nav-logo{ font-family:var(--font-heading); font-size:1rem; font-weight:600;
+      letter-spacing:.15em; color:var(--text); text-decoration:none; }
+    .nav-links{ display:flex; gap:2.5rem; list-style:none; }
+    .nav-links a{ font-size:.8rem; letter-spacing:.1em; text-transform:uppercase;
+      color:var(--text-muted); text-decoration:none; transition:color .3s; }
+    .nav-links a:hover{ color:var(--text); }
+
+    /* the whole page is one screen: heading, then the six, nothing below */
+    section{ position:relative; z-index:1; height:100%; max-width:1500px; margin:0 auto;
+      padding:5.5rem 3rem 3rem; display:flex; flex-direction:column; }
+    /* the one heading, set exactly as the old PROJECTS label was */
+    .section-label{ font-size:.7rem; letter-spacing:.25em; text-transform:uppercase;
+      color:var(--accent); margin-bottom:1.6rem; flex:0 0 auto; }
+
+    /* ─── the card grid — three across, two down, exactly even ─── */
+    .projects-grid{
+      flex:1; min-height:0;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);   /* fixed 3, so it is always symmetrical */
+      grid-template-rows:repeat(2,1fr);      /* and the two rows share what is left */
+      gap:2rem;
     }
+    .card-container{ perspective:1000px; height:100%; min-height:0; }
+    .card-container a{ text-decoration:none; color:inherit; display:block; width:100%; height:100%; }
+    .card{ width:100%; height:100%; position:relative; transform-style:preserve-3d;
+      transition:transform .7s cubic-bezier(.4,0,.2,1); cursor:pointer; }
+    /* every card turns now — there is no no-flip variant */
+    .card-container:hover .card, .card-container.on .card{ transform:rotateY(180deg); }
 
-    html { scroll-behavior: smooth; }
+    .card-front,.card-back{ position:absolute; width:100%; height:100%;
+      backface-visibility:hidden; -webkit-backface-visibility:hidden;
+      border-radius:8px; overflow:hidden; }
 
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
-      font-weight: 300;
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+    .card-front{ background:var(--bg-card); border:1px solid rgba(255,255,255,.04);
+      transition:border-color .3s ease; padding:0; --imgh:62%; }
+    .card-container:hover .card-front{ border-color:rgba(201,185,154,.15); }
 
-    /* ─── BACKGROUND PARTICLES ─── */
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
+    .tile-bg{ position:absolute; left:0; right:0; top:0; height:var(--imgh); z-index:0;
+      overflow:hidden; background:#141414; }
+    .tile-bg img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .edge{ position:absolute; left:0; right:0; height:60px; top:calc(var(--imgh) - 60px);
+      z-index:2; background:linear-gradient(to bottom,transparent,rgba(11,11,11,.4)); }
+    .tile-panel{ position:absolute; left:0; right:0; top:var(--imgh); bottom:0; z-index:4;
+      background:var(--bg-card); border-top:1px solid rgba(232,213,163,.14);
+      padding:clamp(.85rem,2vh,1.5rem) 2rem clamp(.8rem,1.9vh,1.4rem);
+      display:flex; flex-direction:column; justify-content:flex-end; }
 
-    .particle {
-      position: absolute;
-      background: var(--accent);
-      border-radius: 50%;
-      opacity: 0;
-      animation: firefly ease-in-out infinite;
-    }
+    .card-category{ font-size:.65rem; letter-spacing:.25em; text-transform:uppercase;
+      color:var(--accent); margin-bottom:clamp(.35rem,.9vh,.75rem); font-weight:500; }
+    .card-title{ font-family:var(--font-heading); font-size:clamp(1.05rem,2.4vh,1.5rem);
+      font-weight:600; color:var(--text); margin-bottom:clamp(.2rem,.6vh,.5rem); line-height:1.2; }
+    .card-subtitle{ font-size:clamp(.74rem,1.5vh,.85rem); color:var(--text-muted); }
 
-    @keyframes firefly {
-      0% { opacity: 0; transform: translate(0, 0); }
-      25% { opacity: 0.4; }
-      50% { opacity: 0.15; transform: translate(30px, -60px); }
-      75% { opacity: 0.32; }
-      100% { opacity: 0; transform: translate(-20px, -120px); }
-    }
+    .card-back{ background:var(--bg-card-back); transform:rotateY(180deg);
+      padding:clamp(1.1rem,2.6vh,2rem);
+      display:flex; flex-direction:column; justify-content:center;
+      border:1px solid rgba(201,185,154,.1); border-radius:8px; }
+    .card-back .card-category{ margin-bottom:clamp(.4rem,1vh,1rem); }
+    .card-back-title{ font-family:var(--font-heading); font-size:clamp(1rem,2vh,1.2rem);
+      font-weight:600; color:var(--text); margin-bottom:clamp(.45rem,1.1vh,1rem); }
+    .card-back-text{ font-size:clamp(.73rem,1.45vh,.9rem); color:var(--text-muted);
+      line-height:1.58; margin-bottom:clamp(.7rem,1.6vh,1.5rem); }
+    .card-back-link{ display:inline-block; align-self:flex-start; font-size:.7rem;
+      letter-spacing:.15em; text-transform:uppercase; color:var(--accent);
+      text-decoration:none; transition:opacity .3s;
+      border-bottom:1px solid rgba(201,185,154,.3); padding-bottom:2px; }
+    .card-back-link:hover{ opacity:.7; }
+    /* an honest gap, not invented copy */
+    .card-back-todo{ font-size:.8rem; color:#57534e; font-style:italic; }
 
-    /* ─── NAV ─── */
-    nav {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 1.5rem 3rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 100;
-      background: linear-gradient(to bottom, var(--bg) 60%, transparent);
-    }
+    /* cards come up as they enter, the way the live site reveals them */
+    .reveal{ opacity:0; transform:translateY(22px);
+      transition:opacity .7s ease, transform .8s cubic-bezier(.19,.82,.28,1);
+      transition-delay:calc(var(--i) * 90ms); }
+    .reveal.visible{ opacity:1; transform:none; }
 
-    .nav-logo {
-      font-family: var(--font-heading);
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      color: var(--text);
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2.5rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-family: var(--font-body);
-      font-size: 0.8rem;
-      font-weight: 400;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      text-decoration: none;
-      transition: color 0.3s ease;
-    }
-
-    .nav-links a:hover { color: var(--text); }
-
-    /* ─── HERO ─── */
-    .hero {
-      height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-logo { margin-bottom: 2rem; }
-
-    .logo-text {
-      font-family: var(--font-heading);
-      font-size: clamp(4rem, 10vw, 8rem);
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      color: var(--text);
-      line-height: 1;
-    }
-
-    .logo-text .one {
-      color: var(--accent);
-      position: relative;
-    }
-
-    .logo-text .tm {
-      font-size: 0.2em;
-      vertical-align: baseline;
-      color: var(--text-muted);
-      opacity: 0.5;
-      margin-left: 0.05em;
-      position: relative;
-      top: -2.7em;
-    }
-
-    .hero-sub {
-      font-family: var(--font-body);
-      font-size: 0.85rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-top: 0.75rem;
-      /* Centred under the mark rather than flush-left. "Productions" was long
-         enough to look balanced sitting left; a shorter word is not, and the
-         tracking puts a trailing space after the last letter either way. */
-      text-align: center;
-      text-indent: 0.35em;
-    }
-
-    .hero-line {
-      width: 40px;
-      height: 1px;
-      background: var(--accent);
-      margin-top: 3rem;
-      opacity: 0.5;
-    }
-
-    .scroll-hint {
-      position: absolute;
-      bottom: 8rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--accent);
-      text-decoration: none;
-      opacity: 1;
-      animation: bounce 2s ease-in-out infinite;
-      cursor: pointer;
-      transition: opacity 0.3s;
-    }
-    .scroll-hint:hover { opacity: 0.7; }
-    .scroll-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-    }
-
-    @keyframes bounce {
-      0%, 100% { opacity: 0.8; transform: translateY(0); }
-      50% { opacity: 1; transform: translateY(8px); }
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 0.2; transform: translateY(0); }
-      50% { opacity: 0.5; transform: translateY(4px); }
-    }
-
-    /* ─── SECTIONS ─── */
-    section {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 5rem 3rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .section-label {
-      font-family: var(--font-body);
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.5rem;
-    }
-
-    .section-title {
-      font-family: var(--font-heading);
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 600;
-      line-height: 1.2;
-      margin-bottom: 1.5rem;
-      color: var(--text);
-    }
-
-    .section-text {
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      max-width: 600px;
-      line-height: 1.8;
-    }
-
-
-    /* ─── DIVIDER ─── */
-    .divider {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 3rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .divider-line {
-      height: 1px;
-      background: linear-gradient(to right, transparent, var(--accent-dim), transparent);
-    }
-
-    /* ─── PROJECTS ─── */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2rem;
-      margin-top: 3rem;
-    }
-
-    .card-container {
-      perspective: 1000px;
-      height: 400px;
-    }
-
-    .card-container a {
-      text-decoration: none;
-      color: inherit;
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    .card {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-      cursor: pointer;
-    }
-
-    .card-container:hover .card {
-      transform: rotateY(180deg);
-    }
-
-    /* No flip on link cards */
-    .card-container.no-flip:hover .card {
-      transform: none;
-    }
-
-    .card-container.no-flip .card-front {
-      transition: border-color 0.3s, background 0.3s;
-    }
-
-    .card-container.no-flip:hover .card-front {
-      border-color: rgba(201, 185, 154, 0.15);
-      background: #1a1a1a;
-    }
-
-    .card-front,
-    .card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .card-front {
-      background: var(--bg-card);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 2rem 2rem 1.35rem;   /* title sits slightly lower */
-      border: 1px solid rgba(255, 255, 255, 0.04);
-      transition: border-color 0.3s ease;
-    }
-
-    .card-container:hover .card-front {
-      border-color: rgba(201, 185, 154, 0.15);
-    }
-
-    /* Only the unfinished work carries a status; the first three need none. */
-    .card-status {
-      position: absolute;
-      top: 1.5rem;
-      left: 2rem;
-      z-index: 5;
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      font-weight: 500;
-      color: rgba(201, 185, 154, 0.6);
-    }
-
-    .card-category {
-      font-size: 0.65rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.75rem;
-      font-weight: 500;
-    }
-
-    .card-title {
-      font-family: var(--font-heading);
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-    }
-
-    .card-subtitle {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    /* ── image tiles (Shuffle / NYC / Icarus) — shared format ── */
-    /* picture up top (--imgh); title on a solid panel below. divider lowered to give the picture more room */
-    .card-front.tile-shuffle, .card-front.tile-nyc, .card-front.tile-ic { padding: 0; --imgh: 62%; }
-    .tile-shuffle .tile-panel, .tile-nyc .tile-panel, .tile-ic .tile-panel {
-      position: absolute; left: 0; right: 0; top: var(--imgh); bottom: 0; z-index: 4;
-      background: var(--bg-card); border-top: 1px solid rgba(232,213,163,0.14);
-      padding: 1.5rem 2rem 1.4rem; display: flex; flex-direction: column; justify-content: flex-end;
-    }
-    .tile-ic .edge {
-      position: absolute; left: 0; right: 0; height: 60px; top: calc(var(--imgh) - 60px); z-index: 2;
-      background: linear-gradient(to bottom, transparent, rgba(11,11,11,0.4));
-    }
-
-    /* Shuffle — poster artwork. The image band's ratio moves with the grid,
-       measured from 1.37 at the narrowest column to 2.59 when it collapses to
-       one. The asset is therefore cut at 2.60 with the artwork composed inside
-       its central 1.37 region, so `cover` always shows at least that region and
-       only ever crops paper. Paper is part of the image rather than a CSS fill,
-       so there is no tone mismatch at the edges. Measured: nothing clipped at
-       any width. */
-    .tile-shuffle .tile-bg {
-      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      background: url('read/frames/shuffle-tile-v2.png') center / cover no-repeat;
-    }
-    /* Icarus — sci-fi frame, centred */
-    .tile-ic .tile-bg {
-      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      background: url('read/frames/icarus.jpg') center/cover no-repeat;
-    }
-    /* NYC — transparent logo webp, recoloured to the site gold, on dark */
-    .tile-nyc .logo-area {
-      position: absolute; left: 0; right: 0; top: 0; height: var(--imgh); z-index: 0;
-      display: flex; align-items: center; justify-content: center; background: #161616;
-    }
-    .tile-nyc .logo-area img {
-      width: 46%; height: auto;
-      filter: invert(1) sepia(1) saturate(3.6) hue-rotate(4deg) brightness(0.95);
-    }
-
-    .card-number {
-      position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
-      font-family: var(--font-heading);
-      font-size: 4rem;
-      font-weight: 700;
-      color: rgba(255, 255, 255, 0.03);
-      line-height: 1;
-    }
-
-    .card-back {
-      background: var(--bg-card-back);
-      transform: rotateY(180deg);
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      border: 1px solid rgba(201, 185, 154, 0.1);
-      border-radius: 8px;
-    }
-
-    .card-back .card-category { margin-bottom: 1rem; }
-
-    .card-back-title {
-      font-family: var(--font-heading);
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 1rem;
-    }
-
-    .card-back-text {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      line-height: 1.7;
-      margin-bottom: 1.5rem;
-    }
-
-    .card-back-meta {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      letter-spacing: 0.05em;
-      opacity: 0.6;
-    }
-
-    .card-back-meta span {
-      display: block;
-      margin-bottom: 0.3rem;
-    }
-
-    .card-back-link {
-      display: inline-block;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--accent);
-      text-decoration: none;
-      transition: opacity 0.3s;
-      border-bottom: 1px solid rgba(201, 185, 154, 0.3);
-      padding-bottom: 2px;
-    }
-    .card-back-link:hover { opacity: 0.7; }
-
-    /* ─── CONTACT ─── */
-    .contact {
-      text-align: center;
-      padding: 10rem 3rem;
-    }
-
-    .contact .section-title { margin-bottom: 1rem; }
-
-    .contact-email {
-      font-family: var(--font-heading);
-      font-size: clamp(1.2rem, 3vw, 1.8rem);
-      color: var(--accent);
-      text-decoration: none;
-      transition: opacity 0.3s ease;
-      letter-spacing: 0.02em;
-    }
-
-    .contact-email:hover { opacity: 0.7; }
-
-    /* ─── FOOTER ─── */
-    footer {
-      text-align: center;
-      padding: 2rem 3rem 3rem;
-      font-size: 0.7rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      opacity: 0.4;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ─── SCROLL ANIMATIONS ─── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .card-container.reveal {
-      transition-delay: calc(var(--i, 0) * 0.1s);
-    }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
-      .nav-links { gap: 1.5rem; }
-      section { padding: 5rem 1.5rem; }
-      .about { grid-template-columns: 1fr; gap: 2rem; }
-      .projects-grid { grid-template-columns: 1fr; }
-      .contact { padding: 6rem 1.5rem; }
-      .divider { padding: 0 1.5rem; }
+    @media (max-width:1150px){ .projects-grid{ grid-template-columns:repeat(2,1fr) } }
+    /* a phone cannot hold six cards in one screen, so there it scrolls */
+    @media (max-width:760px){
+      html,body{ overflow:auto }
+      section{ height:auto; padding:5rem 1.4rem 3rem }
+      nav{ padding:1.2rem 1.4rem }
+      .projects-grid{ grid-template-columns:1fr; grid-template-rows:none }
+      .card-container{ height:360px }
     }
   </style>
 </head>
 <body>
 
-  <!-- BACKGROUND PARTICLES -->
   <div class="particles" id="particles"></div>
 
-  <!-- NAV -->
   <nav>
     <a href="#" class="nav-logo">SH1FT</a>
     <ul class="nav-links">
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#projects">Stories</a></li>
+      <li><a href="mailto:stories@shift1.co">Contact</a></li>
     </ul>
   </nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-logo">
-      <div class="logo-text">SH<span class="one">1</span>FT</div>
-      <div class="hero-sub">Studios</div>
-    </div>
-    <div class="hero-line"></div>
-    <a href="#projects" class="scroll-hint"><span class="scroll-label">Stories</span>&#8595;</a>
-  </section>
-
-  <!-- PROJECTS -->
   <section id="projects">
-    <div class="section-label">Projects</div>
-    <h2 class="section-title">Selected Stories</h2>
-    <p class="section-text">Features, pilots, novels, short stories — the best fit for the idea.</p>
+    <div class="section-label">Stories</div>
+    <div class="projects-grid" id="grid"></div>
+  </section>
 
-    <div class="projects-grid">
+<script>
+const F = 'read/frames/';
+/* Six stories, every one with its own artwork.  Copy is only what already
+   exists on the site — nothing here is invented. */
+const S = [
+  { t:'Shuffle', k:'Feature', g:'Horror', img:F+'shuffle-tile.jpg', href:'shuffle.html',
+    back:'Some night shifts are quieter than others. For one laboratory worker, the silence is only the beginning. Based on a true story.',
+    link:'See short video &rarr;' },
+  { t:'Icarus', k:'Animated Pilot', g:'Sci-Fi', img:F+'icarus.jpg', href:'read/icarus.html',
+    back:"An outcast teenager becomes the unlikely leader of an alien universe on the brink of collapse. She didn't ask for the job — and they didn't ask for her.",
+    link:'Read the script &rarr;' },
+  { t:'Lyon Street', k:'Novel', g:'Biopic', img:F+'lyon-street.jpg',
+    back:'A teenage girl arrives in a foreign country barely speaking the language. She finds a close community of others like her, and together they make their way in a new world.' },
+  { t:'Bombshell', k:'Feature Screenplay', g:'Comedy', img:F+'bombshell.jpg' },
+  { t:'God has No Family', k:'Feature Screenplay', g:'Thriller / Sci-Fi', img:F+'god-has-no-family.jpg' },
+  { t:'Nostradamus', k:'Feature Screenplay', g:'Romantic Comedy', img:F+'nostradamus.jpg' },
+];
 
-      <!-- NYC Midnight -->
-      <div class="card-container reveal" style="--i:0">
-        <div class="card">
-          <a href="nyc-midnight.html" class="card-front tile-nyc">
-            <div class="logo-area"><img src="read/frames/nyc-logo.webp" alt="NYC Midnight" /></div>
-            <div class="tile-panel">
-              <div class="card-category">Competition</div>
-              <div class="card-title">NYC Midnight</div>
-              <div class="card-subtitle">Short story competition</div>
-            </div>
-          </a>
-          <a href="nyc-midnight.html" class="card-back">
-            <div class="card-category">NYC Midnight</div>
-            <div class="card-back-title">4 Competitions</div>
-            <div class="card-back-text">
-              Scary Story Challenge — 2025<br>
-              Screenwriting Challenge — 2025<br>
-              Screenwriting Challenge — 2026<br>
-              Short Story Challenge — 2026
-            </div>
-            <span class="card-back-link">View entries &rarr;</span>
-          </a>
+document.getElementById('grid').innerHTML = S.map((s,i)=>{
+  const tag  = s.href ? 'a' : 'div';
+  const href = s.href ? ` href="${s.href}"` : '';
+  return `<div class="card-container reveal" data-i="${i}" style="--i:${i}">
+    <div class="card">
+      <${tag}${href} class="card-front">
+        <div class="tile-bg"><img src="${s.img}" alt="${s.t}"></div>
+        <div class="edge"></div>
+        <div class="tile-panel">
+          <div class="card-category">${s.k}</div>
+          <div class="card-title">${s.t}</div>
+          <div class="card-subtitle">${s.g}</div>
         </div>
-      </div>
-
-      <!-- Shuffle -->
-      <div class="card-container reveal" style="--i:1">
-        <div class="card">
-          <a href="shuffle.html" class="card-front tile-shuffle">
-            <div class="tile-bg"></div>
-            <div class="edge"></div>
-            <div class="tile-panel">
-              <div class="card-category">Short Film</div>
-              <div class="card-title">Shuffle</div>
-              <div class="card-subtitle">Horror</div>
-            </div>
-          </a>
-          <a href="shuffle.html" class="card-back">
-            <div class="card-category">Short Film</div>
-            <div class="card-back-title">Shuffle</div>
-            <div class="card-back-text">
-              Some night shifts are quieter than others. For one laboratory worker, the silence is only the beginning. Based on a true story.
-            </div>
-            <span class="card-back-link">See short video &rarr;</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Icarus -->
-      <div class="card-container reveal" style="--i:2">
-        <div class="card">
-          <a href="read/icarus.html" class="card-front tile-ic">
-            <div class="tile-bg"></div>
-            <div class="edge"></div>
-            <div class="tile-panel">
-              <div class="card-category">Animated Pilot</div>
-              <div class="card-title">Icarus</div>
-              <div class="card-subtitle">Comedy / Sci-Fi</div>
-            </div>
-          </a>
-          <a href="read/icarus.html" class="card-back">
-            <div class="card-category">Animated Pilot</div>
-            <div class="card-back-title">Icarus</div>
-            <div class="card-back-text">
-              An outcast teenager becomes the unlikely leader of an alien universe on the brink of collapse. She didn't ask for the job — and they didn't ask for her.
-            </div>
-            <span class="card-back-link">Read the script &rarr;</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Lyon Street -->
-      <div class="card-container reveal" style="--i:3">
-        <div class="card">
-          <div class="card-front">
-            <div class="card-status">In Progress</div>
-            <div class="card-category">Novel</div>
-            <div class="card-title">Lyon Street</div>
-            <div class="card-subtitle">Biopic</div>
-          </div>
-          <div class="card-back">
-            <div class="card-category">Novel</div>
-            <div class="card-back-title">Lyon Street</div>
-            <div class="card-back-text">
-              A teenage girl arrives in a foreign country barely speaking the language. She finds a close community of others like her, and together they make their way in a new world.
-            </div>
-            <div class="card-back-meta">
-              <span>Format: Novel</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bombshell -->
-      <div class="card-container no-flip reveal" style="--i:4">
-        <div class="card">
-          <div class="card-front">
-            <div class="card-status">In Progress</div>
-            <div class="card-category">Feature Screenplay</div>
-            <div class="card-title">Bombshell</div>
-            <div class="card-subtitle">Comedy</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- God has No Family -->
-      <div class="card-container no-flip reveal" style="--i:5">
-        <div class="card">
-          <div class="card-front">
-            <div class="card-status">In Progress</div>
-            <div class="card-category">Feature Screenplay</div>
-            <div class="card-title">God has No Family</div>
-            <div class="card-subtitle">Thriller / Sci-Fi</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Nostradamus -->
-      <div class="card-container no-flip reveal" style="--i:6">
-        <div class="card">
-          <div class="card-front">
-            <div class="card-status">In Progress</div>
-            <div class="card-category">Feature Screenplay</div>
-            <div class="card-title">Nostradamus</div>
-            <div class="card-subtitle">Romantic Comedy</div>
-          </div>
-        </div>
-      </div>
-
+      </${tag}>
+      <${tag}${href} class="card-back">
+        <div class="card-category">${s.k}</div>
+        <div class="card-back-title">${s.t}</div>
+        ${s.back
+          ? `<div class="card-back-text">${s.back}</div>`
+          : `<div class="card-back-text card-back-todo">Synopsis to come.</div>`}
+        ${s.link ? `<span class="card-back-link">${s.link}</span>` : ''}
+      </${tag}>
     </div>
-  </section>
+  </div>`;
+}).join('');
 
-  <div class="divider"><div class="divider-line"></div></div>
+/* the page no longer scrolls, so the cards simply come up on load.
+   A timeout, not requestAnimationFrame — rAF can be starved and then the
+   reveal never fires at all. */
+const cards = document.querySelectorAll('.reveal');
+setTimeout(()=>cards.forEach(c=>c.classList.add('visible')), 60);
 
-  <!-- CONTACT -->
-  <section id="contact" class="contact">
-    <div class="section-label">Get in touch</div>
-    <a href="mailto:stories@shift1.co" class="contact-email">stories@shift1.co</a>
-  </section>
+/* tap to turn a card over where there is no hover */
+if(matchMedia('(hover:none)').matches){
+  document.getElementById('grid').addEventListener('click', e=>{
+    const c = e.target.closest('.card-container');
+    if(c){ e.preventDefault(); c.classList.toggle('on'); }
+  });
+}
 
-  <!-- FOOTER -->
-  <footer>
-    &copy; 2026 Shift1&trade; Studios. All rights reserved.
-  </footer>
-
-  <script>
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-        }
-      });
-    }, { threshold: 0.15 });
-    reveals.forEach(el => observer.observe(el));
-
-    // Background particles (fireflies)
-    const container = document.getElementById('particles');
-    for (let i = 0; i < 40; i++) {
-      const p = document.createElement('div');
-      p.classList.add('particle');
-      p.style.left = Math.random() * 100 + '%';
-      p.style.top = Math.random() * 100 + '%';
-      const size = 2 + Math.random() * 2;
-      p.style.width = size + 'px';
-      p.style.height = size + 'px';
-      p.style.animationDuration = (8 + Math.random() * 8) + 's';
-      p.style.animationDelay = (Math.random() * 1) + 's';
-      container.appendChild(p);
-    }
-  </script>
+/* fireflies */
+const container = document.getElementById('particles');
+for(let i=0;i<40;i++){
+  const p = document.createElement('div');
+  p.classList.add('particle');
+  p.style.left = Math.random()*100+'%'; p.style.top = Math.random()*100+'%';
+  const size = 2 + Math.random()*2;
+  p.style.width = size+'px'; p.style.height = size+'px';
+  p.style.animationDuration = (8+Math.random()*8)+'s';
+  p.style.animationDelay = (Math.random()*1)+'s';
+  container.appendChild(p);
+}
+</script>
 
 <script data-goatcounter="https://shift1.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
