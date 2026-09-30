@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Shift1 — Card label options</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  button{font:inherit;background:none;border:0;color:inherit;cursor:pointer}
+  :root{
+    --bg:#0b0b0b; --card:#161616; --text:#e8e4de; --muted:#8a8580;
+    --accent:#e8d5a3; --line:rgba(255,255,255,.04); --line2:rgba(201,185,154,.14);
+    --fh:'Space Grotesk',sans-serif; --fb:'Inter',sans-serif;
+  }
+  body{background:var(--bg);color:var(--text);font-family:var(--fb);font-weight:300;
+    -webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+
+  /* review chrome — not part of any design */
+  .tabs{display:flex;gap:2px;padding:14px 34px;border-bottom:1px solid #1e1e1e;flex-wrap:wrap}
+  .tabs button{padding:7px 13px;border-radius:3px;font-size:11.5px;letter-spacing:.05em;
+    color:var(--muted);border:1px solid transparent}
+  .tabs button:hover{color:var(--text)}
+  .tabs button.on{background:var(--accent);color:#0b0b0b;font-weight:500}
+  .note{padding:0 34px;margin-top:16px;font-size:12px;color:#5f5b56;letter-spacing:.02em}
+
+  main{flex:1;padding:18px 34px 34px}
+  .view{display:none}.view.on{display:block}
+
+  .intro{font-family:var(--fh);font-size:15px;color:var(--muted);margin-bottom:14px;letter-spacing:.01em}
+
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+  .card{position:relative;background:var(--card);border:1px solid var(--line);
+    border-radius:8px;overflow:hidden;height:clamp(250px,36vh,380px);
+    display:flex;flex-direction:column}
+  .shot{position:relative;height:62%;flex:0 0 62%;overflow:hidden;background:#141414}
+  .shot img{width:100%;height:100%;object-fit:cover;display:block}
+  .shot::after{content:'';position:absolute;left:0;right:0;bottom:0;height:60px;
+    background:linear-gradient(to bottom,transparent,rgba(11,11,11,.4))}
+  .panel{flex:1;background:var(--card);border-top:1px solid var(--line2);
+    padding:1.2rem 1.6rem 1.15rem;display:flex;flex-direction:column;justify-content:flex-end}
+
+  .ttl{font-family:var(--fh);font-size:1.35rem;font-weight:600;line-height:1.15}
+  .cat{font-size:.63rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);
+    font-weight:500;margin-bottom:.6rem}
+  .sub{font-size:.82rem;color:var(--muted);margin-top:.35rem}
+
+  /* ── 2 · two badges ── */
+  .badges{display:flex;gap:6px;margin-bottom:.7rem;flex-wrap:wrap}
+  .b{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500;
+    padding:3px 7px;border-radius:2px;border:1px solid #2e2c29;color:#9a948c}
+  .b.made{border-color:rgba(232,213,163,.45);color:var(--accent)}
+
+  /* ── 3 · corner badge ── */
+  .corner{position:absolute;top:10px;right:10px;z-index:3;
+    font-size:.56rem;letter-spacing:.18em;text-transform:uppercase;font-weight:500;
+    padding:4px 8px;border-radius:2px;
+    background:rgba(11,11,11,.72);border:1px solid #2e2c29;color:#9a948c;
+    backdrop-filter:blur(4px)}
+  .corner.made{border-color:rgba(232,213,163,.5);color:var(--accent)}
+
+  /* ── 4 · editorial ── */
+  .desc{font-size:.82rem;color:var(--muted);margin-top:.4rem}
+
+  /* ── 5 · credit line ── */
+  .credit{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;
+    color:#6f6a64;margin-top:.5rem}
+  .credit .yr{color:var(--accent)}
+  .credit .sep{opacity:.5;margin:0 .45em}
+
+  @media (max-width:1100px){ .grid{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:720px){ .grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<div class="tabs" id="tabs"></div>
+<div class="note" id="note"></div>
+
+<main id="main"></main>
+
+<script>
+const F = 'read/frames/';
+/* the six, with every label the options need */
+const P = [
+  { t:'Shuffle',           img:F+'shuffle-tile.jpg',      genre:'Horror',
+    cat:'Short Film',        form:'Short Film',     status:'Produced',
+    desc:'Produced short film',        made:true,  year:'2026' },
+  { t:'Icarus',            img:F+'icarus.jpg',            genre:'Sci-Fi',
+    cat:'Animated Pilot',    form:'Animated Pilot', status:'Script',
+    desc:'Animated pilot screenplay',  made:false },
+  { t:'Lyon Street',       img:F+'lyon-street.jpg',       genre:'Biopic',
+    cat:'Novel',             form:'Novel',          status:'Manuscript',
+    desc:'Novel',                      made:false },
+  { t:'Bombshell',         img:F+'bombshell.jpg',         genre:'Comedy',
+    cat:'Feature Screenplay',form:'Feature',        status:'Screenplay',
+    desc:'Feature screenplay',         made:false },
+  { t:'God has No Family', img:F+'god-has-no-family.jpg', genre:'Sci-Fi / Thriller',
+    cat:'Feature Screenplay',form:'Feature',        status:'Screenplay',
+    desc:'Feature screenplay',         made:false },
+  { t:'Nostradamus',       img:F+'nostradamus.jpg',       genre:'Romantic Comedy',
+    cat:'Feature Screenplay',form:'Feature',        status:'Screenplay',
+    desc:'Feature screenplay',         made:false },
+];
+const shot = p => `<div class="shot"><img src="${p.img}" alt="${p.t}"></div>`;
+
+const OPTIONS = [
+  { n:'01 · Single label', note:'One uppercase category above the title — closest to what is live now.',
+    card: p => `<div class="card">${shot(p)}<div class="panel">
+        <div class="cat">${p.cat}</div>
+        <div class="ttl">${p.t}</div>
+        <div class="sub">${p.genre}</div></div></div>` },
+
+  { n:'02 · Two badges', note:'Form and status as two outlined badges; the produced one is the only gold.',
+    card: p => `<div class="card">${shot(p)}<div class="panel">
+        <div class="badges"><span class="b">${p.form}</span>
+          <span class="b${p.made?' made':''}">${p.status}</span></div>
+        <div class="ttl">${p.t}</div></div></div>` },
+
+  { n:'03 · Corner badge', note:'Status sits on the artwork; the panel carries only title and format.',
+    card: p => `<div class="card"><span class="corner${p.made?' made':''}">${p.status}</span>
+        ${shot(p)}<div class="panel">
+        <div class="ttl">${p.t}</div>
+        <div class="sub">${p.form}</div></div></div>` },
+
+  { n:'04 · Editorial', note:'No badges at all. One line under the page heading does the work; genre removed.',
+    intro:'Original screenplays, fiction and films.',
+    card: p => `<div class="card">${shot(p)}<div class="panel">
+        <div class="ttl">${p.t}</div>
+        <div class="desc">${p.desc}</div></div></div>` },
+
+  { n:'05 · Credit line', note:'A poster credit. Only made work carries a year — in film, a year is what says a thing exists, so nothing else has to.',
+    card: p => `<div class="card">${shot(p)}<div class="panel">
+        <div class="ttl">${p.t}</div>
+        <div class="credit">${p.genre}<span class="sep">·</span>${
+          p.made ? p.cat + '<span class="sep">·</span><span class="yr">' + p.year + '</span>'
+                 : p.desc.replace(/^./, c=>c.toUpperCase())
+        }</div></div></div>` },
+];
+
+document.getElementById('tabs').innerHTML =
+  OPTIONS.map((o,i)=>`<button data-i="${i}">${o.n}</button>`).join('');
+document.getElementById('main').innerHTML = OPTIONS.map((o,i)=>
+  `<section class="view" id="v${i}">
+     ${o.intro ? `<div class="intro">${o.intro}</div>` : ''}
+     <div class="grid">${P.map(o.card).join('')}</div>
+   </section>`).join('');
+
+function show(i){
+  document.querySelectorAll('.view').forEach((v,j)=>v.classList.toggle('on', j===i));
+  document.querySelectorAll('#tabs button').forEach((b,j)=>b.classList.toggle('on', j===i));
+  document.getElementById('note').textContent = OPTIONS[i].note;
+  history.replaceState(null,'','#'+(i+1));
+}
+document.getElementById('tabs').onclick = e=>{
+  const b = e.target.closest('button'); if(b) show(+b.dataset.i);
+};
+addEventListener('keydown', e=>{ if(e.key>='1'&&e.key<='5') show(+e.key-1); });
+const want = parseInt(location.hash.replace('#',''),10);
+show(want>=1 && want<=5 ? want-1 : 0);
+</script>
+</body>
+</html>
